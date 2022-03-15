@@ -1,7 +1,11 @@
+//Adopted from original souffle lexer and grammar (bison) at:
+//https://github.com/souffle-lang/souffle/tree/master/src/parser
+
 grammar Souffle;
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
 //Directives
+test:PREPROCESSOR;
 DECL: '.decl';
 FUNCTOR: '.functor';
 INPUT_DECL: '.input';
@@ -98,7 +102,7 @@ IF:':-';
 NUMBER:[0-9]+'.'[0-9]+'.'[0-9]+'.'[0-9]+
         | [0-9]+
         | '0b'[0-1]+
-        | '0x'[a-fA-F0-9]+
+        | '0x'HEX+
         ;
 FLOAT:[0-9]+[.][0-9]+;
 UNSIGNED: [0-9]+'u'
@@ -111,6 +115,8 @@ fragment ESC :
 '\\' (["\\/bfnrt] | UNICODE) ;
 fragment UNICODE : 'u' HEX HEX HEX HEX ;
 fragment HEX : [0-9a-fA-F] ;
+
+PREPROCESSOR: [#.]+;
 
 COMMENT: '/*' .*? '*/'
         | '//' ~[\r\n]*
