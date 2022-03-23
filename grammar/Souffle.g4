@@ -133,7 +133,7 @@ program
  */
 unit:
   | unit directive_head
-  | unit rule
+  | unit souffle_rule
   | unit fact
   | unit component_decl
   | unit component_init
@@ -285,7 +285,7 @@ fact
 /**
  * Rule
  */
-rule
+souffle_rule
   : rule_def
   | rule_def query_plan
   | atom LE atom IF body DOT
@@ -373,7 +373,6 @@ non_empty_arg_list
   | non_empty_arg_list COMMA arg
   ;
 
-
 /**
  * Atom argument
  */
@@ -395,12 +394,12 @@ arg
   | functor_built_in LPAREN arg_list RPAREN
    /* some aggregates have the same name as functors */
   | aggregate_func LPAREN arg COMMA non_empty_arg_list RPAREN
-      /* -- intrinsic functor -- */
-    /* unary functors */
+   /* -- intrinsic functor -- */
+   /* unary functors */
   | MINUS arg
   | BW_NOT  arg
   | L_NOT arg
-      /* binary infix functors */
+  /* binary infix functors */
   | arg PLUS arg
   | arg MINUS arg
   | arg STAR arg
@@ -516,7 +515,7 @@ component_param_list
 component_body
   :
   | component_body directive_head
-  | component_body rule
+  | component_body souffle_rule
   | component_body fact
   | component_body OVERRIDE IDENT
   | component_body component_init
