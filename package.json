@@ -1,0 +1,20 @@
+{
+    "name": "souffle-lsp",
+    "displayName": "Souffle LSP",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.65.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "souffle",
+            "aliases": ["Souffle", "souffle"],
+            "extensions": [".dl"],
+            "configuration": "./language-configuration.json"
+        }]
+    }
+}

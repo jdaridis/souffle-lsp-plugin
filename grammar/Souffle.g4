@@ -119,8 +119,8 @@ fragment HEX : [0-9a-fA-F] ;
 
 PREPROCESSOR: '#'~[\r\n]* -> skip;
 
-COMMENT: '/*' .*? '*/' -> skip;
-LINE_COMMENT: '//' ~[\r\n]* -> skip
+COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
+LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
 END: EOF;
 
