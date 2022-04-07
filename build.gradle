@@ -3,7 +3,6 @@ plugins {
     id 'antlr'
 }
 
-group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -19,4 +18,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+jar {
+    manifest {
+        attributes "Main-Class": "SouffleLanguageServerLauncher"
+    }
+    doFirst {
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA', 'about.html'
 }
