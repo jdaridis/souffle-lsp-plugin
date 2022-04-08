@@ -1,7 +1,17 @@
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
+import visitors.SouffleLexer;
+import visitors.SouffleParser;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -12,7 +22,10 @@ import java.util.concurrent.CompletableFuture;
 public class SouffleTextDocumentService implements TextDocumentService {
 
     private SouffleLanguageServer languageServer;
-    private LSClientLogger clientLogger;
+    private LSClientLogger  clientLogger;
+    private SouffleLexer souffleLexer;
+    private SouffleParser souffleParser;
+    private URI uri;
 
     public SouffleTextDocumentService(SouffleLanguageServer languageServer) {
         this.languageServer = languageServer;
@@ -21,8 +34,27 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
-        this.clientLogger.logMessage("Operation '" + "text/didOpen" +
-                "' {fileUri: '" + didOpenTextDocumentParams.getTextDocument().getUri() + "'} opened");
+        try {
+            CharStream input = null;
+            uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
+            input = CharStreams.fromPath(Path.of(uri));
+            souffleLexer = new SouffleLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+            souffleParser = new SouffleParser(tokens);
+            souffleParser.removeErrorListeners();
+            souffleParser.addErrorListener(new SyntaxErrorLogger(languageServer.languageClient, uri.toString()));
+            souffleParser.getInterpreter()
+                    .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+            this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
+            ParseTree tree = souffleParser.program(); // begin parsing at init rule
+
+            this.clientLogger.logMessage("Operation '" + "text/didOpen" +
+                    "' {fileUri: '" + uri + "'} opened");
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
@@ -39,16 +71,43 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public void didSave(DidSaveTextDocumentParams didSaveTextDocumentParams) {
-        this.clientLogger.logMessage("Operation '" + "text/didSave" +
-                "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
+        this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
+        try {
+            CharStream input = null;
+            input = CharStreams.fromPath(Path.of(uri));
+            souffleLexer = new SouffleLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+            souffleParser = new SouffleParser(tokens);
+            souffleParser.removeErrorListeners();
+            souffleParser.addErrorListener(new SyntaxErrorLogger(languageServer.languageClient, uri.toString()));
+            souffleParser.getInterpreter()
+                    .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+            this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
+            ParseTree tree = souffleParser.program(); // begin parsing at init rule
+
+            this.clientLogger.logMessage("Operation '" + "text/didSave" +
+                    "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
         this.clientLogger.logMessage("Operation '" + "text/hover" +
-                "' {fileUri: '" + params.getTextDocument().getUri() + "'} Hover");
-        return TextDocumentService.super.hover(params);
+                "' {fileUri: '" + params.toString() + "'} Hover");
+        return CompletableFuture.supplyAsync(() -> {
+            Hover hover = new Hover();
+            MarkupContent content = new MarkupContent();
+            content.setValue("Test hover");
+            content.setKind(MarkupKind.PLAINTEXT);
+            hover.setContents(content);
+            return hover;
+        });
     }
+
+
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams position) {

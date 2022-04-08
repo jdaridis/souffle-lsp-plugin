@@ -1,14 +1,4 @@
-import org.eclipse.lsp4j.ClientCapabilities;
-import org.eclipse.lsp4j.CompletionOptions;
-import org.eclipse.lsp4j.CompletionRegistrationOptions;
-import org.eclipse.lsp4j.InitializeParams;
-import org.eclipse.lsp4j.InitializeResult;
-import org.eclipse.lsp4j.InitializedParams;
-import org.eclipse.lsp4j.Registration;
-import org.eclipse.lsp4j.RegistrationParams;
-import org.eclipse.lsp4j.ServerCapabilities;
-import org.eclipse.lsp4j.TextDocumentClientCapabilities;
-import org.eclipse.lsp4j.TextDocumentSyncKind;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -38,8 +28,9 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams initializeParams) {
         final InitializeResult response = new InitializeResult(new ServerCapabilities());
-        //Set the document synchronization capabilities to full. 
+        //Set the document synchronization capabilities to full.
         response.getCapabilities().setTextDocumentSync(TextDocumentSyncKind.Full);
+//        response.getCapabilities().setHoverProvider(true);
         this.clientCapabilities = initializeParams.getCapabilities();
         
         /* Check if dynamic registration of completion capability is allowed by the client. If so we don't register the capability.

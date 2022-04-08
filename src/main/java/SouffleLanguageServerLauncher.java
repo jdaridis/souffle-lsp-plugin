@@ -14,43 +14,24 @@ import java.util.concurrent.Future;
  */
 public class SouffleLanguageServerLauncher {
 
+   public static void main(String[] args) throws InterruptedException, ExecutionException {
+       startServer(System.in, System.out);
+   }
 
-    public static void main(String[] args) {
-        try {
-            Socket clientSocket = new Socket("127.0.0.1", 9925);
-            startServer(clientSocket.getInputStream(), clientSocket.getOutputStream());
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            // Failed to start the server
-        }
-    }
-
-    public static void startServer(InputStream in, OutputStream out)
-            throws InterruptedException, ExecutionException {
-        SouffleLanguageServer server = new SouffleLanguageServer();
-        Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, in, out);
-        server.connect(launcher.getRemoteProxy());
-        Future<?> startListening = launcher.startListening();
-        startListening.get();
-    }
-
-//    public static void main(String[] args) throws InterruptedException, ExecutionException {
-//        startServer(System.in, System.out);
-//    }
-//
-//    /**
-//     * Starts the language server given the input and output streams to read and write messages.
-//     *
-//     * @param in  input stream.
-//     * @param out output stream.
-//     * @throws InterruptedException
-//     * @throws ExecutionException
-//     */
-//    public static void startServer(InputStream in, OutputStream out) throws InterruptedException, ExecutionException {
-//        SouffleLanguageServer server = new SouffleLanguageServer();
-//        Launcher<LanguageClient> launcher = Launcher.createLauncher(server, LanguageClient.class, in, out);
-//        LanguageClient client = launcher.getRemoteProxy();
-//        server.connect(client);
-//        Future<?> startListening = launcher.startListening();
-//        startListening.get();
-//    }
+   /**
+    * Starts the language server given the input and output streams to read and write messages.
+    *
+    * @param in  input stream.
+    * @param out output stream.
+    * @throws InterruptedException
+    * @throws ExecutionException
+    */
+   public static void startServer(InputStream in, OutputStream out) throws InterruptedException, ExecutionException {
+       SouffleLanguageServer server = new SouffleLanguageServer();
+       Launcher<LanguageClient> launcher = Launcher.createLauncher(server, LanguageClient.class, in, out);
+       LanguageClient client = launcher.getRemoteProxy();
+       server.connect(client);
+       Future<?> startListening = launcher.startListening();
+       startListening.get();
+   }
 }

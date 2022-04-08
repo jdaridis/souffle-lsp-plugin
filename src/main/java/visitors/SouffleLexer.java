@@ -1,10 +1,13 @@
-// Generated from /home/john/IdeaProjects/Souffle Ide Plugin/grammar/Souffle.g4 by ANTLR 4.9.2
+// Generated from /home/john/IdeaProjects/Souffle_Ide_Plugin/grammar/Souffle.g4 by ANTLR 4.9.2
 package visitors;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class SouffleLexer extends Lexer {
@@ -443,7 +446,7 @@ public class SouffleLexer extends Lexer {
 		"\2\2\2\u034d\u034e\t\6\2\2\u034e\u00c6\3\2\2\2\u034f\u0353\7%\2\2\u0350"+
 		"\u0352\n\f\2\2\u0351\u0350\3\2\2\2\u0352\u0355\3\2\2\2\u0353\u0351\3\2"+
 		"\2\2\u0353\u0354\3\2\2\2\u0354\u0356\3\2\2\2\u0355\u0353\3\2\2\2\u0356"+
-		"\u0357\bd\2\2\u0357\u00c8\3\2\2\2\u0358\u0359\7\61\2\2\u0359\u035a\7,"+
+		"\u0357\bd\3\2\u0357\u00c8\3\2\2\2\u0358\u0359\7\61\2\2\u0359\u035a\7,"+
 		"\2\2\u035a\u035e\3\2\2\2\u035b\u035d\13\2\2\2\u035c\u035b\3\2\2\2\u035d"+
 		"\u0360\3\2\2\2\u035e\u035f\3\2\2\2\u035e\u035c\3\2\2\2\u035f\u0361\3\2"+
 		"\2\2\u0360\u035e\3\2\2\2\u0361\u0362\7,\2\2\u0362\u0363\7\61\2\2\u0363"+
@@ -453,7 +456,7 @@ public class SouffleLexer extends Lexer {
 		"\2\2\u036d\u036f\3\2\2\2\u036e\u036c\3\2\2\2\u036f\u0370\bf\2\2\u0370"+
 		"\u00cc\3\2\2\2\u0371\u0372\7\2\2\3\u0372\u00ce\3\2\2\2\32\2\u00d2\u02df"+
 		"\u02e5\u02eb\u02f1\u02f6\u02fe\u0306\u0308\u030d\u0313\u0318\u0321\u032a"+
-		"\u032d\u0334\u0336\u033b\u033d\u0345\u0353\u035e\u036c\3\b\2\2";
+		"\u032d\u0334\u0336\u033b\u033d\u0345\u0353\u035e\u036c\4\2\3\2\b\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

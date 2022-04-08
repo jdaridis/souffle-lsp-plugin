@@ -3,7 +3,7 @@
 
 grammar Souffle;
 
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+WS : [ \t\r\n]+ -> channel(HIDDEN); // skip spaces, tabs, newlines
 
 //Directives
 DECL: '.decl'WS;
