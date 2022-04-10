@@ -122,10 +122,9 @@ PREPROCESSOR: '#'~[\r\n]* -> skip;
 COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
-END: EOF;
 
 program
-  : unit
+  : unit EOF
   ;
 
 /**

@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
+import org.eclipse.lsp4j.util.Positions;
 import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
@@ -11,9 +12,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -25,26 +24,30 @@ public class SouffleTextDocumentService implements TextDocumentService {
     private LSClientLogger  clientLogger;
     private SouffleLexer souffleLexer;
     private SouffleParser souffleParser;
-    private URI uri;
 
     public SouffleTextDocumentService(SouffleLanguageServer languageServer) {
         this.languageServer = languageServer;
         this.clientLogger = LSClientLogger.getInstance();
     }
 
+    private void consumeInput(String documentURI) throws IOException, URISyntaxException {
+        URI uri = new URI(documentURI);
+        CharStream input = CharStreams.fromPath(Path.of(uri));
+        souffleLexer = new SouffleLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        souffleParser = new SouffleParser(tokens);
+        souffleParser.removeErrorListeners();
+        souffleParser.addErrorListener(new SyntaxErrorLogger(languageServer.languageClient, uri.toString()));
+        souffleParser.getInterpreter()
+                .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+
+    }
+
     @Override
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
         try {
-            CharStream input = null;
-            uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
-            input = CharStreams.fromPath(Path.of(uri));
-            souffleLexer = new SouffleLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
-            souffleParser = new SouffleParser(tokens);
-            souffleParser.removeErrorListeners();
-            souffleParser.addErrorListener(new SyntaxErrorLogger(languageServer.languageClient, uri.toString()));
-            souffleParser.getInterpreter()
-                    .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+            URI uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
+            consumeInput(didOpenTextDocumentParams.getTextDocument().getUri());
             this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
             ParseTree tree = souffleParser.program(); // begin parsing at init rule
 
@@ -53,7 +56,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -71,25 +73,30 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public void didSave(DidSaveTextDocumentParams didSaveTextDocumentParams) {
-        this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
+        this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(didSaveTextDocumentParams.getTextDocument().getUri().toString(), new ArrayList<>(0)));
         try {
-            CharStream input = null;
-            input = CharStreams.fromPath(Path.of(uri));
-            souffleLexer = new SouffleLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
-            souffleParser = new SouffleParser(tokens);
-            souffleParser.removeErrorListeners();
-            souffleParser.addErrorListener(new SyntaxErrorLogger(languageServer.languageClient, uri.toString()));
-            souffleParser.getInterpreter()
-                    .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
-            this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
+            consumeInput(didSaveTextDocumentParams.getTextDocument().getUri());
             ParseTree tree = souffleParser.program(); // begin parsing at init rule
 
             this.clientLogger.logMessage("Operation '" + "text/didSave" +
                     "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
+
+        TreeMap<MyRange, Object> treeMap = new TreeMap<>(new Comparator<MyRange>() {
+            @Override
+            public int compare(MyRange range, MyRange t1) {
+                Position currentPos = range.getStart();
+                if(Positions.isBefore(currentPos, t1.getStart())){
+                    return -1;
+                } else if(!Positions.isBefore(currentPos, t1.getEnd())){
+                    return 1;
+                }
+                return 0;
+            }
+        });
+
 
     }
 

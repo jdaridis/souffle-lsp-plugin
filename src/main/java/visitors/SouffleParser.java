@@ -33,7 +33,7 @@ public class SouffleParser extends Parser {
 		NE=77, EQUALS=78, EXCLAMATION=79, STAR=80, AT=81, SLASH=82, CARET=83, 
 		PERCENT=84, LBRACE=85, RBRACE=86, LT=87, GT=88, IF=89, DOT=90, NUMBER=91, 
 		FLOAT=92, UNSIGNED=93, IDENT=94, STRING=95, PREPROCESSOR=96, COMMENT=97, 
-		LINE_COMMENT=98, END=99;
+		LINE_COMMENT=98;
 	public static final int
 		RULE_program = 0, RULE_unit = 1, RULE_qualified_name = 2, RULE_type_decl = 3, 
 		RULE_record_type_list = 4, RULE_union_type_list = 5, RULE_adt_branch_list = 6, 
@@ -41,33 +41,32 @@ public class SouffleParser extends Parser {
 		RULE_attributes_list = 10, RULE_non_empty_attributes = 11, RULE_attribute = 12, 
 		RULE_relation_tags = 13, RULE_non_empty_attribute_names = 14, RULE_dependency = 15, 
 		RULE_dependency_list_aux = 16, RULE_dependency_list = 17, RULE_fact = 18, 
-		RULE_souffle_rule = 19, RULE_rule_def = 20, RULE_head = 21, RULE_body = 22, 
-		RULE_disjunction = 23, RULE_conjunction = 24, RULE_term = 25, RULE_atom = 26, 
-		RULE_constraint = 27, RULE_arg_list = 28, RULE_non_empty_arg_list = 29, 
-		RULE_arg = 30, RULE_functor_built_in = 31, RULE_aggregate_func = 32, RULE_aggregate_body = 33, 
-		RULE_query_plan = 34, RULE_query_plan_list = 35, RULE_plan_order = 36, 
-		RULE_non_empty_plan_order_list = 37, RULE_component_decl = 38, RULE_component_head = 39, 
-		RULE_component_type = 40, RULE_component_type_params = 41, RULE_component_param_list = 42, 
-		RULE_component_body = 43, RULE_component_init = 44, RULE_functor_decl = 45, 
-		RULE_functor_arg_type_list = 46, RULE_non_empty_functor_arg_type_list = 47, 
-		RULE_functor_attribute = 48, RULE_pragma = 49, RULE_directive_head = 50, 
-		RULE_directive_head_decl = 51, RULE_directive_list = 52, RULE_relation_directive_list = 53, 
-		RULE_non_empty_key_value_pairs = 54, RULE_kvp_value = 55;
+		RULE_souffle_rule = 19, RULE_head = 20, RULE_body = 21, RULE_disjunction = 22, 
+		RULE_conjunction = 23, RULE_term = 24, RULE_atom = 25, RULE_constraint = 26, 
+		RULE_arg_list = 27, RULE_non_empty_arg_list = 28, RULE_arg = 29, RULE_functor_built_in = 30, 
+		RULE_aggregate_func = 31, RULE_aggregate_body = 32, RULE_query_plan_list = 33, 
+		RULE_plan_order = 34, RULE_non_empty_plan_order_list = 35, RULE_component_decl = 36, 
+		RULE_component_head = 37, RULE_component_type = 38, RULE_component_type_params = 39, 
+		RULE_component_param_list = 40, RULE_component_body = 41, RULE_component_init = 42, 
+		RULE_functor_decl = 43, RULE_functor_arg_type_list = 44, RULE_non_empty_functor_arg_type_list = 45, 
+		RULE_functor_attribute = 46, RULE_pragma = 47, RULE_directive_head = 48, 
+		RULE_directive_head_decl = 49, RULE_directive_list = 50, RULE_relation_directive_list = 51, 
+		RULE_non_empty_key_value_pairs = 52, RULE_kvp_value = 53;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"program", "unit", "qualified_name", "type_decl", "record_type_list", 
 			"union_type_list", "adt_branch_list", "adt_branch", "relation_decl", 
 			"relation_names", "attributes_list", "non_empty_attributes", "attribute", 
 			"relation_tags", "non_empty_attribute_names", "dependency", "dependency_list_aux", 
-			"dependency_list", "fact", "souffle_rule", "rule_def", "head", "body", 
-			"disjunction", "conjunction", "term", "atom", "constraint", "arg_list", 
-			"non_empty_arg_list", "arg", "functor_built_in", "aggregate_func", "aggregate_body", 
-			"query_plan", "query_plan_list", "plan_order", "non_empty_plan_order_list", 
-			"component_decl", "component_head", "component_type", "component_type_params", 
-			"component_param_list", "component_body", "component_init", "functor_decl", 
-			"functor_arg_type_list", "non_empty_functor_arg_type_list", "functor_attribute", 
-			"pragma", "directive_head", "directive_head_decl", "directive_list", 
-			"relation_directive_list", "non_empty_key_value_pairs", "kvp_value"
+			"dependency_list", "fact", "souffle_rule", "head", "body", "disjunction", 
+			"conjunction", "term", "atom", "constraint", "arg_list", "non_empty_arg_list", 
+			"arg", "functor_built_in", "aggregate_func", "aggregate_body", "query_plan_list", 
+			"plan_order", "non_empty_plan_order_list", "component_decl", "component_head", 
+			"component_type", "component_type_params", "component_param_list", "component_body", 
+			"component_init", "functor_decl", "functor_arg_type_list", "non_empty_functor_arg_type_list", 
+			"functor_attribute", "pragma", "directive_head", "directive_head_decl", 
+			"directive_list", "relation_directive_list", "non_empty_key_value_pairs", 
+			"kvp_value"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -105,8 +104,7 @@ public class SouffleParser extends Parser {
 			"DOLLAR", "PLUS", "MINUS", "LPAREN", "RPAREN", "COMMA", "COLON", "SEMICOLON", 
 			"SUBTYPE", "LE", "GE", "NE", "EQUALS", "EXCLAMATION", "STAR", "AT", "SLASH", 
 			"CARET", "PERCENT", "LBRACE", "RBRACE", "LT", "GT", "IF", "DOT", "NUMBER", 
-			"FLOAT", "UNSIGNED", "IDENT", "STRING", "PREPROCESSOR", "COMMENT", "LINE_COMMENT", 
-			"END"
+			"FLOAT", "UNSIGNED", "IDENT", "STRING", "PREPROCESSOR", "COMMENT", "LINE_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -164,6 +162,7 @@ public class SouffleParser extends Parser {
 		public UnitContext unit() {
 			return getRuleContext(UnitContext.class,0);
 		}
+		public TerminalNode EOF() { return getToken(SouffleParser.EOF, 0); }
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -181,8 +180,10 @@ public class SouffleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(112);
+			setState(108);
 			unit(0);
+			setState(109);
+			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -256,7 +257,7 @@ public class SouffleParser extends Parser {
 			{
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(135);
+			setState(132);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -264,16 +265,16 @@ public class SouffleParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(133);
+					setState(130);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 					case 1:
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(115);
+						setState(112);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(116);
+						setState(113);
 						directive_head();
 						}
 						break;
@@ -281,9 +282,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(117);
+						setState(114);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(118);
+						setState(115);
 						souffle_rule();
 						}
 						break;
@@ -291,9 +292,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(119);
+						setState(116);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(120);
+						setState(117);
 						fact();
 						}
 						break;
@@ -301,9 +302,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(121);
+						setState(118);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(122);
+						setState(119);
 						component_decl();
 						}
 						break;
@@ -311,9 +312,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(123);
+						setState(120);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(124);
+						setState(121);
 						component_init();
 						}
 						break;
@@ -321,9 +322,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(125);
+						setState(122);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(126);
+						setState(123);
 						pragma();
 						}
 						break;
@@ -331,9 +332,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(127);
+						setState(124);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(128);
+						setState(125);
 						type_decl();
 						}
 						break;
@@ -341,9 +342,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(129);
+						setState(126);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(130);
+						setState(127);
 						functor_decl();
 						}
 						break;
@@ -351,16 +352,16 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new UnitContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_unit);
-						setState(131);
+						setState(128);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(132);
+						setState(129);
 						relation_decl();
 						}
 						break;
 					}
 					} 
 				}
-				setState(137);
+				setState(134);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			}
@@ -410,11 +411,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(139);
+			setState(136);
 			match(IDENT);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(146);
+			setState(143);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -425,16 +426,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Qualified_nameContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_qualified_name);
-					setState(141);
+					setState(138);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(142);
+					setState(139);
 					match(DOT);
-					setState(143);
+					setState(140);
 					match(IDENT);
 					}
 					} 
 				}
-				setState(148);
+				setState(145);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
@@ -485,85 +486,85 @@ public class SouffleParser extends Parser {
 		Type_declContext _localctx = new Type_declContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_type_decl);
 		try {
-			setState(171);
+			setState(168);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(149);
+				setState(146);
 				match(TYPE);
-				setState(150);
+				setState(147);
 				match(IDENT);
-				setState(151);
+				setState(148);
 				match(SUBTYPE);
-				setState(152);
+				setState(149);
 				qualified_name(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(153);
+				setState(150);
 				match(TYPE);
-				setState(154);
+				setState(151);
 				match(IDENT);
-				setState(155);
+				setState(152);
 				match(EQUALS);
-				setState(156);
+				setState(153);
 				union_type_list(0);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(157);
+				setState(154);
 				match(TYPE);
-				setState(158);
+				setState(155);
 				match(IDENT);
-				setState(159);
+				setState(156);
 				match(EQUALS);
-				setState(160);
+				setState(157);
 				record_type_list();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(161);
+				setState(158);
 				match(TYPE);
-				setState(162);
+				setState(159);
 				match(IDENT);
-				setState(163);
+				setState(160);
 				match(EQUALS);
-				setState(164);
+				setState(161);
 				adt_branch_list(0);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(165);
+				setState(162);
 				match(NUMBER_TYPE);
-				setState(166);
+				setState(163);
 				match(IDENT);
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(167);
+				setState(164);
 				match(SYMBOL_TYPE);
-				setState(168);
+				setState(165);
 				match(IDENT);
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(169);
+				setState(166);
 				match(TYPE);
-				setState(170);
+				setState(167);
 				match(IDENT);
 				}
 				break;
@@ -601,26 +602,26 @@ public class SouffleParser extends Parser {
 		Record_type_listContext _localctx = new Record_type_listContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_record_type_list);
 		try {
-			setState(179);
+			setState(176);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(173);
+				setState(170);
 				match(LBRACKET);
-				setState(174);
+				setState(171);
 				match(RBRACKET);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(175);
+				setState(172);
 				match(LBRACKET);
-				setState(176);
+				setState(173);
 				non_empty_attributes(0);
-				setState(177);
+				setState(174);
 				match(RBRACKET);
 				}
 				break;
@@ -672,11 +673,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(182);
+			setState(179);
 			qualified_name(0);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(189);
+			setState(186);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -687,16 +688,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Union_type_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_union_type_list);
-					setState(184);
+					setState(181);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(185);
+					setState(182);
 					match(PIPE);
-					setState(186);
+					setState(183);
 					qualified_name(0);
 					}
 					} 
 				}
-				setState(191);
+				setState(188);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
@@ -748,11 +749,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(193);
+			setState(190);
 			adt_branch();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(200);
+			setState(197);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -763,16 +764,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Adt_branch_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_adt_branch_list);
-					setState(195);
+					setState(192);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(196);
+					setState(193);
 					match(PIPE);
-					setState(197);
+					setState(194);
 					adt_branch();
 					}
 					} 
 				}
-				setState(202);
+				setState(199);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			}
@@ -811,30 +812,30 @@ public class SouffleParser extends Parser {
 		Adt_branchContext _localctx = new Adt_branchContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_adt_branch);
 		try {
-			setState(211);
+			setState(208);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(203);
+				setState(200);
 				match(IDENT);
-				setState(204);
+				setState(201);
 				match(LBRACE);
-				setState(205);
+				setState(202);
 				match(RBRACE);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(206);
+				setState(203);
 				match(IDENT);
-				setState(207);
+				setState(204);
 				match(LBRACE);
-				setState(208);
+				setState(205);
 				non_empty_attributes(0);
-				setState(209);
+				setState(206);
 				match(RBRACE);
 				}
 				break;
@@ -882,15 +883,15 @@ public class SouffleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(213);
+			setState(210);
 			match(DECL);
-			setState(214);
+			setState(211);
 			relation_names(0);
-			setState(215);
+			setState(212);
 			attributes_list();
-			setState(216);
+			setState(213);
 			relation_tags(0);
-			setState(217);
+			setState(214);
 			dependency_list();
 			}
 		}
@@ -938,11 +939,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(220);
+			setState(217);
 			match(IDENT);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(227);
+			setState(224);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -953,16 +954,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Relation_namesContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_relation_names);
-					setState(222);
+					setState(219);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(223);
+					setState(220);
 					match(COMMA);
-					setState(224);
+					setState(221);
 					match(IDENT);
 					}
 					} 
 				}
-				setState(229);
+				setState(226);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			}
@@ -1000,26 +1001,26 @@ public class SouffleParser extends Parser {
 		Attributes_listContext _localctx = new Attributes_listContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_attributes_list);
 		try {
-			setState(236);
+			setState(233);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(230);
+				setState(227);
 				match(LPAREN);
-				setState(231);
+				setState(228);
 				match(RPAREN);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(232);
+				setState(229);
 				match(LPAREN);
-				setState(233);
+				setState(230);
 				non_empty_attributes(0);
-				setState(234);
+				setState(231);
 				match(RPAREN);
 				}
 				break;
@@ -1071,11 +1072,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(239);
+			setState(236);
 			attribute();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(246);
+			setState(243);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1086,16 +1087,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Non_empty_attributesContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_non_empty_attributes);
-					setState(241);
+					setState(238);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(242);
+					setState(239);
 					match(COMMA);
-					setState(243);
+					setState(240);
 					attribute();
 					}
 					} 
 				}
-				setState(248);
+				setState(245);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
 			}
@@ -1135,11 +1136,11 @@ public class SouffleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(249);
+			setState(246);
 			match(IDENT);
-			setState(250);
+			setState(247);
 			match(COLON);
-			setState(251);
+			setState(248);
 			qualified_name(0);
 			}
 		}
@@ -1199,7 +1200,7 @@ public class SouffleParser extends Parser {
 			{
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(280);
+			setState(277);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1207,16 +1208,16 @@ public class SouffleParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(278);
+					setState(275);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 					case 1:
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(254);
+						setState(251);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(255);
+						setState(252);
 						match(OVERRIDABLE_QUALIFIER);
 						}
 						break;
@@ -1224,9 +1225,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(256);
+						setState(253);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(257);
+						setState(254);
 						match(INLINE_QUALIFIER);
 						}
 						break;
@@ -1234,9 +1235,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(258);
+						setState(255);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
-						setState(259);
+						setState(256);
 						match(NO_INLINE_QUALIFIER);
 						}
 						break;
@@ -1244,9 +1245,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(260);
+						setState(257);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(261);
+						setState(258);
 						match(MAGIC_QUALIFIER);
 						}
 						break;
@@ -1254,9 +1255,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(262);
+						setState(259);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(263);
+						setState(260);
 						match(NO_MAGIC_QUALIFIER);
 						}
 						break;
@@ -1264,9 +1265,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(264);
+						setState(261);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(265);
+						setState(262);
 						match(BRIE_QUALIFIER);
 						}
 						break;
@@ -1274,9 +1275,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(266);
+						setState(263);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(267);
+						setState(264);
 						match(BTREE_QUALIFIER);
 						}
 						break;
@@ -1284,9 +1285,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(268);
+						setState(265);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(269);
+						setState(266);
 						match(BTREE_DELETE_QUALIFIER);
 						}
 						break;
@@ -1294,9 +1295,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(270);
+						setState(267);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(271);
+						setState(268);
 						match(EQREL_QUALIFIER);
 						}
 						break;
@@ -1304,9 +1305,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(272);
+						setState(269);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(273);
+						setState(270);
 						match(OUTPUT_QUALIFIER);
 						}
 						break;
@@ -1314,9 +1315,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(274);
+						setState(271);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(275);
+						setState(272);
 						match(INPUT_QUALIFIER);
 						}
 						break;
@@ -1324,16 +1325,16 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Relation_tagsContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_relation_tags);
-						setState(276);
+						setState(273);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(277);
+						setState(274);
 						match(PRINTSIZE_QUALIFIER);
 						}
 						break;
 					}
 					} 
 				}
-				setState(282);
+				setState(279);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 			}
@@ -1383,11 +1384,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(284);
+			setState(281);
 			match(IDENT);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(291);
+			setState(288);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,13,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1398,16 +1399,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Non_empty_attribute_namesContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_non_empty_attribute_names);
-					setState(286);
+					setState(283);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(287);
+					setState(284);
 					match(COMMA);
-					setState(288);
+					setState(285);
 					match(IDENT);
 					}
 					} 
 				}
-				setState(293);
+				setState(290);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,13,_ctx);
 			}
@@ -1446,24 +1447,24 @@ public class SouffleParser extends Parser {
 		DependencyContext _localctx = new DependencyContext(_ctx, getState());
 		enterRule(_localctx, 30, RULE_dependency);
 		try {
-			setState(299);
+			setState(296);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(294);
+				setState(291);
 				match(IDENT);
 				}
 				break;
 			case LPAREN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(295);
+				setState(292);
 				match(LPAREN);
-				setState(296);
+				setState(293);
 				non_empty_attribute_names(0);
-				setState(297);
+				setState(294);
 				match(RPAREN);
 				}
 				break;
@@ -1517,11 +1518,11 @@ public class SouffleParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(302);
+			setState(299);
 			dependency();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(309);
+			setState(306);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,15,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1532,16 +1533,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Dependency_list_auxContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_dependency_list_aux);
-					setState(304);
+					setState(301);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(305);
+					setState(302);
 					match(COMMA);
-					setState(306);
+					setState(303);
 					dependency();
 					}
 					} 
 				}
-				setState(311);
+				setState(308);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,15,_ctx);
 			}
@@ -1578,7 +1579,7 @@ public class SouffleParser extends Parser {
 		Dependency_listContext _localctx = new Dependency_listContext(_ctx, getState());
 		enterRule(_localctx, 34, RULE_dependency_list);
 		try {
-			setState(315);
+			setState(312);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
@@ -1589,9 +1590,9 @@ public class SouffleParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(313);
+				setState(310);
 				match(CHOICEDOMAIN);
-				setState(314);
+				setState(311);
 				dependency_list_aux(0);
 				}
 				break;
@@ -1630,9 +1631,9 @@ public class SouffleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(317);
+			setState(314);
 			atom();
-			setState(318);
+			setState(315);
 			match(DOT);
 			}
 		}
@@ -1648,11 +1649,17 @@ public class SouffleParser extends Parser {
 	}
 
 	public static class Souffle_ruleContext extends ParserRuleContext {
-		public Rule_defContext rule_def() {
-			return getRuleContext(Rule_defContext.class,0);
+		public HeadContext head() {
+			return getRuleContext(HeadContext.class,0);
 		}
-		public Query_planContext query_plan() {
-			return getRuleContext(Query_planContext.class,0);
+		public TerminalNode IF() { return getToken(SouffleParser.IF, 0); }
+		public BodyContext body() {
+			return getRuleContext(BodyContext.class,0);
+		}
+		public TerminalNode DOT() { return getToken(SouffleParser.DOT, 0); }
+		public TerminalNode PLAN() { return getToken(SouffleParser.PLAN, 0); }
+		public Query_plan_listContext query_plan_list() {
+			return getRuleContext(Query_plan_listContext.class,0);
 		}
 		public List<AtomContext> atom() {
 			return getRuleContexts(AtomContext.class);
@@ -1661,11 +1668,6 @@ public class SouffleParser extends Parser {
 			return getRuleContext(AtomContext.class,i);
 		}
 		public TerminalNode LE() { return getToken(SouffleParser.LE, 0); }
-		public TerminalNode IF() { return getToken(SouffleParser.IF, 0); }
-		public BodyContext body() {
-			return getRuleContext(BodyContext.class,0);
-		}
-		public TerminalNode DOT() { return getToken(SouffleParser.DOT, 0); }
 		public Souffle_ruleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1681,108 +1683,77 @@ public class SouffleParser extends Parser {
 		Souffle_ruleContext _localctx = new Souffle_ruleContext(_ctx, getState());
 		enterRule(_localctx, 38, RULE_souffle_rule);
 		try {
-			setState(339);
+			setState(345);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
+				setState(317);
+				head(0);
+				setState(318);
+				match(IF);
+				setState(319);
+				body();
 				setState(320);
-				rule_def();
+				match(DOT);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(321);
-				rule_def();
 				setState(322);
-				query_plan();
+				head(0);
+				setState(323);
+				match(IF);
+				setState(324);
+				body();
+				setState(325);
+				match(DOT);
+				setState(326);
+				match(PLAN);
+				setState(327);
+				query_plan_list(0);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(324);
-				atom();
-				setState(325);
-				match(LE);
-				setState(326);
-				atom();
-				setState(327);
-				match(IF);
-				setState(328);
-				body();
 				setState(329);
+				atom();
+				setState(330);
+				match(LE);
+				setState(331);
+				atom();
+				setState(332);
+				match(IF);
+				setState(333);
+				body();
+				setState(334);
 				match(DOT);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(331);
-				atom();
-				setState(332);
-				match(LE);
-				setState(333);
-				atom();
-				setState(334);
-				match(IF);
-				setState(335);
-				body();
 				setState(336);
-				match(DOT);
+				atom();
 				setState(337);
-				query_plan();
+				match(LE);
+				setState(338);
+				atom();
+				setState(339);
+				match(IF);
+				setState(340);
+				body();
+				setState(341);
+				match(DOT);
+				setState(342);
+				match(PLAN);
+				setState(343);
+				query_plan_list(0);
 				}
 				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Rule_defContext extends ParserRuleContext {
-		public HeadContext head() {
-			return getRuleContext(HeadContext.class,0);
-		}
-		public TerminalNode IF() { return getToken(SouffleParser.IF, 0); }
-		public BodyContext body() {
-			return getRuleContext(BodyContext.class,0);
-		}
-		public TerminalNode DOT() { return getToken(SouffleParser.DOT, 0); }
-		public Rule_defContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_rule_def; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SouffleVisitor ) return ((SouffleVisitor<? extends T>)visitor).visitRule_def(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Rule_defContext rule_def() throws RecognitionException {
-		Rule_defContext _localctx = new Rule_defContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_rule_def);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(341);
-			head(0);
-			setState(342);
-			match(IF);
-			setState(343);
-			body();
-			setState(344);
-			match(DOT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1824,18 +1795,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		HeadContext _localctx = new HeadContext(_ctx, _parentState);
 		HeadContext _prevctx = _localctx;
-		int _startState = 42;
-		enterRecursionRule(_localctx, 42, RULE_head, _p);
+		int _startState = 40;
+		enterRecursionRule(_localctx, 40, RULE_head, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(347);
+			setState(348);
 			atom();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(354);
+			setState(355);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1846,16 +1817,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new HeadContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_head);
-					setState(349);
-					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(350);
-					match(COMMA);
+					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(351);
+					match(COMMA);
+					setState(352);
 					atom();
 					}
 					} 
 				}
-				setState(356);
+				setState(357);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
 			}
@@ -1889,11 +1860,11 @@ public class SouffleParser extends Parser {
 
 	public final BodyContext body() throws RecognitionException {
 		BodyContext _localctx = new BodyContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_body);
+		enterRule(_localctx, 42, RULE_body);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(357);
+			setState(358);
 			disjunction(0);
 			}
 		}
@@ -1936,18 +1907,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		DisjunctionContext _localctx = new DisjunctionContext(_ctx, _parentState);
 		DisjunctionContext _prevctx = _localctx;
-		int _startState = 46;
-		enterRecursionRule(_localctx, 46, RULE_disjunction, _p);
+		int _startState = 44;
+		enterRecursionRule(_localctx, 44, RULE_disjunction, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(360);
+			setState(361);
 			conjunction(0);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(367);
+			setState(368);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1958,16 +1929,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new DisjunctionContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_disjunction);
-					setState(362);
-					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(363);
-					match(SEMICOLON);
+					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(364);
+					match(SEMICOLON);
+					setState(365);
 					conjunction(0);
 					}
 					} 
 				}
-				setState(369);
+				setState(370);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
 			}
@@ -2012,18 +1983,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		ConjunctionContext _localctx = new ConjunctionContext(_ctx, _parentState);
 		ConjunctionContext _prevctx = _localctx;
-		int _startState = 48;
-		enterRecursionRule(_localctx, 48, RULE_conjunction, _p);
+		int _startState = 46;
+		enterRecursionRule(_localctx, 46, RULE_conjunction, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(371);
+			setState(372);
 			term();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(378);
+			setState(379);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -2034,16 +2005,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new ConjunctionContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_conjunction);
-					setState(373);
-					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(374);
-					match(COMMA);
+					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(375);
+					match(COMMA);
+					setState(376);
 					term();
 					}
 					} 
 				}
-				setState(380);
+				setState(381);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
 			}
@@ -2089,42 +2060,42 @@ public class SouffleParser extends Parser {
 
 	public final TermContext term() throws RecognitionException {
 		TermContext _localctx = new TermContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_term);
+		enterRule(_localctx, 48, RULE_term);
 		try {
-			setState(389);
+			setState(390);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(381);
+				setState(382);
 				atom();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(382);
+				setState(383);
 				constraint();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(383);
-				match(LPAREN);
 				setState(384);
-				disjunction(0);
+				match(LPAREN);
 				setState(385);
+				disjunction(0);
+				setState(386);
 				match(RPAREN);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(387);
-				match(EXCLAMATION);
 				setState(388);
+				match(EXCLAMATION);
+				setState(389);
 				term();
 				}
 				break;
@@ -2163,17 +2134,17 @@ public class SouffleParser extends Parser {
 
 	public final AtomContext atom() throws RecognitionException {
 		AtomContext _localctx = new AtomContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_atom);
+		enterRule(_localctx, 50, RULE_atom);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(391);
-			qualified_name(0);
 			setState(392);
-			match(LPAREN);
+			qualified_name(0);
 			setState(393);
-			arg_list();
+			match(LPAREN);
 			setState(394);
+			arg_list();
+			setState(395);
 			match(RPAREN);
 			}
 		}
@@ -2221,122 +2192,122 @@ public class SouffleParser extends Parser {
 
 	public final ConstraintContext constraint() throws RecognitionException {
 		ConstraintContext _localctx = new ConstraintContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_constraint);
+		enterRule(_localctx, 52, RULE_constraint);
 		try {
-			setState(436);
+			setState(437);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(396);
-				arg(0);
 				setState(397);
-				match(LT);
+				arg(0);
 				setState(398);
+				match(LT);
+				setState(399);
 				arg(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(400);
-				arg(0);
 				setState(401);
-				match(GT);
+				arg(0);
 				setState(402);
+				match(GT);
+				setState(403);
 				arg(0);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(404);
-				arg(0);
 				setState(405);
-				match(LE);
+				arg(0);
 				setState(406);
+				match(LE);
+				setState(407);
 				arg(0);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(408);
-				arg(0);
 				setState(409);
-				match(GE);
+				arg(0);
 				setState(410);
+				match(GE);
+				setState(411);
 				arg(0);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(412);
-				arg(0);
 				setState(413);
-				match(EQUALS);
+				arg(0);
 				setState(414);
+				match(EQUALS);
+				setState(415);
 				arg(0);
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(416);
-				arg(0);
 				setState(417);
-				match(NE);
+				arg(0);
 				setState(418);
+				match(NE);
+				setState(419);
 				arg(0);
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(420);
-				match(TMATCH);
 				setState(421);
-				match(LPAREN);
+				match(TMATCH);
 				setState(422);
-				arg(0);
+				match(LPAREN);
 				setState(423);
-				match(COMMA);
-				setState(424);
 				arg(0);
+				setState(424);
+				match(COMMA);
 				setState(425);
+				arg(0);
+				setState(426);
 				match(RPAREN);
 				}
 				break;
 			case 8:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(427);
-				match(TCONTAINS);
 				setState(428);
-				match(LPAREN);
+				match(TCONTAINS);
 				setState(429);
-				arg(0);
+				match(LPAREN);
 				setState(430);
-				match(COMMA);
-				setState(431);
 				arg(0);
+				setState(431);
+				match(COMMA);
 				setState(432);
+				arg(0);
+				setState(433);
 				match(RPAREN);
 				}
 				break;
 			case 9:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(434);
+				setState(435);
 				match(TRUELIT);
 				}
 				break;
 			case 10:
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(435);
+				setState(436);
 				match(FALSELIT);
 				}
 				break;
@@ -2370,9 +2341,9 @@ public class SouffleParser extends Parser {
 
 	public final Arg_listContext arg_list() throws RecognitionException {
 		Arg_listContext _localctx = new Arg_listContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_arg_list);
+		enterRule(_localctx, 54, RULE_arg_list);
 		try {
-			setState(440);
+			setState(441);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RBRACKET:
@@ -2414,7 +2385,7 @@ public class SouffleParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(439);
+				setState(440);
 				non_empty_arg_list(0);
 				}
 				break;
@@ -2461,18 +2432,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Non_empty_arg_listContext _localctx = new Non_empty_arg_listContext(_ctx, _parentState);
 		Non_empty_arg_listContext _prevctx = _localctx;
-		int _startState = 58;
-		enterRecursionRule(_localctx, 58, RULE_non_empty_arg_list, _p);
+		int _startState = 56;
+		enterRecursionRule(_localctx, 56, RULE_non_empty_arg_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(443);
+			setState(444);
 			arg(0);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(450);
+			setState(451);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,24,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -2483,16 +2454,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Non_empty_arg_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_non_empty_arg_list);
-					setState(445);
-					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(446);
-					match(COMMA);
+					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(447);
+					match(COMMA);
+					setState(448);
 					arg(0);
 					}
 					} 
 				}
-				setState(452);
+				setState(453);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,24,_ctx);
 			}
@@ -2588,204 +2559,204 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		ArgContext _localctx = new ArgContext(_ctx, _parentState);
 		ArgContext _prevctx = _localctx;
-		int _startState = 60;
-		enterRecursionRule(_localctx, 60, RULE_arg, _p);
+		int _startState = 58;
+		enterRecursionRule(_localctx, 58, RULE_arg, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(515);
+			setState(516);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,25,_ctx) ) {
 			case 1:
 				{
-				setState(454);
+				setState(455);
 				match(STRING);
 				}
 				break;
 			case 2:
 				{
-				setState(455);
+				setState(456);
 				match(FLOAT);
 				}
 				break;
 			case 3:
 				{
-				setState(456);
+				setState(457);
 				match(UNSIGNED);
 				}
 				break;
 			case 4:
 				{
-				setState(457);
+				setState(458);
 				match(NUMBER);
 				}
 				break;
 			case 5:
 				{
-				setState(458);
+				setState(459);
 				match(UNDERSCORE);
 				}
 				break;
 			case 6:
 				{
-				setState(459);
+				setState(460);
 				match(DOLLAR);
 				}
 				break;
 			case 7:
 				{
-				setState(460);
-				match(AUTOINC);
 				setState(461);
-				match(LPAREN);
+				match(AUTOINC);
 				setState(462);
+				match(LPAREN);
+				setState(463);
 				match(RPAREN);
 				}
 				break;
 			case 8:
 				{
-				setState(463);
+				setState(464);
 				match(IDENT);
 				}
 				break;
 			case 9:
 				{
-				setState(464);
+				setState(465);
 				match(NIL);
 				}
 				break;
 			case 10:
 				{
-				setState(465);
-				match(LBRACKET);
 				setState(466);
-				arg_list();
+				match(LBRACKET);
 				setState(467);
+				arg_list();
+				setState(468);
 				match(RBRACKET);
 				}
 				break;
 			case 11:
 				{
-				setState(469);
-				match(DOLLAR);
 				setState(470);
-				qualified_name(0);
+				match(DOLLAR);
 				setState(471);
-				match(LPAREN);
+				qualified_name(0);
 				setState(472);
-				arg_list();
+				match(LPAREN);
 				setState(473);
+				arg_list();
+				setState(474);
 				match(RPAREN);
 				}
 				break;
 			case 12:
 				{
-				setState(475);
-				match(LPAREN);
 				setState(476);
-				arg(0);
+				match(LPAREN);
 				setState(477);
+				arg(0);
+				setState(478);
 				match(RPAREN);
 				}
 				break;
 			case 13:
 				{
-				setState(479);
-				match(AS);
 				setState(480);
-				match(LPAREN);
+				match(AS);
 				setState(481);
-				arg(0);
+				match(LPAREN);
 				setState(482);
-				match(COMMA);
+				arg(0);
 				setState(483);
-				qualified_name(0);
+				match(COMMA);
 				setState(484);
+				qualified_name(0);
+				setState(485);
 				match(RPAREN);
 				}
 				break;
 			case 14:
 				{
-				setState(486);
-				match(AT);
 				setState(487);
-				match(IDENT);
+				match(AT);
 				setState(488);
-				match(LPAREN);
+				match(IDENT);
 				setState(489);
-				arg_list();
+				match(LPAREN);
 				setState(490);
+				arg_list();
+				setState(491);
 				match(RPAREN);
 				}
 				break;
 			case 15:
 				{
-				setState(492);
-				functor_built_in();
 				setState(493);
-				match(LPAREN);
+				functor_built_in();
 				setState(494);
-				arg_list();
+				match(LPAREN);
 				setState(495);
+				arg_list();
+				setState(496);
 				match(RPAREN);
 				}
 				break;
 			case 16:
 				{
-				setState(497);
-				aggregate_func();
 				setState(498);
-				match(LPAREN);
+				aggregate_func();
 				setState(499);
-				arg(0);
+				match(LPAREN);
 				setState(500);
-				match(COMMA);
+				arg(0);
 				setState(501);
-				non_empty_arg_list(0);
+				match(COMMA);
 				setState(502);
+				non_empty_arg_list(0);
+				setState(503);
 				match(RPAREN);
 				}
 				break;
 			case 17:
 				{
-				setState(504);
-				match(MINUS);
 				setState(505);
+				match(MINUS);
+				setState(506);
 				arg(19);
 				}
 				break;
 			case 18:
 				{
-				setState(506);
-				match(BW_NOT);
 				setState(507);
+				match(BW_NOT);
+				setState(508);
 				arg(18);
 				}
 				break;
 			case 19:
 				{
-				setState(508);
-				match(L_NOT);
 				setState(509);
+				match(L_NOT);
+				setState(510);
 				arg(17);
 				}
 				break;
 			case 20:
 				{
-				setState(510);
-				aggregate_func();
 				setState(511);
-				arg_list();
+				aggregate_func();
 				setState(512);
-				match(COLON);
+				arg_list();
 				setState(513);
+				match(COLON);
+				setState(514);
 				aggregate_body();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(564);
+			setState(565);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -2793,18 +2764,18 @@ public class SouffleParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(562);
+					setState(563);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(517);
-						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
 						setState(518);
-						match(PLUS);
+						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
 						setState(519);
+						match(PLUS);
+						setState(520);
 						arg(17);
 						}
 						break;
@@ -2812,11 +2783,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(520);
-						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
 						setState(521);
-						match(MINUS);
+						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
 						setState(522);
+						match(MINUS);
+						setState(523);
 						arg(16);
 						}
 						break;
@@ -2824,11 +2795,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(523);
-						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
 						setState(524);
-						match(STAR);
+						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
 						setState(525);
+						match(STAR);
+						setState(526);
 						arg(15);
 						}
 						break;
@@ -2836,11 +2807,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(526);
-						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
 						setState(527);
-						match(SLASH);
+						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
 						setState(528);
+						match(SLASH);
+						setState(529);
 						arg(14);
 						}
 						break;
@@ -2848,11 +2819,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(529);
-						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
 						setState(530);
-						match(PERCENT);
+						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
 						setState(531);
+						match(PERCENT);
+						setState(532);
 						arg(13);
 						}
 						break;
@@ -2860,11 +2831,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(532);
-						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
 						setState(533);
-						match(CARET);
+						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
 						setState(534);
+						match(CARET);
+						setState(535);
 						arg(12);
 						}
 						break;
@@ -2872,11 +2843,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(535);
-						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
 						setState(536);
-						match(L_AND);
+						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
 						setState(537);
+						match(L_AND);
+						setState(538);
 						arg(11);
 						}
 						break;
@@ -2884,11 +2855,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(538);
-						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(539);
-						match(L_OR);
+						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(540);
+						match(L_OR);
+						setState(541);
 						arg(10);
 						}
 						break;
@@ -2896,11 +2867,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(541);
-						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(542);
-						match(L_XOR);
+						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(543);
+						match(L_XOR);
+						setState(544);
 						arg(9);
 						}
 						break;
@@ -2908,11 +2879,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(544);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(545);
-						match(BW_AND);
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(546);
+						match(BW_AND);
+						setState(547);
 						arg(8);
 						}
 						break;
@@ -2920,11 +2891,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(547);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(548);
-						match(BW_OR);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(549);
+						match(BW_OR);
+						setState(550);
 						arg(7);
 						}
 						break;
@@ -2932,11 +2903,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(550);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(551);
-						match(BW_XOR);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(552);
+						match(BW_XOR);
+						setState(553);
 						arg(6);
 						}
 						break;
@@ -2944,11 +2915,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(553);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(554);
-						match(BW_SHIFT_L);
+						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(555);
+						match(BW_SHIFT_L);
+						setState(556);
 						arg(5);
 						}
 						break;
@@ -2956,11 +2927,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(556);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(557);
-						match(BW_SHIFT_R);
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(558);
+						match(BW_SHIFT_R);
+						setState(559);
 						arg(4);
 						}
 						break;
@@ -2968,18 +2939,18 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new ArgContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_arg);
-						setState(559);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 						setState(560);
-						match(BW_SHIFT_R_UNSIGNED);
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 						setState(561);
+						match(BW_SHIFT_R_UNSIGNED);
+						setState(562);
 						arg(3);
 						}
 						break;
 					}
 					} 
 				}
-				setState(566);
+				setState(567);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
 			}
@@ -3019,12 +2990,12 @@ public class SouffleParser extends Parser {
 
 	public final Functor_built_inContext functor_built_in() throws RecognitionException {
 		Functor_built_inContext _localctx = new Functor_built_inContext(_ctx, getState());
-		enterRule(_localctx, 62, RULE_functor_built_in);
+		enterRule(_localctx, 60, RULE_functor_built_in);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(567);
+			setState(568);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CAT) | (1L << ORD) | (1L << RANGE) | (1L << STRLEN) | (1L << SUBSTR) | (1L << TOFLOAT) | (1L << TONUMBER) | (1L << TOSTRING) | (1L << TOUNSIGNED))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3066,12 +3037,12 @@ public class SouffleParser extends Parser {
 
 	public final Aggregate_funcContext aggregate_func() throws RecognitionException {
 		Aggregate_funcContext _localctx = new Aggregate_funcContext(_ctx, getState());
-		enterRule(_localctx, 64, RULE_aggregate_func);
+		enterRule(_localctx, 62, RULE_aggregate_func);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(569);
+			setState(570);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MEAN) | (1L << MIN) | (1L << MAX) | (1L << COUNT) | (1L << SUM))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3116,70 +3087,31 @@ public class SouffleParser extends Parser {
 
 	public final Aggregate_bodyContext aggregate_body() throws RecognitionException {
 		Aggregate_bodyContext _localctx = new Aggregate_bodyContext(_ctx, getState());
-		enterRule(_localctx, 66, RULE_aggregate_body);
+		enterRule(_localctx, 64, RULE_aggregate_body);
 		try {
-			setState(576);
+			setState(577);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LBRACE:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(571);
-				match(LBRACE);
 				setState(572);
-				body();
+				match(LBRACE);
 				setState(573);
+				body();
+				setState(574);
 				match(RBRACE);
 				}
 				break;
 			case IDENT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(575);
+				setState(576);
 				atom();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Query_planContext extends ParserRuleContext {
-		public TerminalNode PLAN() { return getToken(SouffleParser.PLAN, 0); }
-		public Query_plan_listContext query_plan_list() {
-			return getRuleContext(Query_plan_listContext.class,0);
-		}
-		public Query_planContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_query_plan; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SouffleVisitor ) return ((SouffleVisitor<? extends T>)visitor).visitQuery_plan(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Query_planContext query_plan() throws RecognitionException {
-		Query_planContext _localctx = new Query_planContext(_ctx, getState());
-		enterRule(_localctx, 68, RULE_query_plan);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(578);
-			match(PLAN);
-			setState(579);
-			query_plan_list(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3223,22 +3155,22 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Query_plan_listContext _localctx = new Query_plan_listContext(_ctx, _parentState);
 		Query_plan_listContext _prevctx = _localctx;
-		int _startState = 70;
-		enterRecursionRule(_localctx, 70, RULE_query_plan_list, _p);
+		int _startState = 66;
+		enterRecursionRule(_localctx, 66, RULE_query_plan_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(582);
+			setState(580);
 			match(NUMBER);
-			setState(583);
+			setState(581);
 			match(COLON);
-			setState(584);
+			setState(582);
 			plan_order();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(593);
+			setState(591);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -3249,20 +3181,20 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Query_plan_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_query_plan_list);
-					setState(586);
+					setState(584);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(587);
+					setState(585);
 					match(COMMA);
-					setState(588);
+					setState(586);
 					match(NUMBER);
-					setState(589);
+					setState(587);
 					match(COLON);
-					setState(590);
+					setState(588);
 					plan_order();
 					}
 					} 
 				}
-				setState(595);
+				setState(593);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
 			}
@@ -3298,28 +3230,28 @@ public class SouffleParser extends Parser {
 
 	public final Plan_orderContext plan_order() throws RecognitionException {
 		Plan_orderContext _localctx = new Plan_orderContext(_ctx, getState());
-		enterRule(_localctx, 72, RULE_plan_order);
+		enterRule(_localctx, 68, RULE_plan_order);
 		try {
-			setState(602);
+			setState(600);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(596);
+				setState(594);
 				match(LPAREN);
-				setState(597);
+				setState(595);
 				match(RPAREN);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(598);
+				setState(596);
 				match(LPAREN);
-				setState(599);
+				setState(597);
 				non_empty_plan_order_list(0);
-				setState(600);
+				setState(598);
 				match(RPAREN);
 				}
 				break;
@@ -3362,18 +3294,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Non_empty_plan_order_listContext _localctx = new Non_empty_plan_order_listContext(_ctx, _parentState);
 		Non_empty_plan_order_listContext _prevctx = _localctx;
-		int _startState = 74;
-		enterRecursionRule(_localctx, 74, RULE_non_empty_plan_order_list, _p);
+		int _startState = 70;
+		enterRecursionRule(_localctx, 70, RULE_non_empty_plan_order_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(605);
+			setState(603);
 			match(NUMBER);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(612);
+			setState(610);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,31,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -3384,16 +3316,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Non_empty_plan_order_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_non_empty_plan_order_list);
-					setState(607);
+					setState(605);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(608);
+					setState(606);
 					match(COMMA);
-					setState(609);
+					setState(607);
 					match(NUMBER);
 					}
 					} 
 				}
-				setState(614);
+				setState(612);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,31,_ctx);
 			}
@@ -3432,17 +3364,17 @@ public class SouffleParser extends Parser {
 
 	public final Component_declContext component_decl() throws RecognitionException {
 		Component_declContext _localctx = new Component_declContext(_ctx, getState());
-		enterRule(_localctx, 76, RULE_component_decl);
+		enterRule(_localctx, 72, RULE_component_decl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(615);
+			setState(613);
 			component_head(0);
-			setState(616);
+			setState(614);
 			match(LBRACE);
-			setState(617);
+			setState(615);
 			component_body(0);
-			setState(618);
+			setState(616);
 			match(RBRACE);
 			}
 		}
@@ -3487,20 +3419,20 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Component_headContext _localctx = new Component_headContext(_ctx, _parentState);
 		Component_headContext _prevctx = _localctx;
-		int _startState = 78;
-		enterRecursionRule(_localctx, 78, RULE_component_head, _p);
+		int _startState = 74;
+		enterRecursionRule(_localctx, 74, RULE_component_head, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(621);
+			setState(619);
 			match(COMPONENT);
-			setState(622);
+			setState(620);
 			component_type();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(632);
+			setState(630);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -3508,18 +3440,18 @@ public class SouffleParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(630);
+					setState(628);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,32,_ctx) ) {
 					case 1:
 						{
 						_localctx = new Component_headContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_head);
-						setState(624);
+						setState(622);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(625);
+						setState(623);
 						match(COLON);
-						setState(626);
+						setState(624);
 						component_type();
 						}
 						break;
@@ -3527,18 +3459,18 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_headContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_head);
-						setState(627);
+						setState(625);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(628);
+						setState(626);
 						match(COMMA);
-						setState(629);
+						setState(627);
 						component_type();
 						}
 						break;
 					}
 					} 
 				}
-				setState(634);
+				setState(632);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
 			}
@@ -3573,13 +3505,13 @@ public class SouffleParser extends Parser {
 
 	public final Component_typeContext component_type() throws RecognitionException {
 		Component_typeContext _localctx = new Component_typeContext(_ctx, getState());
-		enterRule(_localctx, 80, RULE_component_type);
+		enterRule(_localctx, 76, RULE_component_type);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(635);
+			setState(633);
 			match(IDENT);
-			setState(636);
+			setState(634);
 			component_type_params();
 			}
 		}
@@ -3613,9 +3545,9 @@ public class SouffleParser extends Parser {
 
 	public final Component_type_paramsContext component_type_params() throws RecognitionException {
 		Component_type_paramsContext _localctx = new Component_type_paramsContext(_ctx, getState());
-		enterRule(_localctx, 82, RULE_component_type_params);
+		enterRule(_localctx, 78, RULE_component_type_params);
 		try {
-			setState(643);
+			setState(641);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
 			case 1:
@@ -3626,11 +3558,11 @@ public class SouffleParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(639);
+				setState(637);
 				match(LT);
-				setState(640);
+				setState(638);
 				component_param_list(0);
-				setState(641);
+				setState(639);
 				match(GT);
 				}
 				break;
@@ -3673,18 +3605,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Component_param_listContext _localctx = new Component_param_listContext(_ctx, _parentState);
 		Component_param_listContext _prevctx = _localctx;
-		int _startState = 84;
-		enterRecursionRule(_localctx, 84, RULE_component_param_list, _p);
+		int _startState = 80;
+		enterRecursionRule(_localctx, 80, RULE_component_param_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(646);
+			setState(644);
 			match(IDENT);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(653);
+			setState(651);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,35,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -3695,16 +3627,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Component_param_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_component_param_list);
-					setState(648);
+					setState(646);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(649);
+					setState(647);
 					match(COMMA);
-					setState(650);
+					setState(648);
 					match(IDENT);
 					}
 					} 
 				}
-				setState(655);
+				setState(653);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,35,_ctx);
 			}
@@ -3768,8 +3700,8 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Component_bodyContext _localctx = new Component_bodyContext(_ctx, _parentState);
 		Component_bodyContext _prevctx = _localctx;
-		int _startState = 86;
-		enterRecursionRule(_localctx, 86, RULE_component_body, _p);
+		int _startState = 82;
+		enterRecursionRule(_localctx, 82, RULE_component_body, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3777,7 +3709,7 @@ public class SouffleParser extends Parser {
 			{
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(676);
+			setState(674);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,37,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -3785,16 +3717,16 @@ public class SouffleParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(674);
+					setState(672);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,36,_ctx) ) {
 					case 1:
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(657);
+						setState(655);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(658);
+						setState(656);
 						directive_head();
 						}
 						break;
@@ -3802,9 +3734,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(659);
+						setState(657);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(660);
+						setState(658);
 						souffle_rule();
 						}
 						break;
@@ -3812,9 +3744,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(661);
+						setState(659);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(662);
+						setState(660);
 						fact();
 						}
 						break;
@@ -3822,11 +3754,11 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(663);
+						setState(661);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(664);
+						setState(662);
 						match(OVERRIDE);
-						setState(665);
+						setState(663);
 						match(IDENT);
 						}
 						break;
@@ -3834,9 +3766,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(666);
+						setState(664);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(667);
+						setState(665);
 						component_init();
 						}
 						break;
@@ -3844,9 +3776,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(668);
+						setState(666);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(669);
+						setState(667);
 						component_decl();
 						}
 						break;
@@ -3854,9 +3786,9 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(670);
+						setState(668);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(671);
+						setState(669);
 						type_decl();
 						}
 						break;
@@ -3864,16 +3796,16 @@ public class SouffleParser extends Parser {
 						{
 						_localctx = new Component_bodyContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_component_body);
-						setState(672);
+						setState(670);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(673);
+						setState(671);
 						relation_decl();
 						}
 						break;
 					}
 					} 
 				}
-				setState(678);
+				setState(676);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,37,_ctx);
 			}
@@ -3910,17 +3842,17 @@ public class SouffleParser extends Parser {
 
 	public final Component_initContext component_init() throws RecognitionException {
 		Component_initContext _localctx = new Component_initContext(_ctx, getState());
-		enterRule(_localctx, 88, RULE_component_init);
+		enterRule(_localctx, 84, RULE_component_init);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(679);
+			setState(677);
 			match(INSTANTIATE);
-			setState(680);
+			setState(678);
 			match(IDENT);
-			setState(681);
+			setState(679);
 			match(EQUALS);
-			setState(682);
+			setState(680);
 			component_type();
 			}
 		}
@@ -3961,48 +3893,48 @@ public class SouffleParser extends Parser {
 
 	public final Functor_declContext functor_decl() throws RecognitionException {
 		Functor_declContext _localctx = new Functor_declContext(_ctx, getState());
-		enterRule(_localctx, 90, RULE_functor_decl);
+		enterRule(_localctx, 86, RULE_functor_decl);
 		try {
-			setState(701);
+			setState(699);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(684);
+				setState(682);
 				match(FUNCTOR);
-				setState(685);
+				setState(683);
 				match(IDENT);
-				setState(686);
+				setState(684);
 				match(LPAREN);
-				setState(687);
+				setState(685);
 				functor_arg_type_list();
-				setState(688);
+				setState(686);
 				match(RPAREN);
-				setState(689);
+				setState(687);
 				match(COLON);
-				setState(690);
+				setState(688);
 				qualified_name(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(692);
+				setState(690);
 				match(FUNCTOR);
-				setState(693);
+				setState(691);
 				match(IDENT);
-				setState(694);
+				setState(692);
 				match(LPAREN);
-				setState(695);
+				setState(693);
 				functor_arg_type_list();
-				setState(696);
+				setState(694);
 				match(RPAREN);
-				setState(697);
+				setState(695);
 				match(COLON);
-				setState(698);
+				setState(696);
 				qualified_name(0);
-				setState(699);
+				setState(697);
 				match(STATEFUL);
 				}
 				break;
@@ -4036,9 +3968,9 @@ public class SouffleParser extends Parser {
 
 	public final Functor_arg_type_listContext functor_arg_type_list() throws RecognitionException {
 		Functor_arg_type_listContext _localctx = new Functor_arg_type_listContext(_ctx, getState());
-		enterRule(_localctx, 92, RULE_functor_arg_type_list);
+		enterRule(_localctx, 88, RULE_functor_arg_type_list);
 		try {
-			setState(705);
+			setState(703);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RPAREN:
@@ -4049,7 +3981,7 @@ public class SouffleParser extends Parser {
 			case IDENT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(704);
+				setState(702);
 				non_empty_functor_arg_type_list(0);
 				}
 				break;
@@ -4096,18 +4028,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Non_empty_functor_arg_type_listContext _localctx = new Non_empty_functor_arg_type_listContext(_ctx, _parentState);
 		Non_empty_functor_arg_type_listContext _prevctx = _localctx;
-		int _startState = 94;
-		enterRecursionRule(_localctx, 94, RULE_non_empty_functor_arg_type_list, _p);
+		int _startState = 90;
+		enterRecursionRule(_localctx, 90, RULE_non_empty_functor_arg_type_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(708);
+			setState(706);
 			functor_attribute();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(715);
+			setState(713);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -4118,16 +4050,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Non_empty_functor_arg_type_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_non_empty_functor_arg_type_list);
-					setState(710);
+					setState(708);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(711);
+					setState(709);
 					match(COMMA);
-					setState(712);
+					setState(710);
 					functor_attribute();
 					}
 					} 
 				}
-				setState(717);
+				setState(715);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
 			}
@@ -4163,26 +4095,26 @@ public class SouffleParser extends Parser {
 
 	public final Functor_attributeContext functor_attribute() throws RecognitionException {
 		Functor_attributeContext _localctx = new Functor_attributeContext(_ctx, getState());
-		enterRule(_localctx, 96, RULE_functor_attribute);
+		enterRule(_localctx, 92, RULE_functor_attribute);
 		try {
-			setState(722);
+			setState(720);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(718);
+				setState(716);
 				qualified_name(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(719);
+				setState(717);
 				match(IDENT);
-				setState(720);
+				setState(718);
 				match(COLON);
-				setState(721);
+				setState(719);
 				qualified_name(0);
 				}
 				break;
@@ -4218,28 +4150,28 @@ public class SouffleParser extends Parser {
 
 	public final PragmaContext pragma() throws RecognitionException {
 		PragmaContext _localctx = new PragmaContext(_ctx, getState());
-		enterRule(_localctx, 98, RULE_pragma);
+		enterRule(_localctx, 94, RULE_pragma);
 		try {
-			setState(729);
+			setState(727);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(724);
+				setState(722);
 				match(PRAGMA);
-				setState(725);
+				setState(723);
 				match(STRING);
-				setState(726);
+				setState(724);
 				match(STRING);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(727);
+				setState(725);
 				match(PRAGMA);
-				setState(728);
+				setState(726);
 				match(STRING);
 				}
 				break;
@@ -4276,13 +4208,13 @@ public class SouffleParser extends Parser {
 
 	public final Directive_headContext directive_head() throws RecognitionException {
 		Directive_headContext _localctx = new Directive_headContext(_ctx, getState());
-		enterRule(_localctx, 100, RULE_directive_head);
+		enterRule(_localctx, 96, RULE_directive_head);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(731);
+			setState(729);
 			directive_head_decl();
-			setState(732);
+			setState(730);
 			directive_list();
 			}
 		}
@@ -4315,12 +4247,12 @@ public class SouffleParser extends Parser {
 
 	public final Directive_head_declContext directive_head_decl() throws RecognitionException {
 		Directive_head_declContext _localctx = new Directive_head_declContext(_ctx, getState());
-		enterRule(_localctx, 102, RULE_directive_head_decl);
+		enterRule(_localctx, 98, RULE_directive_head_decl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(734);
+			setState(732);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INPUT_DECL) | (1L << OUTPUT_DECL) | (1L << PRINTSIZE_DECL) | (1L << LIMITSIZE_DECL))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -4365,39 +4297,39 @@ public class SouffleParser extends Parser {
 
 	public final Directive_listContext directive_list() throws RecognitionException {
 		Directive_listContext _localctx = new Directive_listContext(_ctx, getState());
-		enterRule(_localctx, 104, RULE_directive_list);
+		enterRule(_localctx, 100, RULE_directive_list);
 		try {
-			setState(746);
+			setState(744);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,43,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(736);
+				setState(734);
 				relation_directive_list(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(737);
+				setState(735);
 				relation_directive_list(0);
-				setState(738);
+				setState(736);
 				match(LPAREN);
-				setState(739);
+				setState(737);
 				match(RPAREN);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(741);
+				setState(739);
 				relation_directive_list(0);
-				setState(742);
+				setState(740);
 				match(LPAREN);
-				setState(743);
+				setState(741);
 				non_empty_key_value_pairs(0);
-				setState(744);
+				setState(742);
 				match(RPAREN);
 				}
 				break;
@@ -4442,18 +4374,18 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Relation_directive_listContext _localctx = new Relation_directive_listContext(_ctx, _parentState);
 		Relation_directive_listContext _prevctx = _localctx;
-		int _startState = 106;
-		enterRecursionRule(_localctx, 106, RULE_relation_directive_list, _p);
+		int _startState = 102;
+		enterRecursionRule(_localctx, 102, RULE_relation_directive_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(749);
+			setState(747);
 			qualified_name(0);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(756);
+			setState(754);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,44,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -4464,16 +4396,16 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Relation_directive_listContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_relation_directive_list);
-					setState(751);
+					setState(749);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(752);
+					setState(750);
 					match(COMMA);
-					setState(753);
+					setState(751);
 					qualified_name(0);
 					}
 					} 
 				}
-				setState(758);
+				setState(756);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,44,_ctx);
 			}
@@ -4520,22 +4452,22 @@ public class SouffleParser extends Parser {
 		int _parentState = getState();
 		Non_empty_key_value_pairsContext _localctx = new Non_empty_key_value_pairsContext(_ctx, _parentState);
 		Non_empty_key_value_pairsContext _prevctx = _localctx;
-		int _startState = 108;
-		enterRecursionRule(_localctx, 108, RULE_non_empty_key_value_pairs, _p);
+		int _startState = 104;
+		enterRecursionRule(_localctx, 104, RULE_non_empty_key_value_pairs, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(760);
+			setState(758);
 			match(IDENT);
-			setState(761);
+			setState(759);
 			match(EQUALS);
-			setState(762);
+			setState(760);
 			kvp_value();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(771);
+			setState(769);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,45,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -4546,20 +4478,20 @@ public class SouffleParser extends Parser {
 					{
 					_localctx = new Non_empty_key_value_pairsContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_non_empty_key_value_pairs);
-					setState(764);
+					setState(762);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(765);
+					setState(763);
 					match(COMMA);
-					setState(766);
+					setState(764);
 					match(IDENT);
-					setState(767);
+					setState(765);
 					match(EQUALS);
-					setState(768);
+					setState(766);
 					kvp_value();
 					}
 					} 
 				}
-				setState(773);
+				setState(771);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,45,_ctx);
 			}
@@ -4595,12 +4527,12 @@ public class SouffleParser extends Parser {
 
 	public final Kvp_valueContext kvp_value() throws RecognitionException {
 		Kvp_valueContext _localctx = new Kvp_valueContext(_ctx, getState());
-		enterRule(_localctx, 110, RULE_kvp_value);
+		enterRule(_localctx, 106, RULE_kvp_value);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(774);
+			setState(772);
 			_la = _input.LA(1);
 			if ( !(((((_la - 56)) & ~0x3f) == 0 && ((1L << (_la - 56)) & ((1L << (TRUELIT - 56)) | (1L << (FALSELIT - 56)) | (1L << (NUMBER - 56)) | (1L << (IDENT - 56)) | (1L << (STRING - 56)))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -4643,31 +4575,31 @@ public class SouffleParser extends Parser {
 			return non_empty_attribute_names_sempred((Non_empty_attribute_namesContext)_localctx, predIndex);
 		case 16:
 			return dependency_list_aux_sempred((Dependency_list_auxContext)_localctx, predIndex);
-		case 21:
+		case 20:
 			return head_sempred((HeadContext)_localctx, predIndex);
-		case 23:
+		case 22:
 			return disjunction_sempred((DisjunctionContext)_localctx, predIndex);
-		case 24:
+		case 23:
 			return conjunction_sempred((ConjunctionContext)_localctx, predIndex);
-		case 29:
+		case 28:
 			return non_empty_arg_list_sempred((Non_empty_arg_listContext)_localctx, predIndex);
-		case 30:
+		case 29:
 			return arg_sempred((ArgContext)_localctx, predIndex);
-		case 35:
+		case 33:
 			return query_plan_list_sempred((Query_plan_listContext)_localctx, predIndex);
-		case 37:
+		case 35:
 			return non_empty_plan_order_list_sempred((Non_empty_plan_order_listContext)_localctx, predIndex);
-		case 39:
+		case 37:
 			return component_head_sempred((Component_headContext)_localctx, predIndex);
-		case 42:
+		case 40:
 			return component_param_list_sempred((Component_param_listContext)_localctx, predIndex);
-		case 43:
+		case 41:
 			return component_body_sempred((Component_bodyContext)_localctx, predIndex);
-		case 47:
+		case 45:
 			return non_empty_functor_arg_type_list_sempred((Non_empty_functor_arg_type_listContext)_localctx, predIndex);
-		case 53:
+		case 51:
 			return relation_directive_list_sempred((Relation_directive_listContext)_localctx, predIndex);
-		case 54:
+		case 52:
 			return non_empty_key_value_pairs_sempred((Non_empty_key_value_pairsContext)_localctx, predIndex);
 		}
 		return true;
@@ -4910,290 +4842,295 @@ public class SouffleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3e\u030b\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3d\u0309\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
 		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
 		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
-		"\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\3\2\3\2\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3\u0088"+
-		"\n\3\f\3\16\3\u008b\13\3\3\4\3\4\3\4\3\4\3\4\3\4\7\4\u0093\n\4\f\4\16"+
-		"\4\u0096\13\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
-		"\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5\u00ae\n\5\3\6\3\6\3\6\3\6\3\6\3\6"+
-		"\5\6\u00b6\n\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7\u00be\n\7\f\7\16\7\u00c1\13"+
-		"\7\3\b\3\b\3\b\3\b\3\b\3\b\7\b\u00c9\n\b\f\b\16\b\u00cc\13\b\3\t\3\t\3"+
-		"\t\3\t\3\t\3\t\3\t\3\t\5\t\u00d6\n\t\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13"+
-		"\3\13\3\13\3\13\3\13\7\13\u00e4\n\13\f\13\16\13\u00e7\13\13\3\f\3\f\3"+
-		"\f\3\f\3\f\3\f\5\f\u00ef\n\f\3\r\3\r\3\r\3\r\3\r\3\r\7\r\u00f7\n\r\f\r"+
-		"\16\r\u00fa\13\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17"+
+		"\64\4\65\t\65\4\66\t\66\4\67\t\67\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3\u0085\n\3\f\3"+
+		"\16\3\u0088\13\3\3\4\3\4\3\4\3\4\3\4\3\4\7\4\u0090\n\4\f\4\16\4\u0093"+
+		"\13\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
+		"\3\5\3\5\3\5\3\5\3\5\3\5\5\5\u00ab\n\5\3\6\3\6\3\6\3\6\3\6\3\6\5\6\u00b3"+
+		"\n\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7\u00bb\n\7\f\7\16\7\u00be\13\7\3\b\3\b"+
+		"\3\b\3\b\3\b\3\b\7\b\u00c6\n\b\f\b\16\b\u00c9\13\b\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\5\t\u00d3\n\t\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13"+
+		"\3\13\3\13\7\13\u00e1\n\13\f\13\16\13\u00e4\13\13\3\f\3\f\3\f\3\f\3\f"+
+		"\3\f\5\f\u00ec\n\f\3\r\3\r\3\r\3\r\3\r\3\r\7\r\u00f4\n\r\f\r\16\r\u00f7"+
+		"\13\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17"+
 		"\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17"+
-		"\3\17\3\17\3\17\3\17\7\17\u0119\n\17\f\17\16\17\u011c\13\17\3\20\3\20"+
-		"\3\20\3\20\3\20\3\20\7\20\u0124\n\20\f\20\16\20\u0127\13\20\3\21\3\21"+
-		"\3\21\3\21\3\21\5\21\u012e\n\21\3\22\3\22\3\22\3\22\3\22\3\22\7\22\u0136"+
-		"\n\22\f\22\16\22\u0139\13\22\3\23\3\23\3\23\5\23\u013e\n\23\3\24\3\24"+
-		"\3\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
-		"\3\25\3\25\3\25\3\25\3\25\3\25\5\25\u0156\n\25\3\26\3\26\3\26\3\26\3\26"+
-		"\3\27\3\27\3\27\3\27\3\27\3\27\7\27\u0163\n\27\f\27\16\27\u0166\13\27"+
-		"\3\30\3\30\3\31\3\31\3\31\3\31\3\31\3\31\7\31\u0170\n\31\f\31\16\31\u0173"+
-		"\13\31\3\32\3\32\3\32\3\32\3\32\3\32\7\32\u017b\n\32\f\32\16\32\u017e"+
-		"\13\32\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\5\33\u0188\n\33\3\34\3"+
-		"\34\3\34\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3"+
-		"\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3"+
-		"\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3"+
-		"\35\3\35\5\35\u01b7\n\35\3\36\3\36\5\36\u01bb\n\36\3\37\3\37\3\37\3\37"+
-		"\3\37\3\37\7\37\u01c3\n\37\f\37\16\37\u01c6\13\37\3 \3 \3 \3 \3 \3 \3"+
-		" \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3"+
-		" \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3"+
-		" \3 \3 \3 \3 \3 \3 \3 \3 \3 \5 \u0206\n \3 \3 \3 \3 \3 \3 \3 \3 \3 \3"+
-		" \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3"+
-		" \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \3 \7 \u0235\n \f \16 \u0238\13 \3!"+
-		"\3!\3\"\3\"\3#\3#\3#\3#\3#\5#\u0243\n#\3$\3$\3$\3%\3%\3%\3%\3%\3%\3%\3"+
-		"%\3%\3%\7%\u0252\n%\f%\16%\u0255\13%\3&\3&\3&\3&\3&\3&\5&\u025d\n&\3\'"+
-		"\3\'\3\'\3\'\3\'\3\'\7\'\u0265\n\'\f\'\16\'\u0268\13\'\3(\3(\3(\3(\3("+
-		"\3)\3)\3)\3)\3)\3)\3)\3)\3)\3)\7)\u0279\n)\f)\16)\u027c\13)\3*\3*\3*\3"+
-		"+\3+\3+\3+\3+\5+\u0286\n+\3,\3,\3,\3,\3,\3,\7,\u028e\n,\f,\16,\u0291\13"+
-		",\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\7-\u02a5\n-\f"+
-		"-\16-\u02a8\13-\3.\3.\3.\3.\3.\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/"+
-		"\3/\3/\3/\3/\5/\u02c0\n/\3\60\3\60\5\60\u02c4\n\60\3\61\3\61\3\61\3\61"+
-		"\3\61\3\61\7\61\u02cc\n\61\f\61\16\61\u02cf\13\61\3\62\3\62\3\62\3\62"+
-		"\5\62\u02d5\n\62\3\63\3\63\3\63\3\63\3\63\5\63\u02dc\n\63\3\64\3\64\3"+
-		"\64\3\65\3\65\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\5\66\u02ed"+
-		"\n\66\3\67\3\67\3\67\3\67\3\67\3\67\7\67\u02f5\n\67\f\67\16\67\u02f8\13"+
-		"\67\38\38\38\38\38\38\38\38\38\38\78\u0304\n8\f8\168\u0307\138\39\39\3"+
-		"9\2\30\4\6\f\16\24\30\34\36\",\60\62<>HLPVX`ln:\2\4\6\b\n\f\16\20\22\24"+
-		"\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnp\2\6"+
-		"\4\2 $<?\5\2\37\37\63\6489\3\2\6\t\5\2:;]]`a\2\u0348\2r\3\2\2\2\4t\3\2"+
-		"\2\2\6\u008c\3\2\2\2\b\u00ad\3\2\2\2\n\u00b5\3\2\2\2\f\u00b7\3\2\2\2\16"+
-		"\u00c2\3\2\2\2\20\u00d5\3\2\2\2\22\u00d7\3\2\2\2\24\u00dd\3\2\2\2\26\u00ee"+
-		"\3\2\2\2\30\u00f0\3\2\2\2\32\u00fb\3\2\2\2\34\u00ff\3\2\2\2\36\u011d\3"+
-		"\2\2\2 \u012d\3\2\2\2\"\u012f\3\2\2\2$\u013d\3\2\2\2&\u013f\3\2\2\2(\u0155"+
-		"\3\2\2\2*\u0157\3\2\2\2,\u015c\3\2\2\2.\u0167\3\2\2\2\60\u0169\3\2\2\2"+
-		"\62\u0174\3\2\2\2\64\u0187\3\2\2\2\66\u0189\3\2\2\28\u01b6\3\2\2\2:\u01ba"+
-		"\3\2\2\2<\u01bc\3\2\2\2>\u0205\3\2\2\2@\u0239\3\2\2\2B\u023b\3\2\2\2D"+
-		"\u0242\3\2\2\2F\u0244\3\2\2\2H\u0247\3\2\2\2J\u025c\3\2\2\2L\u025e\3\2"+
-		"\2\2N\u0269\3\2\2\2P\u026e\3\2\2\2R\u027d\3\2\2\2T\u0285\3\2\2\2V\u0287"+
-		"\3\2\2\2X\u0292\3\2\2\2Z\u02a9\3\2\2\2\\\u02bf\3\2\2\2^\u02c3\3\2\2\2"+
-		"`\u02c5\3\2\2\2b\u02d4\3\2\2\2d\u02db\3\2\2\2f\u02dd\3\2\2\2h\u02e0\3"+
-		"\2\2\2j\u02ec\3\2\2\2l\u02ee\3\2\2\2n\u02f9\3\2\2\2p\u0308\3\2\2\2rs\5"+
-		"\4\3\2s\3\3\2\2\2t\u0089\b\3\1\2uv\f\13\2\2v\u0088\5f\64\2wx\f\n\2\2x"+
-		"\u0088\5(\25\2yz\f\t\2\2z\u0088\5&\24\2{|\f\b\2\2|\u0088\5N(\2}~\f\7\2"+
-		"\2~\u0088\5Z.\2\177\u0080\f\6\2\2\u0080\u0088\5d\63\2\u0081\u0082\f\5"+
-		"\2\2\u0082\u0088\5\b\5\2\u0083\u0084\f\4\2\2\u0084\u0088\5\\/\2\u0085"+
-		"\u0086\f\3\2\2\u0086\u0088\5\22\n\2\u0087u\3\2\2\2\u0087w\3\2\2\2\u0087"+
-		"y\3\2\2\2\u0087{\3\2\2\2\u0087}\3\2\2\2\u0087\177\3\2\2\2\u0087\u0081"+
-		"\3\2\2\2\u0087\u0083\3\2\2\2\u0087\u0085\3\2\2\2\u0088\u008b\3\2\2\2\u0089"+
-		"\u0087\3\2\2\2\u0089\u008a\3\2\2\2\u008a\5\3\2\2\2\u008b\u0089\3\2\2\2"+
-		"\u008c\u008d\b\4\1\2\u008d\u008e\7`\2\2\u008e\u0094\3\2\2\2\u008f\u0090"+
-		"\f\3\2\2\u0090\u0091\7\\\2\2\u0091\u0093\7`\2\2\u0092\u008f\3\2\2\2\u0093"+
-		"\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0094\u0095\3\2\2\2\u0095\7\3\2\2\2"+
-		"\u0096\u0094\3\2\2\2\u0097\u0098\7\n\2\2\u0098\u0099\7`\2\2\u0099\u009a"+
-		"\7L\2\2\u009a\u00ae\5\6\4\2\u009b\u009c\7\n\2\2\u009c\u009d\7`\2\2\u009d"+
-		"\u009e\7P\2\2\u009e\u00ae\5\f\7\2\u009f\u00a0\7\n\2\2\u00a0\u00a1\7`\2"+
-		"\2\u00a1\u00a2\7P\2\2\u00a2\u00ae\5\n\6\2\u00a3\u00a4\7\n\2\2\u00a4\u00a5"+
-		"\7`\2\2\u00a5\u00a6\7P\2\2\u00a6\u00ae\5\16\b\2\u00a7\u00a8\7\r\2\2\u00a8"+
-		"\u00ae\7`\2\2\u00a9\u00aa\7\16\2\2\u00aa\u00ae\7`\2\2\u00ab\u00ac\7\n"+
-		"\2\2\u00ac\u00ae\7`\2\2\u00ad\u0097\3\2\2\2\u00ad\u009b\3\2\2\2\u00ad"+
-		"\u009f\3\2\2\2\u00ad\u00a3\3\2\2\2\u00ad\u00a7\3\2\2\2\u00ad\u00a9\3\2"+
-		"\2\2\u00ad\u00ab\3\2\2\2\u00ae\t\3\2\2\2\u00af\u00b0\7B\2\2\u00b0\u00b6"+
-		"\7C\2\2\u00b1\u00b2\7B\2\2\u00b2\u00b3\5\30\r\2\u00b3\u00b4\7C\2\2\u00b4"+
-		"\u00b6\3\2\2\2\u00b5\u00af\3\2\2\2\u00b5\u00b1\3\2\2\2\u00b6\13\3\2\2"+
-		"\2\u00b7\u00b8\b\7\1\2\u00b8\u00b9\5\6\4\2\u00b9\u00bf\3\2\2\2\u00ba\u00bb"+
-		"\f\3\2\2\u00bb\u00bc\7A\2\2\u00bc\u00be\5\6\4\2\u00bd\u00ba\3\2\2\2\u00be"+
-		"\u00c1\3\2\2\2\u00bf\u00bd\3\2\2\2\u00bf\u00c0\3\2\2\2\u00c0\r\3\2\2\2"+
-		"\u00c1\u00bf\3\2\2\2\u00c2\u00c3\b\b\1\2\u00c3\u00c4\5\20\t\2\u00c4\u00ca"+
-		"\3\2\2\2\u00c5\u00c6\f\3\2\2\u00c6\u00c7\7A\2\2\u00c7\u00c9\5\20\t\2\u00c8"+
-		"\u00c5\3\2\2\2\u00c9\u00cc\3\2\2\2\u00ca\u00c8\3\2\2\2\u00ca\u00cb\3\2"+
-		"\2\2\u00cb\17\3\2\2\2\u00cc\u00ca\3\2\2\2\u00cd\u00ce\7`\2\2\u00ce\u00cf"+
-		"\7W\2\2\u00cf\u00d6\7X\2\2\u00d0\u00d1\7`\2\2\u00d1\u00d2\7W\2\2\u00d2"+
-		"\u00d3\5\30\r\2\u00d3\u00d4\7X\2\2\u00d4\u00d6\3\2\2\2\u00d5\u00cd\3\2"+
-		"\2\2\u00d5\u00d0\3\2\2\2\u00d6\21\3\2\2\2\u00d7\u00d8\7\4\2\2\u00d8\u00d9"+
-		"\5\24\13\2\u00d9\u00da\5\26\f\2\u00da\u00db\5\34\17\2\u00db\u00dc\5$\23"+
-		"\2\u00dc\23\3\2\2\2\u00dd\u00de\b\13\1\2\u00de\u00df\7`\2\2\u00df\u00e5"+
-		"\3\2\2\2\u00e0\u00e1\f\3\2\2\u00e1\u00e2\7I\2\2\u00e2\u00e4\7`\2\2\u00e3"+
-		"\u00e0\3\2\2\2\u00e4\u00e7\3\2\2\2\u00e5\u00e3\3\2\2\2\u00e5\u00e6\3\2"+
-		"\2\2\u00e6\25\3\2\2\2\u00e7\u00e5\3\2\2\2\u00e8\u00e9\7G\2\2\u00e9\u00ef"+
-		"\7H\2\2\u00ea\u00eb\7G\2\2\u00eb\u00ec\5\30\r\2\u00ec\u00ed\7H\2\2\u00ed"+
-		"\u00ef\3\2\2\2\u00ee\u00e8\3\2\2\2\u00ee\u00ea\3\2\2\2\u00ef\27\3\2\2"+
-		"\2\u00f0\u00f1\b\r\1\2\u00f1\u00f2\5\32\16\2\u00f2\u00f8\3\2\2\2\u00f3"+
-		"\u00f4\f\3\2\2\u00f4\u00f5\7I\2\2\u00f5\u00f7\5\32\16\2\u00f6\u00f3\3"+
-		"\2\2\2\u00f7\u00fa\3\2\2\2\u00f8\u00f6\3\2\2\2\u00f8\u00f9\3\2\2\2\u00f9"+
-		"\31\3\2\2\2\u00fa\u00f8\3\2\2\2\u00fb\u00fc\7`\2\2\u00fc\u00fd\7J\2\2"+
-		"\u00fd\u00fe\5\6\4\2\u00fe\33\3\2\2\2\u00ff\u011a\b\17\1\2\u0100\u0101"+
-		"\f\16\2\2\u0101\u0119\7)\2\2\u0102\u0103\f\r\2\2\u0103\u0119\7,\2\2\u0104"+
-		"\u0105\f\f\2\2\u0105\u0119\7-\2\2\u0106\u0107\f\13\2\2\u0107\u0119\7."+
-		"\2\2\u0108\u0109\f\n\2\2\u0109\u0119\7/\2\2\u010a\u010b\f\t\2\2\u010b"+
-		"\u0119\7\60\2\2\u010c\u010d\f\b\2\2\u010d\u0119\7\62\2\2\u010e\u010f\f"+
-		"\7\2\2\u010f\u0119\7\61\2\2\u0110\u0111\f\6\2\2\u0111\u0119\7+\2\2\u0112"+
-		"\u0113\f\5\2\2\u0113\u0119\7\'\2\2\u0114\u0115\f\4\2\2\u0115\u0119\7("+
-		"\2\2\u0116\u0117\f\3\2\2\u0117\u0119\7*\2\2\u0118\u0100\3\2\2\2\u0118"+
-		"\u0102\3\2\2\2\u0118\u0104\3\2\2\2\u0118\u0106\3\2\2\2\u0118\u0108\3\2"+
-		"\2\2\u0118\u010a\3\2\2\2\u0118\u010c\3\2\2\2\u0118\u010e\3\2\2\2\u0118"+
-		"\u0110\3\2\2\2\u0118\u0112\3\2\2\2\u0118\u0114\3\2\2\2\u0118\u0116\3\2"+
-		"\2\2\u0119\u011c\3\2\2\2\u011a\u0118\3\2\2\2\u011a\u011b\3\2\2\2\u011b"+
-		"\35\3\2\2\2\u011c\u011a\3\2\2\2\u011d\u011e\b\20\1\2\u011e\u011f\7`\2"+
-		"\2\u011f\u0125\3\2\2\2\u0120\u0121\f\3\2\2\u0121\u0122\7I\2\2\u0122\u0124"+
-		"\7`\2\2\u0123\u0120\3\2\2\2\u0124\u0127\3\2\2\2\u0125\u0123\3\2\2\2\u0125"+
-		"\u0126\3\2\2\2\u0126\37\3\2\2\2\u0127\u0125\3\2\2\2\u0128\u012e\7`\2\2"+
-		"\u0129\u012a\7G\2\2\u012a\u012b\5\36\20\2\u012b\u012c\7H\2\2\u012c\u012e"+
-		"\3\2\2\2\u012d\u0128\3\2\2\2\u012d\u0129\3\2\2\2\u012e!\3\2\2\2\u012f"+
-		"\u0130\b\22\1\2\u0130\u0131\5 \21\2\u0131\u0137\3\2\2\2\u0132\u0133\f"+
-		"\3\2\2\u0133\u0134\7I\2\2\u0134\u0136\5 \21\2\u0135\u0132\3\2\2\2\u0136"+
-		"\u0139\3\2\2\2\u0137\u0135\3\2\2\2\u0137\u0138\3\2\2\2\u0138#\3\2\2\2"+
-		"\u0139\u0137\3\2\2\2\u013a\u013e\3\2\2\2\u013b\u013c\7@\2\2\u013c\u013e"+
-		"\5\"\22\2\u013d\u013a\3\2\2\2\u013d\u013b\3\2\2\2\u013e%\3\2\2\2\u013f"+
-		"\u0140\5\66\34\2\u0140\u0141\7\\\2\2\u0141\'\3\2\2\2\u0142\u0156\5*\26"+
-		"\2\u0143\u0144\5*\26\2\u0144\u0145\5F$\2\u0145\u0156\3\2\2\2\u0146\u0147"+
-		"\5\66\34\2\u0147\u0148\7M\2\2\u0148\u0149\5\66\34\2\u0149\u014a\7[\2\2"+
-		"\u014a\u014b\5.\30\2\u014b\u014c\7\\\2\2\u014c\u0156\3\2\2\2\u014d\u014e"+
-		"\5\66\34\2\u014e\u014f\7M\2\2\u014f\u0150\5\66\34\2\u0150\u0151\7[\2\2"+
-		"\u0151\u0152\5.\30\2\u0152\u0153\7\\\2\2\u0153\u0154\5F$\2\u0154\u0156"+
-		"\3\2\2\2\u0155\u0142\3\2\2\2\u0155\u0143\3\2\2\2\u0155\u0146\3\2\2\2\u0155"+
-		"\u014d\3\2\2\2\u0156)\3\2\2\2\u0157\u0158\5,\27\2\u0158\u0159\7[\2\2\u0159"+
-		"\u015a\5.\30\2\u015a\u015b\7\\\2\2\u015b+\3\2\2\2\u015c\u015d\b\27\1\2"+
-		"\u015d\u015e\5\66\34\2\u015e\u0164\3\2\2\2\u015f\u0160\f\3\2\2\u0160\u0161"+
-		"\7I\2\2\u0161\u0163\5\66\34\2\u0162\u015f\3\2\2\2\u0163\u0166\3\2\2\2"+
-		"\u0164\u0162\3\2\2\2\u0164\u0165\3\2\2\2\u0165-\3\2\2\2\u0166\u0164\3"+
-		"\2\2\2\u0167\u0168\5\60\31\2\u0168/\3\2\2\2\u0169\u016a\b\31\1\2\u016a"+
-		"\u016b\5\62\32\2\u016b\u0171\3\2\2\2\u016c\u016d\f\3\2\2\u016d\u016e\7"+
-		"K\2\2\u016e\u0170\5\62\32\2\u016f\u016c\3\2\2\2\u0170\u0173\3\2\2\2\u0171"+
-		"\u016f\3\2\2\2\u0171\u0172\3\2\2\2\u0172\61\3\2\2\2\u0173\u0171\3\2\2"+
-		"\2\u0174\u0175\b\32\1\2\u0175\u0176\5\64\33\2\u0176\u017c\3\2\2\2\u0177"+
-		"\u0178\f\3\2\2\u0178\u0179\7I\2\2\u0179\u017b\5\64\33\2\u017a\u0177\3"+
-		"\2\2\2\u017b\u017e\3\2\2\2\u017c\u017a\3\2\2\2\u017c\u017d\3\2\2\2\u017d"+
-		"\63\3\2\2\2\u017e\u017c\3\2\2\2\u017f\u0188\5\66\34\2\u0180\u0188\58\35"+
-		"\2\u0181\u0182\7G\2\2\u0182\u0183\5\60\31\2\u0183\u0184\7H\2\2\u0184\u0188"+
-		"\3\2\2\2\u0185\u0186\7Q\2\2\u0186\u0188\5\64\33\2\u0187\u017f\3\2\2\2"+
-		"\u0187\u0180\3\2\2\2\u0187\u0181\3\2\2\2\u0187\u0185\3\2\2\2\u0188\65"+
-		"\3\2\2\2\u0189\u018a\5\6\4\2\u018a\u018b\7G\2\2\u018b\u018c\5:\36\2\u018c"+
-		"\u018d\7H\2\2\u018d\67\3\2\2\2\u018e\u018f\5> \2\u018f\u0190\7Y\2\2\u0190"+
-		"\u0191\5> \2\u0191\u01b7\3\2\2\2\u0192\u0193\5> \2\u0193\u0194\7Z\2\2"+
-		"\u0194\u0195\5> \2\u0195\u01b7\3\2\2\2\u0196\u0197\5> \2\u0197\u0198\7"+
-		"M\2\2\u0198\u0199\5> \2\u0199\u01b7\3\2\2\2\u019a\u019b\5> \2\u019b\u019c"+
-		"\7N\2\2\u019c\u019d\5> \2\u019d\u01b7\3\2\2\2\u019e\u019f\5> \2\u019f"+
-		"\u01a0\7P\2\2\u01a0\u01a1\5> \2\u01a1\u01b7\3\2\2\2\u01a2\u01a3\5> \2"+
-		"\u01a3\u01a4\7O\2\2\u01a4\u01a5\5> \2\u01a5\u01b7\3\2\2\2\u01a6\u01a7"+
-		"\7\36\2\2\u01a7\u01a8\7G\2\2\u01a8\u01a9\5> \2\u01a9\u01aa\7I\2\2\u01aa"+
-		"\u01ab\5> \2\u01ab\u01ac\7H\2\2\u01ac\u01b7\3\2\2\2\u01ad\u01ae\7&\2\2"+
-		"\u01ae\u01af\7G\2\2\u01af\u01b0\5> \2\u01b0\u01b1\7I\2\2\u01b1\u01b2\5"+
-		"> \2\u01b2\u01b3\7H\2\2\u01b3\u01b7\3\2\2\2\u01b4\u01b7\7:\2\2\u01b5\u01b7"+
-		"\7;\2\2\u01b6\u018e\3\2\2\2\u01b6\u0192\3\2\2\2\u01b6\u0196\3\2\2\2\u01b6"+
-		"\u019a\3\2\2\2\u01b6\u019e\3\2\2\2\u01b6\u01a2\3\2\2\2\u01b6\u01a6\3\2"+
-		"\2\2\u01b6\u01ad\3\2\2\2\u01b6\u01b4\3\2\2\2\u01b6\u01b5\3\2\2\2\u01b7"+
-		"9\3\2\2\2\u01b8\u01bb\3\2\2\2\u01b9\u01bb\5<\37\2\u01ba\u01b8\3\2\2\2"+
-		"\u01ba\u01b9\3\2\2\2\u01bb;\3\2\2\2\u01bc\u01bd\b\37\1\2\u01bd\u01be\5"+
-		"> \2\u01be\u01c4\3\2\2\2\u01bf\u01c0\f\3\2\2\u01c0\u01c1\7I\2\2\u01c1"+
-		"\u01c3\5> \2\u01c2\u01bf\3\2\2\2\u01c3\u01c6\3\2\2\2\u01c4\u01c2\3\2\2"+
-		"\2\u01c4\u01c5\3\2\2\2\u01c5=\3\2\2\2\u01c6\u01c4\3\2\2\2\u01c7\u01c8"+
-		"\b \1\2\u01c8\u0206\7a\2\2\u01c9\u0206\7^\2\2\u01ca\u0206\7_\2\2\u01cb"+
-		"\u0206\7]\2\2\u01cc\u0206\7\67\2\2\u01cd\u0206\7D\2\2\u01ce\u01cf\7\22"+
-		"\2\2\u01cf\u01d0\7G\2\2\u01d0\u0206\7H\2\2\u01d1\u0206\7`\2\2\u01d2\u0206"+
-		"\7\66\2\2\u01d3\u01d4\7B\2\2\u01d4\u01d5\5:\36\2\u01d5\u01d6\7C\2\2\u01d6"+
-		"\u0206\3\2\2\2\u01d7\u01d8\7D\2\2\u01d8\u01d9\5\6\4\2\u01d9\u01da\7G\2"+
-		"\2\u01da\u01db\5:\36\2\u01db\u01dc\7H\2\2\u01dc\u0206\3\2\2\2\u01dd\u01de"+
-		"\7G\2\2\u01de\u01df\5> \2\u01df\u01e0\7H\2\2\u01e0\u0206\3\2\2\2\u01e1"+
-		"\u01e2\7\65\2\2\u01e2\u01e3\7G\2\2\u01e3\u01e4\5> \2\u01e4\u01e5\7I\2"+
-		"\2\u01e5\u01e6\5\6\4\2\u01e6\u01e7\7H\2\2\u01e7\u0206\3\2\2\2\u01e8\u01e9"+
-		"\7S\2\2\u01e9\u01ea\7`\2\2\u01ea\u01eb\7G\2\2\u01eb\u01ec\5:\36\2\u01ec"+
-		"\u01ed\7H\2\2\u01ed\u0206\3\2\2\2\u01ee\u01ef\5@!\2\u01ef\u01f0\7G\2\2"+
-		"\u01f0\u01f1\5:\36\2\u01f1\u01f2\7H\2\2\u01f2\u0206\3\2\2\2\u01f3\u01f4"+
-		"\5B\"\2\u01f4\u01f5\7G\2\2\u01f5\u01f6\5> \2\u01f6\u01f7\7I\2\2\u01f7"+
-		"\u01f8\5<\37\2\u01f8\u01f9\7H\2\2\u01f9\u0206\3\2\2\2\u01fa\u01fb\7F\2"+
-		"\2\u01fb\u0206\5> \25\u01fc\u01fd\7\26\2\2\u01fd\u0206\5> \24\u01fe\u01ff"+
-		"\7\35\2\2\u01ff\u0206\5> \23\u0200\u0201\5B\"\2\u0201\u0202\5:\36\2\u0202"+
-		"\u0203\7J\2\2\u0203\u0204\5D#\2\u0204\u0206\3\2\2\2\u0205\u01c7\3\2\2"+
-		"\2\u0205\u01c9\3\2\2\2\u0205\u01ca\3\2\2\2\u0205\u01cb\3\2\2\2\u0205\u01cc"+
-		"\3\2\2\2\u0205\u01cd\3\2\2\2\u0205\u01ce\3\2\2\2\u0205\u01d1\3\2\2\2\u0205"+
-		"\u01d2\3\2\2\2\u0205\u01d3\3\2\2\2\u0205\u01d7\3\2\2\2\u0205\u01dd\3\2"+
-		"\2\2\u0205\u01e1\3\2\2\2\u0205\u01e8\3\2\2\2\u0205\u01ee\3\2\2\2\u0205"+
-		"\u01f3\3\2\2\2\u0205\u01fa\3\2\2\2\u0205\u01fc\3\2\2\2\u0205\u01fe\3\2"+
-		"\2\2\u0205\u0200\3\2\2\2\u0206\u0236\3\2\2\2\u0207\u0208\f\22\2\2\u0208"+
-		"\u0209\7E\2\2\u0209\u0235\5> \23\u020a\u020b\f\21\2\2\u020b\u020c\7F\2"+
-		"\2\u020c\u0235\5> \22\u020d\u020e\f\20\2\2\u020e\u020f\7R\2\2\u020f\u0235"+
-		"\5> \21\u0210\u0211\f\17\2\2\u0211\u0212\7T\2\2\u0212\u0235\5> \20\u0213"+
-		"\u0214\f\16\2\2\u0214\u0215\7V\2\2\u0215\u0235\5> \17\u0216\u0217\f\r"+
-		"\2\2\u0217\u0218\7U\2\2\u0218\u0235\5> \16\u0219\u021a\f\f\2\2\u021a\u021b"+
-		"\7\32\2\2\u021b\u0235\5> \r\u021c\u021d\f\13\2\2\u021d\u021e\7\33\2\2"+
-		"\u021e\u0235\5> \f\u021f\u0220\f\n\2\2\u0220\u0221\7\34\2\2\u0221\u0235"+
-		"\5> \13\u0222\u0223\f\t\2\2\u0223\u0224\7\23\2\2\u0224\u0235\5> \n\u0225"+
-		"\u0226\f\b\2\2\u0226\u0227\7\24\2\2\u0227\u0235\5> \t\u0228\u0229\f\7"+
-		"\2\2\u0229\u022a\7\25\2\2\u022a\u0235\5> \b\u022b\u022c\f\6\2\2\u022c"+
-		"\u022d\7\27\2\2\u022d\u0235\5> \7\u022e\u022f\f\5\2\2\u022f\u0230\7\30"+
-		"\2\2\u0230\u0235\5> \6\u0231\u0232\f\4\2\2\u0232\u0233\7\31\2\2\u0233"+
-		"\u0235\5> \5\u0234\u0207\3\2\2\2\u0234\u020a\3\2\2\2\u0234\u020d\3\2\2"+
-		"\2\u0234\u0210\3\2\2\2\u0234\u0213\3\2\2\2\u0234\u0216\3\2\2\2\u0234\u0219"+
-		"\3\2\2\2\u0234\u021c\3\2\2\2\u0234\u021f\3\2\2\2\u0234\u0222\3\2\2\2\u0234"+
-		"\u0225\3\2\2\2\u0234\u0228\3\2\2\2\u0234\u022b\3\2\2\2\u0234\u022e\3\2"+
-		"\2\2\u0234\u0231\3\2\2\2\u0235\u0238\3\2\2\2\u0236\u0234\3\2\2\2\u0236"+
-		"\u0237\3\2\2\2\u0237?\3\2\2\2\u0238\u0236\3\2\2\2\u0239\u023a\t\2\2\2"+
-		"\u023aA\3\2\2\2\u023b\u023c\t\3\2\2\u023cC\3\2\2\2\u023d\u023e\7W\2\2"+
-		"\u023e\u023f\5.\30\2\u023f\u0240\7X\2\2\u0240\u0243\3\2\2\2\u0241\u0243"+
-		"\5\66\34\2\u0242\u023d\3\2\2\2\u0242\u0241\3\2\2\2\u0243E\3\2\2\2\u0244"+
-		"\u0245\7\21\2\2\u0245\u0246\5H%\2\u0246G\3\2\2\2\u0247\u0248\b%\1\2\u0248"+
-		"\u0249\7]\2\2\u0249\u024a\7J\2\2\u024a\u024b\5J&\2\u024b\u0253\3\2\2\2"+
-		"\u024c\u024d\f\3\2\2\u024d\u024e\7I\2\2\u024e\u024f\7]\2\2\u024f\u0250"+
-		"\7J\2\2\u0250\u0252\5J&\2\u0251\u024c\3\2\2\2\u0252\u0255\3\2\2\2\u0253"+
-		"\u0251\3\2\2\2\u0253\u0254\3\2\2\2\u0254I\3\2\2\2\u0255\u0253\3\2\2\2"+
-		"\u0256\u0257\7G\2\2\u0257\u025d\7H\2\2\u0258\u0259\7G\2\2\u0259\u025a"+
-		"\5L\'\2\u025a\u025b\7H\2\2\u025b\u025d\3\2\2\2\u025c\u0256\3\2\2\2\u025c"+
-		"\u0258\3\2\2\2\u025dK\3\2\2\2\u025e\u025f\b\'\1\2\u025f\u0260\7]\2\2\u0260"+
-		"\u0266\3\2\2\2\u0261\u0262\f\3\2\2\u0262\u0263\7I\2\2\u0263\u0265\7]\2"+
-		"\2\u0264\u0261\3\2\2\2\u0265\u0268\3\2\2\2\u0266\u0264\3\2\2\2\u0266\u0267"+
-		"\3\2\2\2\u0267M\3\2\2\2\u0268\u0266\3\2\2\2\u0269\u026a\5P)\2\u026a\u026b"+
-		"\7W\2\2\u026b\u026c\5X-\2\u026c\u026d\7X\2\2\u026dO\3\2\2\2\u026e\u026f"+
-		"\b)\1\2\u026f\u0270\7\13\2\2\u0270\u0271\5R*\2\u0271\u027a\3\2\2\2\u0272"+
-		"\u0273\f\4\2\2\u0273\u0274\7J\2\2\u0274\u0279\5R*\2\u0275\u0276\f\3\2"+
-		"\2\u0276\u0277\7I\2\2\u0277\u0279\5R*\2\u0278\u0272\3\2\2\2\u0278\u0275"+
-		"\3\2\2\2\u0279\u027c\3\2\2\2\u027a\u0278\3\2\2\2\u027a\u027b\3\2\2\2\u027b"+
-		"Q\3\2\2\2\u027c\u027a\3\2\2\2\u027d\u027e\7`\2\2\u027e\u027f\5T+\2\u027f"+
-		"S\3\2\2\2\u0280\u0286\3\2\2\2\u0281\u0282\7Y\2\2\u0282\u0283\5V,\2\u0283"+
-		"\u0284\7Z\2\2\u0284\u0286\3\2\2\2\u0285\u0280\3\2\2\2\u0285\u0281\3\2"+
-		"\2\2\u0286U\3\2\2\2\u0287\u0288\b,\1\2\u0288\u0289\7`\2\2\u0289\u028f"+
-		"\3\2\2\2\u028a\u028b\f\3\2\2\u028b\u028c\7I\2\2\u028c\u028e\7`\2\2\u028d"+
-		"\u028a\3\2\2\2\u028e\u0291\3\2\2\2\u028f\u028d\3\2\2\2\u028f\u0290\3\2"+
-		"\2\2\u0290W\3\2\2\2\u0291\u028f\3\2\2\2\u0292\u02a6\b-\1\2\u0293\u0294"+
-		"\f\n\2\2\u0294\u02a5\5f\64\2\u0295\u0296\f\t\2\2\u0296\u02a5\5(\25\2\u0297"+
-		"\u0298\f\b\2\2\u0298\u02a5\5&\24\2\u0299\u029a\f\7\2\2\u029a\u029b\7\17"+
-		"\2\2\u029b\u02a5\7`\2\2\u029c\u029d\f\6\2\2\u029d\u02a5\5Z.\2\u029e\u029f"+
-		"\f\5\2\2\u029f\u02a5\5N(\2\u02a0\u02a1\f\4\2\2\u02a1\u02a5\5\b\5\2\u02a2"+
-		"\u02a3\f\3\2\2\u02a3\u02a5\5\22\n\2\u02a4\u0293\3\2\2\2\u02a4\u0295\3"+
-		"\2\2\2\u02a4\u0297\3\2\2\2\u02a4\u0299\3\2\2\2\u02a4\u029c\3\2\2\2\u02a4"+
-		"\u029e\3\2\2\2\u02a4\u02a0\3\2\2\2\u02a4\u02a2\3\2\2\2\u02a5\u02a8\3\2"+
-		"\2\2\u02a6\u02a4\3\2\2\2\u02a6\u02a7\3\2\2\2\u02a7Y\3\2\2\2\u02a8\u02a6"+
-		"\3\2\2\2\u02a9\u02aa\7\f\2\2\u02aa\u02ab\7`\2\2\u02ab\u02ac\7P\2\2\u02ac"+
-		"\u02ad\5R*\2\u02ad[\3\2\2\2\u02ae\u02af\7\5\2\2\u02af\u02b0\7`\2\2\u02b0"+
-		"\u02b1\7G\2\2\u02b1\u02b2\5^\60\2\u02b2\u02b3\7H\2\2\u02b3\u02b4\7J\2"+
-		"\2\u02b4\u02b5\5\6\4\2\u02b5\u02c0\3\2\2\2\u02b6\u02b7\7\5\2\2\u02b7\u02b8"+
-		"\7`\2\2\u02b8\u02b9\7G\2\2\u02b9\u02ba\5^\60\2\u02ba\u02bb\7H\2\2\u02bb"+
-		"\u02bc\7J\2\2\u02bc\u02bd\5\6\4\2\u02bd\u02be\7%\2\2\u02be\u02c0\3\2\2"+
-		"\2\u02bf\u02ae\3\2\2\2\u02bf\u02b6\3\2\2\2\u02c0]\3\2\2\2\u02c1\u02c4"+
-		"\3\2\2\2\u02c2\u02c4\5`\61\2\u02c3\u02c1\3\2\2\2\u02c3\u02c2\3\2\2\2\u02c4"+
-		"_\3\2\2\2\u02c5\u02c6\b\61\1\2\u02c6\u02c7\5b\62\2\u02c7\u02cd\3\2\2\2"+
-		"\u02c8\u02c9\f\3\2\2\u02c9\u02ca\7I\2\2\u02ca\u02cc\5b\62\2\u02cb\u02c8"+
-		"\3\2\2\2\u02cc\u02cf\3\2\2\2\u02cd\u02cb\3\2\2\2\u02cd\u02ce\3\2\2\2\u02ce"+
-		"a\3\2\2\2\u02cf\u02cd\3\2\2\2\u02d0\u02d5\5\6\4\2\u02d1\u02d2\7`\2\2\u02d2"+
-		"\u02d3\7J\2\2\u02d3\u02d5\5\6\4\2\u02d4\u02d0\3\2\2\2\u02d4\u02d1\3\2"+
-		"\2\2\u02d5c\3\2\2\2\u02d6\u02d7\7\20\2\2\u02d7\u02d8\7a\2\2\u02d8\u02dc"+
-		"\7a\2\2\u02d9\u02da\7\20\2\2\u02da\u02dc\7a\2\2\u02db\u02d6\3\2\2\2\u02db"+
-		"\u02d9\3\2\2\2\u02dce\3\2\2\2\u02dd\u02de\5h\65\2\u02de\u02df\5j\66\2"+
-		"\u02dfg\3\2\2\2\u02e0\u02e1\t\4\2\2\u02e1i\3\2\2\2\u02e2\u02ed\5l\67\2"+
-		"\u02e3\u02e4\5l\67\2\u02e4\u02e5\7G\2\2\u02e5\u02e6\7H\2\2\u02e6\u02ed"+
-		"\3\2\2\2\u02e7\u02e8\5l\67\2\u02e8\u02e9\7G\2\2\u02e9\u02ea\5n8\2\u02ea"+
-		"\u02eb\7H\2\2\u02eb\u02ed\3\2\2\2\u02ec\u02e2\3\2\2\2\u02ec\u02e3\3\2"+
-		"\2\2\u02ec\u02e7\3\2\2\2\u02edk\3\2\2\2\u02ee\u02ef\b\67\1\2\u02ef\u02f0"+
-		"\5\6\4\2\u02f0\u02f6\3\2\2\2\u02f1\u02f2\f\3\2\2\u02f2\u02f3\7I\2\2\u02f3"+
-		"\u02f5\5\6\4\2\u02f4\u02f1\3\2\2\2\u02f5\u02f8\3\2\2\2\u02f6\u02f4\3\2"+
-		"\2\2\u02f6\u02f7\3\2\2\2\u02f7m\3\2\2\2\u02f8\u02f6\3\2\2\2\u02f9\u02fa"+
-		"\b8\1\2\u02fa\u02fb\7`\2\2\u02fb\u02fc\7P\2\2\u02fc\u02fd\5p9\2\u02fd"+
-		"\u0305\3\2\2\2\u02fe\u02ff\f\3\2\2\u02ff\u0300\7I\2\2\u0300\u0301\7`\2"+
-		"\2\u0301\u0302\7P\2\2\u0302\u0304\5p9\2\u0303\u02fe\3\2\2\2\u0304\u0307"+
-		"\3\2\2\2\u0305\u0303\3\2\2\2\u0305\u0306\3\2\2\2\u0306o\3\2\2\2\u0307"+
-		"\u0305\3\2\2\2\u0308\u0309\t\5\2\2\u0309q\3\2\2\2\60\u0087\u0089\u0094"+
-		"\u00ad\u00b5\u00bf\u00ca\u00d5\u00e5\u00ee\u00f8\u0118\u011a\u0125\u012d"+
-		"\u0137\u013d\u0155\u0164\u0171\u017c\u0187\u01b6\u01ba\u01c4\u0205\u0234"+
-		"\u0236\u0242\u0253\u025c\u0266\u0278\u027a\u0285\u028f\u02a4\u02a6\u02bf"+
-		"\u02c3\u02cd\u02d4\u02db\u02ec\u02f6\u0305";
+		"\3\17\3\17\7\17\u0116\n\17\f\17\16\17\u0119\13\17\3\20\3\20\3\20\3\20"+
+		"\3\20\3\20\7\20\u0121\n\20\f\20\16\20\u0124\13\20\3\21\3\21\3\21\3\21"+
+		"\3\21\5\21\u012b\n\21\3\22\3\22\3\22\3\22\3\22\3\22\7\22\u0133\n\22\f"+
+		"\22\16\22\u0136\13\22\3\23\3\23\3\23\5\23\u013b\n\23\3\24\3\24\3\24\3"+
+		"\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3"+
+		"\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\5"+
+		"\25\u015c\n\25\3\26\3\26\3\26\3\26\3\26\3\26\7\26\u0164\n\26\f\26\16\26"+
+		"\u0167\13\26\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\7\30\u0171\n\30\f"+
+		"\30\16\30\u0174\13\30\3\31\3\31\3\31\3\31\3\31\3\31\7\31\u017c\n\31\f"+
+		"\31\16\31\u017f\13\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\5\32\u0189"+
+		"\n\32\3\33\3\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34"+
+		"\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34"+
+		"\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34"+
+		"\3\34\3\34\3\34\3\34\5\34\u01b8\n\34\3\35\3\35\5\35\u01bc\n\35\3\36\3"+
+		"\36\3\36\3\36\3\36\3\36\7\36\u01c4\n\36\f\36\16\36\u01c7\13\36\3\37\3"+
+		"\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3"+
+		"\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3"+
+		"\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3"+
+		"\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3"+
+		"\37\3\37\3\37\3\37\3\37\5\37\u0207\n\37\3\37\3\37\3\37\3\37\3\37\3\37"+
+		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37"+
+		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37"+
+		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\7\37\u0236\n\37"+
+		"\f\37\16\37\u0239\13\37\3 \3 \3!\3!\3\"\3\"\3\"\3\"\3\"\5\"\u0244\n\""+
+		"\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\7#\u0250\n#\f#\16#\u0253\13#\3$\3$\3$\3"+
+		"$\3$\3$\5$\u025b\n$\3%\3%\3%\3%\3%\3%\7%\u0263\n%\f%\16%\u0266\13%\3&"+
+		"\3&\3&\3&\3&\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\7\'\u0277\n\'\f\'"+
+		"\16\'\u027a\13\'\3(\3(\3(\3)\3)\3)\3)\3)\5)\u0284\n)\3*\3*\3*\3*\3*\3"+
+		"*\7*\u028c\n*\f*\16*\u028f\13*\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+"+
+		"\3+\3+\3+\3+\3+\7+\u02a3\n+\f+\16+\u02a6\13+\3,\3,\3,\3,\3,\3-\3-\3-\3"+
+		"-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\3-\5-\u02be\n-\3.\3.\5.\u02c2\n"+
+		".\3/\3/\3/\3/\3/\3/\7/\u02ca\n/\f/\16/\u02cd\13/\3\60\3\60\3\60\3\60\5"+
+		"\60\u02d3\n\60\3\61\3\61\3\61\3\61\3\61\5\61\u02da\n\61\3\62\3\62\3\62"+
+		"\3\63\3\63\3\64\3\64\3\64\3\64\3\64\3\64\3\64\3\64\3\64\3\64\5\64\u02eb"+
+		"\n\64\3\65\3\65\3\65\3\65\3\65\3\65\7\65\u02f3\n\65\f\65\16\65\u02f6\13"+
+		"\65\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\7\66\u0302\n\66"+
+		"\f\66\16\66\u0305\13\66\3\67\3\67\3\67\2\30\4\6\f\16\24\30\34\36\"*.\60"+
+		":<DHLRT\\hj8\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64"+
+		"\668:<>@BDFHJLNPRTVXZ\\^`bdfhjl\2\6\4\2 $<?\5\2\37\37\63\6489\3\2\6\t"+
+		"\5\2:;]]`a\2\u0348\2n\3\2\2\2\4q\3\2\2\2\6\u0089\3\2\2\2\b\u00aa\3\2\2"+
+		"\2\n\u00b2\3\2\2\2\f\u00b4\3\2\2\2\16\u00bf\3\2\2\2\20\u00d2\3\2\2\2\22"+
+		"\u00d4\3\2\2\2\24\u00da\3\2\2\2\26\u00eb\3\2\2\2\30\u00ed\3\2\2\2\32\u00f8"+
+		"\3\2\2\2\34\u00fc\3\2\2\2\36\u011a\3\2\2\2 \u012a\3\2\2\2\"\u012c\3\2"+
+		"\2\2$\u013a\3\2\2\2&\u013c\3\2\2\2(\u015b\3\2\2\2*\u015d\3\2\2\2,\u0168"+
+		"\3\2\2\2.\u016a\3\2\2\2\60\u0175\3\2\2\2\62\u0188\3\2\2\2\64\u018a\3\2"+
+		"\2\2\66\u01b7\3\2\2\28\u01bb\3\2\2\2:\u01bd\3\2\2\2<\u0206\3\2\2\2>\u023a"+
+		"\3\2\2\2@\u023c\3\2\2\2B\u0243\3\2\2\2D\u0245\3\2\2\2F\u025a\3\2\2\2H"+
+		"\u025c\3\2\2\2J\u0267\3\2\2\2L\u026c\3\2\2\2N\u027b\3\2\2\2P\u0283\3\2"+
+		"\2\2R\u0285\3\2\2\2T\u0290\3\2\2\2V\u02a7\3\2\2\2X\u02bd\3\2\2\2Z\u02c1"+
+		"\3\2\2\2\\\u02c3\3\2\2\2^\u02d2\3\2\2\2`\u02d9\3\2\2\2b\u02db\3\2\2\2"+
+		"d\u02de\3\2\2\2f\u02ea\3\2\2\2h\u02ec\3\2\2\2j\u02f7\3\2\2\2l\u0306\3"+
+		"\2\2\2no\5\4\3\2op\7\2\2\3p\3\3\2\2\2q\u0086\b\3\1\2rs\f\13\2\2s\u0085"+
+		"\5b\62\2tu\f\n\2\2u\u0085\5(\25\2vw\f\t\2\2w\u0085\5&\24\2xy\f\b\2\2y"+
+		"\u0085\5J&\2z{\f\7\2\2{\u0085\5V,\2|}\f\6\2\2}\u0085\5`\61\2~\177\f\5"+
+		"\2\2\177\u0085\5\b\5\2\u0080\u0081\f\4\2\2\u0081\u0085\5X-\2\u0082\u0083"+
+		"\f\3\2\2\u0083\u0085\5\22\n\2\u0084r\3\2\2\2\u0084t\3\2\2\2\u0084v\3\2"+
+		"\2\2\u0084x\3\2\2\2\u0084z\3\2\2\2\u0084|\3\2\2\2\u0084~\3\2\2\2\u0084"+
+		"\u0080\3\2\2\2\u0084\u0082\3\2\2\2\u0085\u0088\3\2\2\2\u0086\u0084\3\2"+
+		"\2\2\u0086\u0087\3\2\2\2\u0087\5\3\2\2\2\u0088\u0086\3\2\2\2\u0089\u008a"+
+		"\b\4\1\2\u008a\u008b\7`\2\2\u008b\u0091\3\2\2\2\u008c\u008d\f\3\2\2\u008d"+
+		"\u008e\7\\\2\2\u008e\u0090\7`\2\2\u008f\u008c\3\2\2\2\u0090\u0093\3\2"+
+		"\2\2\u0091\u008f\3\2\2\2\u0091\u0092\3\2\2\2\u0092\7\3\2\2\2\u0093\u0091"+
+		"\3\2\2\2\u0094\u0095\7\n\2\2\u0095\u0096\7`\2\2\u0096\u0097\7L\2\2\u0097"+
+		"\u00ab\5\6\4\2\u0098\u0099\7\n\2\2\u0099\u009a\7`\2\2\u009a\u009b\7P\2"+
+		"\2\u009b\u00ab\5\f\7\2\u009c\u009d\7\n\2\2\u009d\u009e\7`\2\2\u009e\u009f"+
+		"\7P\2\2\u009f\u00ab\5\n\6\2\u00a0\u00a1\7\n\2\2\u00a1\u00a2\7`\2\2\u00a2"+
+		"\u00a3\7P\2\2\u00a3\u00ab\5\16\b\2\u00a4\u00a5\7\r\2\2\u00a5\u00ab\7`"+
+		"\2\2\u00a6\u00a7\7\16\2\2\u00a7\u00ab\7`\2\2\u00a8\u00a9\7\n\2\2\u00a9"+
+		"\u00ab\7`\2\2\u00aa\u0094\3\2\2\2\u00aa\u0098\3\2\2\2\u00aa\u009c\3\2"+
+		"\2\2\u00aa\u00a0\3\2\2\2\u00aa\u00a4\3\2\2\2\u00aa\u00a6\3\2\2\2\u00aa"+
+		"\u00a8\3\2\2\2\u00ab\t\3\2\2\2\u00ac\u00ad\7B\2\2\u00ad\u00b3\7C\2\2\u00ae"+
+		"\u00af\7B\2\2\u00af\u00b0\5\30\r\2\u00b0\u00b1\7C\2\2\u00b1\u00b3\3\2"+
+		"\2\2\u00b2\u00ac\3\2\2\2\u00b2\u00ae\3\2\2\2\u00b3\13\3\2\2\2\u00b4\u00b5"+
+		"\b\7\1\2\u00b5\u00b6\5\6\4\2\u00b6\u00bc\3\2\2\2\u00b7\u00b8\f\3\2\2\u00b8"+
+		"\u00b9\7A\2\2\u00b9\u00bb\5\6\4\2\u00ba\u00b7\3\2\2\2\u00bb\u00be\3\2"+
+		"\2\2\u00bc\u00ba\3\2\2\2\u00bc\u00bd\3\2\2\2\u00bd\r\3\2\2\2\u00be\u00bc"+
+		"\3\2\2\2\u00bf\u00c0\b\b\1\2\u00c0\u00c1\5\20\t\2\u00c1\u00c7\3\2\2\2"+
+		"\u00c2\u00c3\f\3\2\2\u00c3\u00c4\7A\2\2\u00c4\u00c6\5\20\t\2\u00c5\u00c2"+
+		"\3\2\2\2\u00c6\u00c9\3\2\2\2\u00c7\u00c5\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8"+
+		"\17\3\2\2\2\u00c9\u00c7\3\2\2\2\u00ca\u00cb\7`\2\2\u00cb\u00cc\7W\2\2"+
+		"\u00cc\u00d3\7X\2\2\u00cd\u00ce\7`\2\2\u00ce\u00cf\7W\2\2\u00cf\u00d0"+
+		"\5\30\r\2\u00d0\u00d1\7X\2\2\u00d1\u00d3\3\2\2\2\u00d2\u00ca\3\2\2\2\u00d2"+
+		"\u00cd\3\2\2\2\u00d3\21\3\2\2\2\u00d4\u00d5\7\4\2\2\u00d5\u00d6\5\24\13"+
+		"\2\u00d6\u00d7\5\26\f\2\u00d7\u00d8\5\34\17\2\u00d8\u00d9\5$\23\2\u00d9"+
+		"\23\3\2\2\2\u00da\u00db\b\13\1\2\u00db\u00dc\7`\2\2\u00dc\u00e2\3\2\2"+
+		"\2\u00dd\u00de\f\3\2\2\u00de\u00df\7I\2\2\u00df\u00e1\7`\2\2\u00e0\u00dd"+
+		"\3\2\2\2\u00e1\u00e4\3\2\2\2\u00e2\u00e0\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3"+
+		"\25\3\2\2\2\u00e4\u00e2\3\2\2\2\u00e5\u00e6\7G\2\2\u00e6\u00ec\7H\2\2"+
+		"\u00e7\u00e8\7G\2\2\u00e8\u00e9\5\30\r\2\u00e9\u00ea\7H\2\2\u00ea\u00ec"+
+		"\3\2\2\2\u00eb\u00e5\3\2\2\2\u00eb\u00e7\3\2\2\2\u00ec\27\3\2\2\2\u00ed"+
+		"\u00ee\b\r\1\2\u00ee\u00ef\5\32\16\2\u00ef\u00f5\3\2\2\2\u00f0\u00f1\f"+
+		"\3\2\2\u00f1\u00f2\7I\2\2\u00f2\u00f4\5\32\16\2\u00f3\u00f0\3\2\2\2\u00f4"+
+		"\u00f7\3\2\2\2\u00f5\u00f3\3\2\2\2\u00f5\u00f6\3\2\2\2\u00f6\31\3\2\2"+
+		"\2\u00f7\u00f5\3\2\2\2\u00f8\u00f9\7`\2\2\u00f9\u00fa\7J\2\2\u00fa\u00fb"+
+		"\5\6\4\2\u00fb\33\3\2\2\2\u00fc\u0117\b\17\1\2\u00fd\u00fe\f\16\2\2\u00fe"+
+		"\u0116\7)\2\2\u00ff\u0100\f\r\2\2\u0100\u0116\7,\2\2\u0101\u0102\f\f\2"+
+		"\2\u0102\u0116\7-\2\2\u0103\u0104\f\13\2\2\u0104\u0116\7.\2\2\u0105\u0106"+
+		"\f\n\2\2\u0106\u0116\7/\2\2\u0107\u0108\f\t\2\2\u0108\u0116\7\60\2\2\u0109"+
+		"\u010a\f\b\2\2\u010a\u0116\7\62\2\2\u010b\u010c\f\7\2\2\u010c\u0116\7"+
+		"\61\2\2\u010d\u010e\f\6\2\2\u010e\u0116\7+\2\2\u010f\u0110\f\5\2\2\u0110"+
+		"\u0116\7\'\2\2\u0111\u0112\f\4\2\2\u0112\u0116\7(\2\2\u0113\u0114\f\3"+
+		"\2\2\u0114\u0116\7*\2\2\u0115\u00fd\3\2\2\2\u0115\u00ff\3\2\2\2\u0115"+
+		"\u0101\3\2\2\2\u0115\u0103\3\2\2\2\u0115\u0105\3\2\2\2\u0115\u0107\3\2"+
+		"\2\2\u0115\u0109\3\2\2\2\u0115\u010b\3\2\2\2\u0115\u010d\3\2\2\2\u0115"+
+		"\u010f\3\2\2\2\u0115\u0111\3\2\2\2\u0115\u0113\3\2\2\2\u0116\u0119\3\2"+
+		"\2\2\u0117\u0115\3\2\2\2\u0117\u0118\3\2\2\2\u0118\35\3\2\2\2\u0119\u0117"+
+		"\3\2\2\2\u011a\u011b\b\20\1\2\u011b\u011c\7`\2\2\u011c\u0122\3\2\2\2\u011d"+
+		"\u011e\f\3\2\2\u011e\u011f\7I\2\2\u011f\u0121\7`\2\2\u0120\u011d\3\2\2"+
+		"\2\u0121\u0124\3\2\2\2\u0122\u0120\3\2\2\2\u0122\u0123\3\2\2\2\u0123\37"+
+		"\3\2\2\2\u0124\u0122\3\2\2\2\u0125\u012b\7`\2\2\u0126\u0127\7G\2\2\u0127"+
+		"\u0128\5\36\20\2\u0128\u0129\7H\2\2\u0129\u012b\3\2\2\2\u012a\u0125\3"+
+		"\2\2\2\u012a\u0126\3\2\2\2\u012b!\3\2\2\2\u012c\u012d\b\22\1\2\u012d\u012e"+
+		"\5 \21\2\u012e\u0134\3\2\2\2\u012f\u0130\f\3\2\2\u0130\u0131\7I\2\2\u0131"+
+		"\u0133\5 \21\2\u0132\u012f\3\2\2\2\u0133\u0136\3\2\2\2\u0134\u0132\3\2"+
+		"\2\2\u0134\u0135\3\2\2\2\u0135#\3\2\2\2\u0136\u0134\3\2\2\2\u0137\u013b"+
+		"\3\2\2\2\u0138\u0139\7@\2\2\u0139\u013b\5\"\22\2\u013a\u0137\3\2\2\2\u013a"+
+		"\u0138\3\2\2\2\u013b%\3\2\2\2\u013c\u013d\5\64\33\2\u013d\u013e\7\\\2"+
+		"\2\u013e\'\3\2\2\2\u013f\u0140\5*\26\2\u0140\u0141\7[\2\2\u0141\u0142"+
+		"\5,\27\2\u0142\u0143\7\\\2\2\u0143\u015c\3\2\2\2\u0144\u0145\5*\26\2\u0145"+
+		"\u0146\7[\2\2\u0146\u0147\5,\27\2\u0147\u0148\7\\\2\2\u0148\u0149\7\21"+
+		"\2\2\u0149\u014a\5D#\2\u014a\u015c\3\2\2\2\u014b\u014c\5\64\33\2\u014c"+
+		"\u014d\7M\2\2\u014d\u014e\5\64\33\2\u014e\u014f\7[\2\2\u014f\u0150\5,"+
+		"\27\2\u0150\u0151\7\\\2\2\u0151\u015c\3\2\2\2\u0152\u0153\5\64\33\2\u0153"+
+		"\u0154\7M\2\2\u0154\u0155\5\64\33\2\u0155\u0156\7[\2\2\u0156\u0157\5,"+
+		"\27\2\u0157\u0158\7\\\2\2\u0158\u0159\7\21\2\2\u0159\u015a\5D#\2\u015a"+
+		"\u015c\3\2\2\2\u015b\u013f\3\2\2\2\u015b\u0144\3\2\2\2\u015b\u014b\3\2"+
+		"\2\2\u015b\u0152\3\2\2\2\u015c)\3\2\2\2\u015d\u015e\b\26\1\2\u015e\u015f"+
+		"\5\64\33\2\u015f\u0165\3\2\2\2\u0160\u0161\f\3\2\2\u0161\u0162\7I\2\2"+
+		"\u0162\u0164\5\64\33\2\u0163\u0160\3\2\2\2\u0164\u0167\3\2\2\2\u0165\u0163"+
+		"\3\2\2\2\u0165\u0166\3\2\2\2\u0166+\3\2\2\2\u0167\u0165\3\2\2\2\u0168"+
+		"\u0169\5.\30\2\u0169-\3\2\2\2\u016a\u016b\b\30\1\2\u016b\u016c\5\60\31"+
+		"\2\u016c\u0172\3\2\2\2\u016d\u016e\f\3\2\2\u016e\u016f\7K\2\2\u016f\u0171"+
+		"\5\60\31\2\u0170\u016d\3\2\2\2\u0171\u0174\3\2\2\2\u0172\u0170\3\2\2\2"+
+		"\u0172\u0173\3\2\2\2\u0173/\3\2\2\2\u0174\u0172\3\2\2\2\u0175\u0176\b"+
+		"\31\1\2\u0176\u0177\5\62\32\2\u0177\u017d\3\2\2\2\u0178\u0179\f\3\2\2"+
+		"\u0179\u017a\7I\2\2\u017a\u017c\5\62\32\2\u017b\u0178\3\2\2\2\u017c\u017f"+
+		"\3\2\2\2\u017d\u017b\3\2\2\2\u017d\u017e\3\2\2\2\u017e\61\3\2\2\2\u017f"+
+		"\u017d\3\2\2\2\u0180\u0189\5\64\33\2\u0181\u0189\5\66\34\2\u0182\u0183"+
+		"\7G\2\2\u0183\u0184\5.\30\2\u0184\u0185\7H\2\2\u0185\u0189\3\2\2\2\u0186"+
+		"\u0187\7Q\2\2\u0187\u0189\5\62\32\2\u0188\u0180\3\2\2\2\u0188\u0181\3"+
+		"\2\2\2\u0188\u0182\3\2\2\2\u0188\u0186\3\2\2\2\u0189\63\3\2\2\2\u018a"+
+		"\u018b\5\6\4\2\u018b\u018c\7G\2\2\u018c\u018d\58\35\2\u018d\u018e\7H\2"+
+		"\2\u018e\65\3\2\2\2\u018f\u0190\5<\37\2\u0190\u0191\7Y\2\2\u0191\u0192"+
+		"\5<\37\2\u0192\u01b8\3\2\2\2\u0193\u0194\5<\37\2\u0194\u0195\7Z\2\2\u0195"+
+		"\u0196\5<\37\2\u0196\u01b8\3\2\2\2\u0197\u0198\5<\37\2\u0198\u0199\7M"+
+		"\2\2\u0199\u019a\5<\37\2\u019a\u01b8\3\2\2\2\u019b\u019c\5<\37\2\u019c"+
+		"\u019d\7N\2\2\u019d\u019e\5<\37\2\u019e\u01b8\3\2\2\2\u019f\u01a0\5<\37"+
+		"\2\u01a0\u01a1\7P\2\2\u01a1\u01a2\5<\37\2\u01a2\u01b8\3\2\2\2\u01a3\u01a4"+
+		"\5<\37\2\u01a4\u01a5\7O\2\2\u01a5\u01a6\5<\37\2\u01a6\u01b8\3\2\2\2\u01a7"+
+		"\u01a8\7\36\2\2\u01a8\u01a9\7G\2\2\u01a9\u01aa\5<\37\2\u01aa\u01ab\7I"+
+		"\2\2\u01ab\u01ac\5<\37\2\u01ac\u01ad\7H\2\2\u01ad\u01b8\3\2\2\2\u01ae"+
+		"\u01af\7&\2\2\u01af\u01b0\7G\2\2\u01b0\u01b1\5<\37\2\u01b1\u01b2\7I\2"+
+		"\2\u01b2\u01b3\5<\37\2\u01b3\u01b4\7H\2\2\u01b4\u01b8\3\2\2\2\u01b5\u01b8"+
+		"\7:\2\2\u01b6\u01b8\7;\2\2\u01b7\u018f\3\2\2\2\u01b7\u0193\3\2\2\2\u01b7"+
+		"\u0197\3\2\2\2\u01b7\u019b\3\2\2\2\u01b7\u019f\3\2\2\2\u01b7\u01a3\3\2"+
+		"\2\2\u01b7\u01a7\3\2\2\2\u01b7\u01ae\3\2\2\2\u01b7\u01b5\3\2\2\2\u01b7"+
+		"\u01b6\3\2\2\2\u01b8\67\3\2\2\2\u01b9\u01bc\3\2\2\2\u01ba\u01bc\5:\36"+
+		"\2\u01bb\u01b9\3\2\2\2\u01bb\u01ba\3\2\2\2\u01bc9\3\2\2\2\u01bd\u01be"+
+		"\b\36\1\2\u01be\u01bf\5<\37\2\u01bf\u01c5\3\2\2\2\u01c0\u01c1\f\3\2\2"+
+		"\u01c1\u01c2\7I\2\2\u01c2\u01c4\5<\37\2\u01c3\u01c0\3\2\2\2\u01c4\u01c7"+
+		"\3\2\2\2\u01c5\u01c3\3\2\2\2\u01c5\u01c6\3\2\2\2\u01c6;\3\2\2\2\u01c7"+
+		"\u01c5\3\2\2\2\u01c8\u01c9\b\37\1\2\u01c9\u0207\7a\2\2\u01ca\u0207\7^"+
+		"\2\2\u01cb\u0207\7_\2\2\u01cc\u0207\7]\2\2\u01cd\u0207\7\67\2\2\u01ce"+
+		"\u0207\7D\2\2\u01cf\u01d0\7\22\2\2\u01d0\u01d1\7G\2\2\u01d1\u0207\7H\2"+
+		"\2\u01d2\u0207\7`\2\2\u01d3\u0207\7\66\2\2\u01d4\u01d5\7B\2\2\u01d5\u01d6"+
+		"\58\35\2\u01d6\u01d7\7C\2\2\u01d7\u0207\3\2\2\2\u01d8\u01d9\7D\2\2\u01d9"+
+		"\u01da\5\6\4\2\u01da\u01db\7G\2\2\u01db\u01dc\58\35\2\u01dc\u01dd\7H\2"+
+		"\2\u01dd\u0207\3\2\2\2\u01de\u01df\7G\2\2\u01df\u01e0\5<\37\2\u01e0\u01e1"+
+		"\7H\2\2\u01e1\u0207\3\2\2\2\u01e2\u01e3\7\65\2\2\u01e3\u01e4\7G\2\2\u01e4"+
+		"\u01e5\5<\37\2\u01e5\u01e6\7I\2\2\u01e6\u01e7\5\6\4\2\u01e7\u01e8\7H\2"+
+		"\2\u01e8\u0207\3\2\2\2\u01e9\u01ea\7S\2\2\u01ea\u01eb\7`\2\2\u01eb\u01ec"+
+		"\7G\2\2\u01ec\u01ed\58\35\2\u01ed\u01ee\7H\2\2\u01ee\u0207\3\2\2\2\u01ef"+
+		"\u01f0\5> \2\u01f0\u01f1\7G\2\2\u01f1\u01f2\58\35\2\u01f2\u01f3\7H\2\2"+
+		"\u01f3\u0207\3\2\2\2\u01f4\u01f5\5@!\2\u01f5\u01f6\7G\2\2\u01f6\u01f7"+
+		"\5<\37\2\u01f7\u01f8\7I\2\2\u01f8\u01f9\5:\36\2\u01f9\u01fa\7H\2\2\u01fa"+
+		"\u0207\3\2\2\2\u01fb\u01fc\7F\2\2\u01fc\u0207\5<\37\25\u01fd\u01fe\7\26"+
+		"\2\2\u01fe\u0207\5<\37\24\u01ff\u0200\7\35\2\2\u0200\u0207\5<\37\23\u0201"+
+		"\u0202\5@!\2\u0202\u0203\58\35\2\u0203\u0204\7J\2\2\u0204\u0205\5B\"\2"+
+		"\u0205\u0207\3\2\2\2\u0206\u01c8\3\2\2\2\u0206\u01ca\3\2\2\2\u0206\u01cb"+
+		"\3\2\2\2\u0206\u01cc\3\2\2\2\u0206\u01cd\3\2\2\2\u0206\u01ce\3\2\2\2\u0206"+
+		"\u01cf\3\2\2\2\u0206\u01d2\3\2\2\2\u0206\u01d3\3\2\2\2\u0206\u01d4\3\2"+
+		"\2\2\u0206\u01d8\3\2\2\2\u0206\u01de\3\2\2\2\u0206\u01e2\3\2\2\2\u0206"+
+		"\u01e9\3\2\2\2\u0206\u01ef\3\2\2\2\u0206\u01f4\3\2\2\2\u0206\u01fb\3\2"+
+		"\2\2\u0206\u01fd\3\2\2\2\u0206\u01ff\3\2\2\2\u0206\u0201\3\2\2\2\u0207"+
+		"\u0237\3\2\2\2\u0208\u0209\f\22\2\2\u0209\u020a\7E\2\2\u020a\u0236\5<"+
+		"\37\23\u020b\u020c\f\21\2\2\u020c\u020d\7F\2\2\u020d\u0236\5<\37\22\u020e"+
+		"\u020f\f\20\2\2\u020f\u0210\7R\2\2\u0210\u0236\5<\37\21\u0211\u0212\f"+
+		"\17\2\2\u0212\u0213\7T\2\2\u0213\u0236\5<\37\20\u0214\u0215\f\16\2\2\u0215"+
+		"\u0216\7V\2\2\u0216\u0236\5<\37\17\u0217\u0218\f\r\2\2\u0218\u0219\7U"+
+		"\2\2\u0219\u0236\5<\37\16\u021a\u021b\f\f\2\2\u021b\u021c\7\32\2\2\u021c"+
+		"\u0236\5<\37\r\u021d\u021e\f\13\2\2\u021e\u021f\7\33\2\2\u021f\u0236\5"+
+		"<\37\f\u0220\u0221\f\n\2\2\u0221\u0222\7\34\2\2\u0222\u0236\5<\37\13\u0223"+
+		"\u0224\f\t\2\2\u0224\u0225\7\23\2\2\u0225\u0236\5<\37\n\u0226\u0227\f"+
+		"\b\2\2\u0227\u0228\7\24\2\2\u0228\u0236\5<\37\t\u0229\u022a\f\7\2\2\u022a"+
+		"\u022b\7\25\2\2\u022b\u0236\5<\37\b\u022c\u022d\f\6\2\2\u022d\u022e\7"+
+		"\27\2\2\u022e\u0236\5<\37\7\u022f\u0230\f\5\2\2\u0230\u0231\7\30\2\2\u0231"+
+		"\u0236\5<\37\6\u0232\u0233\f\4\2\2\u0233\u0234\7\31\2\2\u0234\u0236\5"+
+		"<\37\5\u0235\u0208\3\2\2\2\u0235\u020b\3\2\2\2\u0235\u020e\3\2\2\2\u0235"+
+		"\u0211\3\2\2\2\u0235\u0214\3\2\2\2\u0235\u0217\3\2\2\2\u0235\u021a\3\2"+
+		"\2\2\u0235\u021d\3\2\2\2\u0235\u0220\3\2\2\2\u0235\u0223\3\2\2\2\u0235"+
+		"\u0226\3\2\2\2\u0235\u0229\3\2\2\2\u0235\u022c\3\2\2\2\u0235\u022f\3\2"+
+		"\2\2\u0235\u0232\3\2\2\2\u0236\u0239\3\2\2\2\u0237\u0235\3\2\2\2\u0237"+
+		"\u0238\3\2\2\2\u0238=\3\2\2\2\u0239\u0237\3\2\2\2\u023a\u023b\t\2\2\2"+
+		"\u023b?\3\2\2\2\u023c\u023d\t\3\2\2\u023dA\3\2\2\2\u023e\u023f\7W\2\2"+
+		"\u023f\u0240\5,\27\2\u0240\u0241\7X\2\2\u0241\u0244\3\2\2\2\u0242\u0244"+
+		"\5\64\33\2\u0243\u023e\3\2\2\2\u0243\u0242\3\2\2\2\u0244C\3\2\2\2\u0245"+
+		"\u0246\b#\1\2\u0246\u0247\7]\2\2\u0247\u0248\7J\2\2\u0248\u0249\5F$\2"+
+		"\u0249\u0251\3\2\2\2\u024a\u024b\f\3\2\2\u024b\u024c\7I\2\2\u024c\u024d"+
+		"\7]\2\2\u024d\u024e\7J\2\2\u024e\u0250\5F$\2\u024f\u024a\3\2\2\2\u0250"+
+		"\u0253\3\2\2\2\u0251\u024f\3\2\2\2\u0251\u0252\3\2\2\2\u0252E\3\2\2\2"+
+		"\u0253\u0251\3\2\2\2\u0254\u0255\7G\2\2\u0255\u025b\7H\2\2\u0256\u0257"+
+		"\7G\2\2\u0257\u0258\5H%\2\u0258\u0259\7H\2\2\u0259\u025b\3\2\2\2\u025a"+
+		"\u0254\3\2\2\2\u025a\u0256\3\2\2\2\u025bG\3\2\2\2\u025c\u025d\b%\1\2\u025d"+
+		"\u025e\7]\2\2\u025e\u0264\3\2\2\2\u025f\u0260\f\3\2\2\u0260\u0261\7I\2"+
+		"\2\u0261\u0263\7]\2\2\u0262\u025f\3\2\2\2\u0263\u0266\3\2\2\2\u0264\u0262"+
+		"\3\2\2\2\u0264\u0265\3\2\2\2\u0265I\3\2\2\2\u0266\u0264\3\2\2\2\u0267"+
+		"\u0268\5L\'\2\u0268\u0269\7W\2\2\u0269\u026a\5T+\2\u026a\u026b\7X\2\2"+
+		"\u026bK\3\2\2\2\u026c\u026d\b\'\1\2\u026d\u026e\7\13\2\2\u026e\u026f\5"+
+		"N(\2\u026f\u0278\3\2\2\2\u0270\u0271\f\4\2\2\u0271\u0272\7J\2\2\u0272"+
+		"\u0277\5N(\2\u0273\u0274\f\3\2\2\u0274\u0275\7I\2\2\u0275\u0277\5N(\2"+
+		"\u0276\u0270\3\2\2\2\u0276\u0273\3\2\2\2\u0277\u027a\3\2\2\2\u0278\u0276"+
+		"\3\2\2\2\u0278\u0279\3\2\2\2\u0279M\3\2\2\2\u027a\u0278\3\2\2\2\u027b"+
+		"\u027c\7`\2\2\u027c\u027d\5P)\2\u027dO\3\2\2\2\u027e\u0284\3\2\2\2\u027f"+
+		"\u0280\7Y\2\2\u0280\u0281\5R*\2\u0281\u0282\7Z\2\2\u0282\u0284\3\2\2\2"+
+		"\u0283\u027e\3\2\2\2\u0283\u027f\3\2\2\2\u0284Q\3\2\2\2\u0285\u0286\b"+
+		"*\1\2\u0286\u0287\7`\2\2\u0287\u028d\3\2\2\2\u0288\u0289\f\3\2\2\u0289"+
+		"\u028a\7I\2\2\u028a\u028c\7`\2\2\u028b\u0288\3\2\2\2\u028c\u028f\3\2\2"+
+		"\2\u028d\u028b\3\2\2\2\u028d\u028e\3\2\2\2\u028eS\3\2\2\2\u028f\u028d"+
+		"\3\2\2\2\u0290\u02a4\b+\1\2\u0291\u0292\f\n\2\2\u0292\u02a3\5b\62\2\u0293"+
+		"\u0294\f\t\2\2\u0294\u02a3\5(\25\2\u0295\u0296\f\b\2\2\u0296\u02a3\5&"+
+		"\24\2\u0297\u0298\f\7\2\2\u0298\u0299\7\17\2\2\u0299\u02a3\7`\2\2\u029a"+
+		"\u029b\f\6\2\2\u029b\u02a3\5V,\2\u029c\u029d\f\5\2\2\u029d\u02a3\5J&\2"+
+		"\u029e\u029f\f\4\2\2\u029f\u02a3\5\b\5\2\u02a0\u02a1\f\3\2\2\u02a1\u02a3"+
+		"\5\22\n\2\u02a2\u0291\3\2\2\2\u02a2\u0293\3\2\2\2\u02a2\u0295\3\2\2\2"+
+		"\u02a2\u0297\3\2\2\2\u02a2\u029a\3\2\2\2\u02a2\u029c\3\2\2\2\u02a2\u029e"+
+		"\3\2\2\2\u02a2\u02a0\3\2\2\2\u02a3\u02a6\3\2\2\2\u02a4\u02a2\3\2\2\2\u02a4"+
+		"\u02a5\3\2\2\2\u02a5U\3\2\2\2\u02a6\u02a4\3\2\2\2\u02a7\u02a8\7\f\2\2"+
+		"\u02a8\u02a9\7`\2\2\u02a9\u02aa\7P\2\2\u02aa\u02ab\5N(\2\u02abW\3\2\2"+
+		"\2\u02ac\u02ad\7\5\2\2\u02ad\u02ae\7`\2\2\u02ae\u02af\7G\2\2\u02af\u02b0"+
+		"\5Z.\2\u02b0\u02b1\7H\2\2\u02b1\u02b2\7J\2\2\u02b2\u02b3\5\6\4\2\u02b3"+
+		"\u02be\3\2\2\2\u02b4\u02b5\7\5\2\2\u02b5\u02b6\7`\2\2\u02b6\u02b7\7G\2"+
+		"\2\u02b7\u02b8\5Z.\2\u02b8\u02b9\7H\2\2\u02b9\u02ba\7J\2\2\u02ba\u02bb"+
+		"\5\6\4\2\u02bb\u02bc\7%\2\2\u02bc\u02be\3\2\2\2\u02bd\u02ac\3\2\2\2\u02bd"+
+		"\u02b4\3\2\2\2\u02beY\3\2\2\2\u02bf\u02c2\3\2\2\2\u02c0\u02c2\5\\/\2\u02c1"+
+		"\u02bf\3\2\2\2\u02c1\u02c0\3\2\2\2\u02c2[\3\2\2\2\u02c3\u02c4\b/\1\2\u02c4"+
+		"\u02c5\5^\60\2\u02c5\u02cb\3\2\2\2\u02c6\u02c7\f\3\2\2\u02c7\u02c8\7I"+
+		"\2\2\u02c8\u02ca\5^\60\2\u02c9\u02c6\3\2\2\2\u02ca\u02cd\3\2\2\2\u02cb"+
+		"\u02c9\3\2\2\2\u02cb\u02cc\3\2\2\2\u02cc]\3\2\2\2\u02cd\u02cb\3\2\2\2"+
+		"\u02ce\u02d3\5\6\4\2\u02cf\u02d0\7`\2\2\u02d0\u02d1\7J\2\2\u02d1\u02d3"+
+		"\5\6\4\2\u02d2\u02ce\3\2\2\2\u02d2\u02cf\3\2\2\2\u02d3_\3\2\2\2\u02d4"+
+		"\u02d5\7\20\2\2\u02d5\u02d6\7a\2\2\u02d6\u02da\7a\2\2\u02d7\u02d8\7\20"+
+		"\2\2\u02d8\u02da\7a\2\2\u02d9\u02d4\3\2\2\2\u02d9\u02d7\3\2\2\2\u02da"+
+		"a\3\2\2\2\u02db\u02dc\5d\63\2\u02dc\u02dd\5f\64\2\u02ddc\3\2\2\2\u02de"+
+		"\u02df\t\4\2\2\u02dfe\3\2\2\2\u02e0\u02eb\5h\65\2\u02e1\u02e2\5h\65\2"+
+		"\u02e2\u02e3\7G\2\2\u02e3\u02e4\7H\2\2\u02e4\u02eb\3\2\2\2\u02e5\u02e6"+
+		"\5h\65\2\u02e6\u02e7\7G\2\2\u02e7\u02e8\5j\66\2\u02e8\u02e9\7H\2\2\u02e9"+
+		"\u02eb\3\2\2\2\u02ea\u02e0\3\2\2\2\u02ea\u02e1\3\2\2\2\u02ea\u02e5\3\2"+
+		"\2\2\u02ebg\3\2\2\2\u02ec\u02ed\b\65\1\2\u02ed\u02ee\5\6\4\2\u02ee\u02f4"+
+		"\3\2\2\2\u02ef\u02f0\f\3\2\2\u02f0\u02f1\7I\2\2\u02f1\u02f3\5\6\4\2\u02f2"+
+		"\u02ef\3\2\2\2\u02f3\u02f6\3\2\2\2\u02f4\u02f2\3\2\2\2\u02f4\u02f5\3\2"+
+		"\2\2\u02f5i\3\2\2\2\u02f6\u02f4\3\2\2\2\u02f7\u02f8\b\66\1\2\u02f8\u02f9"+
+		"\7`\2\2\u02f9\u02fa\7P\2\2\u02fa\u02fb\5l\67\2\u02fb\u0303\3\2\2\2\u02fc"+
+		"\u02fd\f\3\2\2\u02fd\u02fe\7I\2\2\u02fe\u02ff\7`\2\2\u02ff\u0300\7P\2"+
+		"\2\u0300\u0302\5l\67\2\u0301\u02fc\3\2\2\2\u0302\u0305\3\2\2\2\u0303\u0301"+
+		"\3\2\2\2\u0303\u0304\3\2\2\2\u0304k\3\2\2\2\u0305\u0303\3\2\2\2\u0306"+
+		"\u0307\t\5\2\2\u0307m\3\2\2\2\60\u0084\u0086\u0091\u00aa\u00b2\u00bc\u00c7"+
+		"\u00d2\u00e2\u00eb\u00f5\u0115\u0117\u0122\u012a\u0134\u013a\u015b\u0165"+
+		"\u0172\u017d\u0188\u01b7\u01bb\u01c5\u0206\u0235\u0237\u0243\u0251\u025a"+
+		"\u0264\u0276\u0278\u0283\u028d\u02a2\u02a4\u02bd\u02c1\u02cb\u02d2\u02d9"+
+		"\u02ea\u02f4\u0303";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
