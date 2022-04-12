@@ -1,5 +1,4 @@
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -37,10 +36,8 @@ public class SouffleTextDocumentService implements TextDocumentService {
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
-        souffleParser.addErrorListener(new SyntaxErrorLogger(languageServer.languageClient, uri.toString()));
-        souffleParser.getInterpreter()
-                .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
-
+        souffleParser.setErrorHandler(new SouffleError());
+        souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
     }
 
     @Override
@@ -48,7 +45,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         try {
             URI uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
             consumeInput(didOpenTextDocumentParams.getTextDocument().getUri());
-            this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(uri.toString(), new ArrayList<>(0)));
+            this.clientLogger.clearDiagnostics(uri.toString());
             ParseTree tree = souffleParser.program(); // begin parsing at init rule
 
             this.clientLogger.logMessage("Operation '" + "text/didOpen" +
@@ -73,7 +70,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public void didSave(DidSaveTextDocumentParams didSaveTextDocumentParams) {
-        this.languageServer.languageClient.publishDiagnostics(new PublishDiagnosticsParams(didSaveTextDocumentParams.getTextDocument().getUri().toString(), new ArrayList<>(0)));
+        this.clientLogger.clearDiagnostics(didSaveTextDocumentParams.getTextDocument().getUri());
         try {
             consumeInput(didSaveTextDocumentParams.getTextDocument().getUri());
             ParseTree tree = souffleParser.program(); // begin parsing at init rule

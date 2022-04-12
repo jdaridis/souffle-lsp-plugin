@@ -131,6 +131,12 @@ public interface SouffleVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSouffle_rule(SouffleParser.Souffle_ruleContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SouffleParser#rule_def}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRule_def(SouffleParser.Rule_defContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SouffleParser#head}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -208,6 +214,12 @@ public interface SouffleVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAggregate_body(SouffleParser.Aggregate_bodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#query_plan}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQuery_plan(SouffleParser.Query_planContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SouffleParser#query_plan_list}.
 	 * @param ctx the parse tree

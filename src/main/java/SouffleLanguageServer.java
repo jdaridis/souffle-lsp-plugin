@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Language Server implementation for Ballerina.
+ * Language Server implementation for Souffle Datalog.
  */
 public class SouffleLanguageServer implements LanguageServer, LanguageClientAware {
 

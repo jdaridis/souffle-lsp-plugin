@@ -80,7 +80,7 @@ function getServerOptions() {
 
   let serverOptions: ServerOptions = {
     command: executable,
-    args: [...args, LS_LAUNCHER_MAIN, "2>", "./log.txt"],
+    args: [...args, LS_LAUNCHER_MAIN],
     options: {},
   };
   return serverOptions;
