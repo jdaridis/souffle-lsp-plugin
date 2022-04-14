@@ -1,12 +1,15 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Tree;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.util.Positions;
+import org.w3c.dom.Text;
 import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
+import javax.annotation.processing.Completion;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -54,6 +57,37 @@ public class SouffleTextDocumentService implements TextDocumentService {
             e.printStackTrace();
         }
 
+        TreeMap<Range, String> treeMap = new TreeMap<>(new Comparator<Range>() {
+            @Override
+            public int compare(Range range, Range t1) {
+                Position currentPos = range.getStart();
+//                System.err.println("Range " + range + " t1 "+ t1);
+                if(Positions.isBefore(currentPos, t1.getStart())){
+//                    System.err.println("Going left");
+                    return -1;
+                } else if(!Positions.isBefore(currentPos, t1.getEnd())){
+//                    System.err.println("Going right");
+                    return 1;
+                }
+                if(range.getStart().equals(range.getEnd()))
+                    return 0;
+                else
+                    return 1;
+            }
+        });
+
+        Range range1 = new Range(new Position(1, 0), new Position(3, 1));
+        Range range2 = new Range(new Position(2, 0), new Position(2,3));
+
+        treeMap.put(range2, "Range2");
+        treeMap.put(range1, "Range1");
+//        treeMap.
+        Range range = new Range(new Position(2,2), new Position(2,2));
+//        TreeMap<Range, String> treeMap1 = (TreeMap<Range, String>) treeMap.clone();
+//        treeMap.remove(range);
+        System.err.println("Getting treemap " + treeMap);
+//        System.err.println("Getting treemap " + treeMap1);
+
     }
 
     @Override
@@ -81,19 +115,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
             e.printStackTrace();
         }
 
-        TreeMap<MyRange, Object> treeMap = new TreeMap<>(new Comparator<MyRange>() {
-            @Override
-            public int compare(MyRange range, MyRange t1) {
-                Position currentPos = range.getStart();
-                if(Positions.isBefore(currentPos, t1.getStart())){
-                    return -1;
-                } else if(!Positions.isBefore(currentPos, t1.getEnd())){
-                    return 1;
-                }
-                return 0;
-            }
-        });
-
 
     }
 
@@ -111,18 +132,43 @@ public class SouffleTextDocumentService implements TextDocumentService {
         });
     }
 
-
-
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams position) {
         return CompletableFuture.supplyAsync(() -> {
+            String[] directives = {
+                    ".decl",
+                    ".output",
+                    ".input",
+                    ".type",
+                    ".comp",
+                    ".init",
+                    ".printsize",
+                    ".functor",
+                    ".limitsize",
+                    ".override",
+                    ".pragma",
+                    ".plan",
+                    ".symboltype",
+                    ".numbertype",
+            };
+
+            List<CompletionItem> directiveComplete = new ArrayList<>();
+
+            for(String directive: directives){
+                CompletionItem completionItem = new CompletionItem();
+                completionItem.setLabel(directive);
+                completionItem.setInsertText(directive);
+                completionItem.setKind(CompletionItemKind.Keyword);
+                directiveComplete.add(completionItem);
+                if(directive.equals(".symboltype") || directive.equals(".numbertype")){
+                    completionItem.setTags(List.of(CompletionItemTag.Deprecated));
+                }
+            }
+//            CompletionList
+
             this.clientLogger.logMessage("Operation '" + "text/completion");
-            CompletionItem completionItem = new CompletionItem();
-            completionItem.setLabel("Test completion item");
-            completionItem.setInsertText("Test");
-            completionItem.setDetail("Snippet");
-            completionItem.setKind(CompletionItemKind.Snippet);
-            return Either.forLeft(Arrays.asList(completionItem));
+
+            return Either.forLeft(directiveComplete);
         });
     }
 }

@@ -75,7 +75,7 @@ function getServerOptions() {
   const LS_HOME = path.join(PROJECT_HOME, LS_LIB);
   const JAVA_HOME = "/usr/lib/jvm/java-11-openjdk-amd64/"//process.env.JAVA_HOME;
 
-  let executable: string = path.join(String(JAVA_HOME), "bin", "java");
+  let executable: string = "java"//path.join(String(JAVA_HOME), "bin", "java");
   let args: string[] = ["-cp", LS_HOME];
 
   let serverOptions: ServerOptions = {

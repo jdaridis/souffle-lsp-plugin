@@ -6,7 +6,7 @@
     "engines": {
         "vscode": "^1.65.0"
     },
-    "activationEvents": ["onLanguage:souffle"],
+    "activationEvents": ["onLanguage:souffle", "workspaceContains:**.dl"],
     "main": "./out/extension.js",
     "categories": [
         "Programming Languages"
