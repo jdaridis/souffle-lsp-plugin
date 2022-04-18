@@ -12,7 +12,6 @@ import visitors.SouffleParser;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,13 +43,19 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         //Set the document synchronization capabilities to full.
         response.getCapabilities().setTextDocumentSync(TextDocumentSyncKind.Full);
 //        response.getCapabilities().setHoverProvider(true);
+        SignatureHelpOptions signatureHelpOptions = new SignatureHelpOptions();
+        signatureHelpOptions.setTriggerCharacters(List.of("("));
+        response.getCapabilities().setSignatureHelpProvider(signatureHelpOptions);
+        response.getCapabilities().setDocumentSymbolProvider(true);
+
         this.clientCapabilities = initializeParams.getCapabilities();
-        
         /* Check if dynamic registration of completion capability is allowed by the client. If so we don't register the capability.
            Else, we register the completion capability.  
          */
         if (!isDynamicCompletionRegistration()) {
-            response.getCapabilities().setCompletionProvider(new CompletionOptions());
+            CompletionOptions completionOptions = new CompletionOptions();
+            completionOptions.setTriggerCharacters(List.of(":"));
+            response.getCapabilities().setCompletionProvider(completionOptions);
         }
         return CompletableFuture.supplyAsync(() -> response);
     }
@@ -66,25 +71,23 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         }
 
 //        languageClient.workspaceFolders().thenApply(workspaceFolders -> {
-//            filterByPattern(URI.create(workspaceFolders.get(0).getUri()).getPath());
+//            if(workspaceFolders != null && !workspaceFolders.isEmpty()){
+//                traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
+//            }
 //            return true;
 //        });
 
     }
 
-    private void filterByPattern(String directory) {
-
+    private void traverseWorkspace(String directory) {
         // Reading the folder and getting Stream.
         try (Stream<Path> walk = Files.walk(Paths.get(directory))) {
-
             // Filtering the paths by a folder and adding into a list.
-
             List<String> fileNamesList = walk.map(Path::toString).filter(f -> f.endsWith(".dl"))
                     .collect(Collectors.toList());
-
             // printing the folder names
             for (String s : fileNamesList) {
-                consumeInput(s);
+                parseInput(s);
             }
 
         } catch (IOException e) {
@@ -92,8 +95,8 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         }
     }
 
-    private void consumeInput(String documentURI) throws IOException {
-        Path path = Path.of(documentURI);
+    private void parseInput(String documentPath) throws IOException {
+        Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
         SouffleLexer souffleLexer = new SouffleLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);

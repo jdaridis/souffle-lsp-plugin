@@ -57,43 +57,13 @@ public class SouffleTextDocumentService implements TextDocumentService {
             e.printStackTrace();
         }
 
-        TreeMap<Range, String> treeMap = new TreeMap<>(new Comparator<Range>() {
-            @Override
-            public int compare(Range range, Range t1) {
-                Position currentPos = range.getStart();
-//                System.err.println("Range " + range + " t1 "+ t1);
-                if(Positions.isBefore(currentPos, t1.getStart())){
-//                    System.err.println("Going left");
-                    return -1;
-                } else if(!Positions.isBefore(currentPos, t1.getEnd())){
-//                    System.err.println("Going right");
-                    return 1;
-                }
-                if(range.getStart().equals(range.getEnd()))
-                    return 0;
-                else
-                    return 1;
-            }
-        });
-
-        Range range1 = new Range(new Position(1, 0), new Position(3, 1));
-        Range range2 = new Range(new Position(2, 0), new Position(2,3));
-
-        treeMap.put(range2, "Range2");
-        treeMap.put(range1, "Range1");
-//        treeMap.
-        Range range = new Range(new Position(2,2), new Position(2,2));
-//        TreeMap<Range, String> treeMap1 = (TreeMap<Range, String>) treeMap.clone();
-//        treeMap.remove(range);
-        System.err.println("Getting treemap " + treeMap);
-//        System.err.println("Getting treemap " + treeMap1);
 
     }
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
         this.clientLogger.logMessage("Operation '" + "text/didChange" +
-                "' {fileUri: '" + didChangeTextDocumentParams.getTextDocument().getUri() + "'} Changed");
+                "' {fileUri: '" + didChangeTextDocumentParams.getContentChanges() + "'} Changed");
     }
 
     @Override
@@ -164,11 +134,56 @@ public class SouffleTextDocumentService implements TextDocumentService {
                     completionItem.setTags(List.of(CompletionItemTag.Deprecated));
                 }
             }
+
+            CompletionItem completionItem = new CompletionItem();
+            completionItem.setLabel("Test(): void");
+            completionItem.setInsertText("Test()");
+            completionItem.setKind(CompletionItemKind.Snippet);
+            directiveComplete.add(completionItem);
+//            Command command = new Command();
+//            command.setCommand("editor.action.triggerParameterHints");
+//            completionItem.setCommand(command);
+
 //            CompletionList
 
             this.clientLogger.logMessage("Operation '" + "text/completion");
 
             return Either.forLeft(directiveComplete);
+        });
+    }
+
+    @Override
+    public CompletableFuture<SignatureHelp> signatureHelp(SignatureHelpParams params) {
+        return CompletableFuture.supplyAsync(() -> {
+            this.clientLogger.logMessage("Signature params " + params.toString());
+            SignatureHelp signatureHelp = new SignatureHelp();
+            SignatureInformation signatureInformation = new SignatureInformation();
+            signatureInformation.setLabel("Test signature");
+            signatureHelp.setSignatures(List.of(signatureInformation));
+            return signatureHelp;
+        });
+    }
+
+    @Override
+    public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> documentSymbol(DocumentSymbolParams params) {
+        return CompletableFuture.supplyAsync(() -> {
+           DocumentSymbol symbol = new DocumentSymbol();
+           symbol.setDetail("Test symbol");
+           symbol.setKind(SymbolKind.Operator);
+           symbol.setName("Test Symbol");
+           symbol.setRange(new Range(new Position(17, 2), new Position(17,17)));
+           symbol.setSelectionRange(new Range(new Position(17, 2), new Position(17,17)));
+
+            DocumentSymbol symbol2 = new DocumentSymbol();
+            symbol2.setDetail("Test symbol");
+            symbol2.setKind(SymbolKind.Operator);
+            symbol2.setName("Test Symbol");
+            symbol2.setRange(new Range(new Position(19, 2), new Position(19,17)));
+            symbol2.setSelectionRange(new Range(new Position(19, 2), new Position(19,17)));
+
+            symbol2.setChildren(List.of(symbol));
+
+           return List.of(Either.forRight(symbol2));
         });
     }
 }

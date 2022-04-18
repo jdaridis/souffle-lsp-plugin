@@ -1,6 +1,7 @@
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.Token;
 
 public class SouffleError extends DefaultErrorStrategy {
     @Override
@@ -14,7 +15,12 @@ public class SouffleError extends DefaultErrorStrategy {
                 msg += "symbol ";
                 break;
         }
-
+//        int offTokenIndex = e.getOffendingToken().getTokenIndex();
+//        while (!recognizer.getTokenStream().get(offTokenIndex).getText().equals("(")){
+//            offTokenIndex--;
+//        }
+//
+//        System.err.println(recognizer.getTokenStream().get(offTokenIndex - 1).getText());
         msg += recognizer.getCurrentToken().getText();
         recognizer.notifyErrorListeners(e.getOffendingToken(), msg, e);
 
