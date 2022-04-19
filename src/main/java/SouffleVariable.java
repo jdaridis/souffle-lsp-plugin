@@ -14,11 +14,20 @@ public class SouffleVariable extends SouffleSymbol {
         this(name, type, null, range);
     }
 
+    public SouffleVariable(String name, Range range) {
+        this(name, null, null, range);
+    }
+
     public SouffleType getType() {
         return type;
     }
 
     public Object getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return name + ": " + type;
     }
 }

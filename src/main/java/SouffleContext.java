@@ -2,22 +2,21 @@ import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.util.Positions;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class SouffleContext {
     private SouffleContextType kind;
     private Range range;
     private Map<Range, SouffleContext> subContext;
     private final Map<String, List<SouffleSymbol>> scope;
-    private SouffleSymbol symbol;
+    private List<SouffleSymbol> symbols;
 
     public SouffleContext(SouffleContextType kind, Range range, SouffleSymbol symbol) {
         this.kind = kind;
         this.range = range;
-        this.symbol = symbol;
+        this.symbols = new ArrayList<>();
+        if(symbol != null)
+            symbols.add(symbol);
         this.scope = new HashMap<>();
     }
 
@@ -51,12 +50,12 @@ public class SouffleContext {
         }
     }
 
-    public SouffleSymbol getContextSymbol() {
-        return symbol;
+    public List<SouffleSymbol> getContextSymbols() {
+        return symbols;
     }
 
-    public void setContextSymbol(SouffleSymbol symbol) {
-        this.symbol = symbol;
+    public void addContextSymbol(SouffleSymbol symbol) {
+        this.symbols.add(symbol);
     }
 
     public SouffleContextType getKind() {
@@ -71,11 +70,28 @@ public class SouffleContext {
         if(scope.containsKey(symbol.getName())){
             scope.get(symbol.getName()).add(symbol);
         } else {
-            scope.put(symbol.getName(), List.of(symbol));
+            scope.put(symbol.getName(), new ArrayList<>(List.of(symbol)));
         }
     }
 
     public List<SouffleSymbol> getSymbols(String name){
         return scope.get(name);
+    }
+
+    public Map<String, List<SouffleSymbol>> getScope() {
+        return scope;
+    }
+
+    @Override
+    public String toString() {
+        String s = kind.toString() + " "
+                + range.toString() + " "
+                + symbols.toString() + " "
+                + scope.toString();
+
+        if(subContext != null){
+            s += subContext.toString();
+        }
+        return s;
     }
 }

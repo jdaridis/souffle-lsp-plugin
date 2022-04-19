@@ -22,4 +22,9 @@ public class SouffleSymbol {
     public Range getRange() {
         return range;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
