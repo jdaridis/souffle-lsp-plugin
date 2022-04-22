@@ -11,6 +11,8 @@ public class SouffleContext {
     private final Map<String, List<SouffleSymbol>> scope;
     private List<SouffleSymbol> symbols;
 
+    private Map<Range, SouffleSymbol> symbolRange;
+
     public SouffleContext(SouffleContextType kind, Range range, SouffleSymbol symbol) {
         this.kind = kind;
         this.range = range;
@@ -18,6 +20,18 @@ public class SouffleContext {
         if(symbol != null)
             symbols.add(symbol);
         this.scope = new HashMap<>();
+        this.symbolRange = new TreeMap<>((range1, t1) -> {
+            Position currentPos = range1.getStart();
+            if(Positions.isBefore(currentPos, t1.getStart())){
+                return -1;
+            } else if(!Positions.isBefore(currentPos, t1.getEnd())){
+                return 1;
+            }
+            if(range1.getStart().equals(range1.getEnd()))
+                return 0;
+            else
+                return 1;
+        });
     }
 
     public SouffleContext(SouffleContextType kind, Range range) {
@@ -56,6 +70,20 @@ public class SouffleContext {
 
     public void addContextSymbol(SouffleSymbol symbol) {
         this.symbols.add(symbol);
+        this.symbolRange.put(symbol.range, symbol);
+    }
+
+    public SouffleSymbol getSymbol(Range range){
+        if(this.symbolRange.containsKey(range)){
+            return this.symbolRange.get(range);
+        } else {
+            SouffleContext subContext = getFromSubContext(range);
+            if(subContext != null){
+                return subContext.symbolRange.get(range);
+            }
+        }
+
+        return null;
     }
 
     public SouffleContextType getKind() {
@@ -89,9 +117,9 @@ public class SouffleContext {
                 + symbols.toString() + " "
                 + scope.toString();
 
-        if(subContext != null){
-            s += subContext.toString();
-        }
+//        if(subContext != null){
+//            s += subContext.toString();
+//        }
         return s;
     }
 }

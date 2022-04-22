@@ -1,4 +1,4 @@
-// Generated from /home/john/IdeaProjects/Souffle_Ide_Plugin/grammar/Souffle.g4 by ANTLR 4.9.2
+// Generated from /home/john/IdeaProjects/Souffle_Ide_Plugin/grammar/Souffle.g4 by ANTLR 4.10.1
 package visitors;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

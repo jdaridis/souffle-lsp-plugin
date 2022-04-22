@@ -12,7 +12,7 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    antlr 'org.antlr:antlr4:4.9.3' // use ANTLR version 4
+    antlr 'org.antlr:antlr4:4.10.1' // use ANTLR version 4
     implementation 'org.eclipse.lsp4j:org.eclipse.lsp4j:0.12.0'
 }
 

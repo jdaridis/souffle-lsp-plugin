@@ -28,6 +28,10 @@ public class SouffleVariable extends SouffleSymbol {
 
     @Override
     public String toString() {
-        return name + ": " + type;
+        String s = name;
+        if(type != null){
+            s += ": " + type;
+        }
+        return s;
     }
 }

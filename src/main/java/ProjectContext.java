@@ -11,11 +11,16 @@ public class ProjectContext {
         documents = new HashMap<>();
     }
 
+    public SouffleContext getDocumentContext(String documentUri) {
+        return documents.get(documentUri);
+    }
+
     public SouffleContext getContext(String documentUri, Range range){
         SouffleContext documentContext = documents.get(documentUri);
-        SouffleContext current = documentContext.getFromSubContext(range);
+        SouffleContext current = documentContext;
         SouffleContext next = current;
         cursorPosition = range;
+//        System.err.println(current);
 
         if(current == null){
             return documentContext;
@@ -23,6 +28,7 @@ public class ProjectContext {
 
         while (next != null){
             current = current.getFromSubContext(range);
+//            System.err.println(current);
             if(current != null){
                 next = current.getFromSubContext(range);
                 if(next != null) {

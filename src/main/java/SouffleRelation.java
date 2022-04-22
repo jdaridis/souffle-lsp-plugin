@@ -46,12 +46,14 @@ public class SouffleRelation extends SouffleSymbol {
 
     @Override
     public String toString() {
-        String relationName = name + "(";
-
-        for(SouffleVariable arg: args){
-            relationName += arg.toString() + ", ";
+        StringBuilder relationName = new StringBuilder(name + "(");
+        int i = 0;
+        for (; i < args.size() - 1; i++) {
+            SouffleVariable arg = args.get(i);
+            relationName.append(arg.toString()).append(", ");
         }
-        relationName += ")";
-        return relationName;
+        relationName.append(args.get(i).toString());
+        relationName.append(")");
+        return relationName.toString();
     }
 }

@@ -1,6 +1,7 @@
 import org.eclipse.lsp4j.Range;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SouffleRule extends SouffleSymbol{
@@ -35,11 +36,28 @@ public class SouffleRule extends SouffleSymbol{
         body.add(symbol);
     }
 
+    public void addToBody(Collection<SouffleSymbol> symbols){
+        body.addAll(symbols);
+    }
+
+
     public SouffleRelation getDeclaration() {
         return declaration;
     }
 
     public void setDeclaration(SouffleRelation declaration) {
         this.declaration = declaration;
+    }
+
+    public String toString() {
+        StringBuilder relationName = new StringBuilder(name + "(");
+        int i = 0;
+        for (; i < args.size() - 1; i++) {
+            SouffleVariable arg = args.get(i);
+            relationName.append(arg.toString()).append(", ");
+        }
+        relationName.append(args.get(i).toString());
+        relationName.append(")");
+        return relationName.toString();
     }
 }
