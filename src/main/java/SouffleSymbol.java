@@ -5,6 +5,9 @@ public class SouffleSymbol {
     protected SouffleSymbolType kind;
     protected Range range;
 
+    protected SouffleSymbol declaration;
+    protected String documentation;
+
     public SouffleSymbol(String name, SouffleSymbolType kind, Range range) {
         this.name = name;
         this.kind = kind;
@@ -21,6 +24,22 @@ public class SouffleSymbol {
 
     public Range getRange() {
         return range;
+    }
+
+    public String getDocumentation() {
+        return documentation;
+    }
+
+    public void setDocumentation(String documentation) {
+        this.documentation = documentation;
+    }
+
+    public SouffleSymbol getDeclaration() {
+        return declaration;
+    }
+
+    public void setDeclaration(SouffleSymbol declaration) {
+        this.declaration = declaration;
     }
 
     @Override

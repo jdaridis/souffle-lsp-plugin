@@ -79,5 +79,6 @@ fabric.properties
 bin/
 .vscode/
 build/
+.gradle/*
 *.lock
 

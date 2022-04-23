@@ -7,7 +7,6 @@ import java.util.List;
 public class SouffleRule extends SouffleSymbol{
     private final List<SouffleVariable> args;
     private final List<SouffleSymbol> body;
-    private SouffleRelation declaration;
 
     public SouffleRule(String name, Range range) {
         super(name, SouffleSymbolType.RULE, range);
@@ -38,15 +37,6 @@ public class SouffleRule extends SouffleSymbol{
 
     public void addToBody(Collection<SouffleSymbol> symbols){
         body.addAll(symbols);
-    }
-
-
-    public SouffleRelation getDeclaration() {
-        return declaration;
-    }
-
-    public void setDeclaration(SouffleRelation declaration) {
-        this.declaration = declaration;
     }
 
     public String toString() {

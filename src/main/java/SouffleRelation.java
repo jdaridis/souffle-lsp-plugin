@@ -5,7 +5,6 @@ import java.util.List;
 
 public class SouffleRelation extends SouffleSymbol {
     private final List<SouffleVariable> args;
-    private SouffleRelation declaration;
 
     private SouffleRelation(String name, Range range, SouffleSymbolType kind) {
         super(name, kind, range);
@@ -34,14 +33,6 @@ public class SouffleRelation extends SouffleSymbol {
 
     public List<SouffleVariable> getArgs() {
         return args;
-    }
-
-    public SouffleRelation getDeclaration() {
-        return declaration;
-    }
-
-    public void setDeclaration(SouffleRelation declaration) {
-        this.declaration = declaration;
     }
 
     @Override

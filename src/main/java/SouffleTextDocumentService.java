@@ -101,16 +101,21 @@ public class SouffleTextDocumentService implements TextDocumentService {
             Range cursor = new Range(params.getPosition(), params.getPosition());
             SouffleContext context = projectContext.getContext(params.getTextDocument().getUri(), cursor);
             System.err.println("Context " + context);
-            Hover hover = new Hover();
-            MarkupContent content = new MarkupContent();
-            content.setValue("Test hover");
-            content.setKind(MarkupKind.PLAINTEXT);
-            hover.setContents(content);
+            Hover hover = null;
             if(context != null){
                 SouffleSymbol currentSymbol = context.getSymbol(cursor);
                 if(currentSymbol != null){
+                    hover = new Hover();
+                    MarkupContent content = new MarkupContent();
+                    content.setValue("Test hover");
+                    content.setKind(MarkupKind.PLAINTEXT);
+                    hover.setContents(content);
                     System.err.println(currentSymbol);
-                    content.setValue(currentSymbol.getName());
+                    if(currentSymbol.getDocumentation() != null){
+                        content.setValue(currentSymbol.getDocumentation());
+                    } else {
+                        content.setValue(currentSymbol.getName());
+                    }
                 }
             }
 

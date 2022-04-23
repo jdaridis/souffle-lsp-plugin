@@ -1,8 +1,11 @@
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import visitors.SouffleBaseVisitor;
+import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
 import java.util.ArrayDeque;
@@ -57,6 +60,18 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
         documentContext.addToSubContext(declarationContext);
+        String documentation = null;
+        Token semi = ctx.getStart();
+        int i = semi.getTokenIndex();
+        BufferedTokenStream tokens = (BufferedTokenStream)parser.getTokenStream();
+        List<Token> cmtChannel =
+                tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
+        if ( cmtChannel!=null ) {
+            Token cmt = cmtChannel.get(0);
+            if ( cmt!=null ) {
+                documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
+            }
+        }
 
         currentScope.push(new ArrayDeque<>());
         ctx.relation_names().accept(this);
@@ -69,6 +84,7 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         boolean firstPass = true;
         for(SouffleSymbol relationName: relationNames){
             SouffleRelation relation = new SouffleRelation(relationName.getName(), relationName.getRange(), true);
+            relation.setDocumentation(documentation);
             for(SouffleSymbol attribute: attributes){
                 SouffleVariable arg = (SouffleVariable) attribute;
                 relation.addArg(arg);
@@ -101,6 +117,20 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         assert currentScope.peek() != null;
         currentScope.peek().push(relationName);
         return super.visitRelation_names(ctx);
+    }
+
+    @Override
+    public SouffleSymbol visitType_decl(SouffleParser.Type_declContext ctx) {
+        SouffleContext declarationContext = new SouffleContext(SouffleContextType.TYPE,toRange(ctx));
+        assert currentContext.peek() != null;
+        SouffleContext documentContext = currentContext.peek();
+
+        SouffleSymbol typeName = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.TYPE_DECL, toRange(ctx.IDENT()));
+        declarationContext.addContextSymbol(typeName);
+        documentContext.addToContextScope(typeName);
+        documentContext.addToSubContext(declarationContext);
+
+        return super.visitType_decl(ctx);
     }
 
     @Override
@@ -157,7 +187,6 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         ArrayDeque<SouffleSymbol> bodyList = currentScope.pop();
         currentScope.push(bodyList);
         for (SouffleSymbol bodySymbol: bodyList){
-//            System.err.println(bodySymbol);
             if(bodySymbol.getKind() == SouffleSymbolType.RELATION_USE){
                 SouffleRelation relation = (SouffleRelation) bodySymbol;
                 SouffleContext inRuleContext = new SouffleContext(SouffleContextType.RELATION_USE, relation.getRange());
@@ -181,7 +210,6 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     @Override
     public SouffleSymbol visitConjunction(SouffleParser.ConjunctionContext ctx) {
         SouffleSymbol atom = ctx.term().accept(this);
-//        System.err.println("Term atom " + atom);
         if(atom != null){
             assert currentScope.peek() != null;
             currentScope.peek().push(atom);
