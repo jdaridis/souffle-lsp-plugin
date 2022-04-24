@@ -10,6 +10,7 @@ public class SouffleType extends SouffleSymbol {
         this(name, range, SouffleSymbolType.TYPE_USE);
         if(isDecl){
             kind = SouffleSymbolType.TYPE_DECL;
+            declaration = this;
         }
     }
 

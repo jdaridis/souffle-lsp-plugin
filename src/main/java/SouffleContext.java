@@ -13,6 +13,8 @@ public class SouffleContext {
 
     private Map<Range, SouffleSymbol> symbolRange;
 
+    private SouffleContext parent;
+
     public SouffleContext(SouffleContextType kind, Range range, SouffleSymbol symbol) {
         this.kind = kind;
         this.range = range;
@@ -53,7 +55,12 @@ public class SouffleContext {
                     return 1;
             });
         }
+        context.parent = this;
         subContext.put(context.range, context);
+    }
+
+    public SouffleContext getParent() {
+        return parent;
     }
 
     public SouffleContext getFromSubContext(Range range){

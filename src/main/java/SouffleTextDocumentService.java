@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.checkerframework.checker.nullness.Opt;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
@@ -28,7 +29,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
     public SouffleTextDocumentService(SouffleLanguageServer languageServer) {
         this.languageServer = languageServer;
         this.clientLogger = LSClientLogger.getInstance();
-        this.projectContext = new ProjectContext();
+        this.projectContext = ProjectContext.getInstance();
     }
 
     private void consumeInput(String documentURI) throws IOException, URISyntaxException {
@@ -50,10 +51,14 @@ public class SouffleTextDocumentService implements TextDocumentService {
             this.clientLogger.clearDiagnostics(uri.toString());
 
             // begin parsing at init rule
-            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser);
+            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, uri.toString(), projectContext);
             visitor.visit(souffleParser.program());
 
             projectContext.addDocument(uri.toString(), visitor.getDocumentContext());
+            souffleParser.reset();
+            SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
+            visitor2.visit(souffleParser.program());
+
             this.clientLogger.logMessage("Operation '" + "text/didOpen" +
                     "' {fileUri: '" + uri + "'} opened");
         } catch (URISyntaxException | IOException e) {
@@ -80,10 +85,13 @@ public class SouffleTextDocumentService implements TextDocumentService {
         this.clientLogger.clearDiagnostics(didSaveTextDocumentParams.getTextDocument().getUri());
         try {
             consumeInput(didSaveTextDocumentParams.getTextDocument().getUri());
-            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser);
+            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, didSaveTextDocumentParams.getTextDocument().getUri(), projectContext);
             visitor.visit(souffleParser.program());
 
             projectContext.addDocument(didSaveTextDocumentParams.getTextDocument().getUri(), visitor.getDocumentContext());
+            souffleParser.reset();
+            SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, didSaveTextDocumentParams.getTextDocument().getUri());
+            visitor2.visit(souffleParser.program());
             this.clientLogger.logMessage("Operation '" + "text/didSave" +
                     "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
         } catch (IOException | URISyntaxException e) {
@@ -91,6 +99,24 @@ public class SouffleTextDocumentService implements TextDocumentService {
         }
 
 
+    }
+
+    @Override
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Location> declLocations = new ArrayList<>();
+            Range cursor = new Range(params.getPosition(), params.getPosition());
+            Optional<SouffleContext> context = Optional.ofNullable(projectContext.getContext(params.getTextDocument().getUri(), cursor));
+            if(context.isPresent()){
+                Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));
+                if(currentSymbol.isPresent()){
+                    Optional<SouffleSymbol> declaration = Optional.ofNullable(currentSymbol.get().getDeclaration());
+                    declaration.ifPresent(symbol -> declLocations.add(new Location(symbol.getURI(), symbol.getRange())));
+                }
+            }
+
+            return Either.forLeft(declLocations);
+        });
     }
 
     @Override

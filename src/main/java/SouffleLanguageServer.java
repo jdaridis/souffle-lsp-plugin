@@ -43,6 +43,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         //Set the document synchronization capabilities to full.
         response.getCapabilities().setTextDocumentSync(TextDocumentSyncKind.Full);
         response.getCapabilities().setHoverProvider(true);
+        response.getCapabilities().setDefinitionProvider(true);
         SignatureHelpOptions signatureHelpOptions = new SignatureHelpOptions();
         signatureHelpOptions.setTriggerCharacters(List.of("("));
         response.getCapabilities().setSignatureHelpProvider(signatureHelpOptions);
@@ -70,12 +71,12 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             languageClient.registerCapability(new RegistrationParams(List.of(completionRegistration)));
         }
 
-//        languageClient.workspaceFolders().thenApply(workspaceFolders -> {
-//            if(workspaceFolders != null && !workspaceFolders.isEmpty()){
-//                traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
-//            }
-//            return true;
-//        });
+        languageClient.workspaceFolders().thenApply(workspaceFolders -> {
+            if(workspaceFolders != null && !workspaceFolders.isEmpty()){
+                traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
+            }
+            return true;
+        });
 
     }
 
@@ -96,6 +97,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void parseInput(String documentPath) throws IOException {
+        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
         SouffleLexer souffleLexer = new SouffleLexer(input);
@@ -104,7 +106,11 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         souffleParser.removeErrorListeners();
         souffleParser.setErrorHandler(new SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(path.toUri().toString()));
-        souffleParser.program();
+        ProjectContext projectContext = ProjectContext.getInstance();
+        SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, documentPath, projectContext);
+        visitor.visit(souffleParser.program());
+
+        projectContext.addDocument(documentPath, visitor.getDocumentContext());
     }
 
     @Override

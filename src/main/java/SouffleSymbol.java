@@ -5,6 +5,15 @@ public class SouffleSymbol {
     protected SouffleSymbolType kind;
     protected Range range;
 
+    public String getURI() {
+        return URI;
+    }
+
+    public void setURI(String URI) {
+        this.URI = URI;
+    }
+
+    protected String URI;
     protected SouffleSymbol declaration;
     protected String documentation;
 

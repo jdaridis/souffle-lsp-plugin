@@ -30,8 +30,8 @@ public class VisitorLauncher {
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 // create a parser that feeds off the tokens buffer
             SouffleParser parser = new SouffleParser(tokens);
-            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(parser);
-            visitor.visit(parser.program());
+//            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(parser);
+//            visitor.visit(parser.program());
 //            ParseTree tree = ; // begin parsing at init rule
         } catch (IOException e) {
             e.printStackTrace();

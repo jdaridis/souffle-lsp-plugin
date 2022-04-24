@@ -1,15 +1,32 @@
 import org.eclipse.lsp4j.Range;
+import org.eclipse.lsp4j.services.LanguageClient;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ProjectContext {
+    public Map<String, SouffleContext> getDocuments() {
+        return documents;
+    }
+
     private final Map<String, SouffleContext> documents;
     private Range cursorPosition;
 
-    public ProjectContext() {
+    private boolean isInitialized;
+
+    private static ProjectContext INSTANCE;
+
+    private ProjectContext() {
         documents = new HashMap<>();
     }
+
+    public static ProjectContext getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ProjectContext();
+        }
+        return INSTANCE;
+    }
+
 
     public SouffleContext getDocumentContext(String documentUri) {
         return documents.get(documentUri);
