@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 /**
  * TextDocumentService implementation for Ballerina.
@@ -182,11 +183,28 @@ public class SouffleTextDocumentService implements TextDocumentService {
                 }
             }
 
-            CompletionItem completionItem = new CompletionItem();
-            completionItem.setLabel("Test(): void");
-            completionItem.setInsertText("Test()");
-            completionItem.setKind(CompletionItemKind.Snippet);
-            directiveComplete.add(completionItem);
+            for(SouffleContext documentContext: projectContext.getDocuments().values()){
+                for(List<SouffleSymbol> symbols: documentContext.getScope().values()){
+                    for(SouffleSymbol name: symbols){
+                        CompletionItem completionItem = new CompletionItem();
+                        completionItem.setLabel(name.toString());
+                        completionItem.setInsertText(name.getName());
+                        switch (name.getKind()){
+                            case TYPE_DECL:
+                                completionItem.setKind(CompletionItemKind.Interface);
+                                directiveComplete.add(completionItem);
+                                break;
+                            case RELATION_DECL:
+                                completionItem.setKind(CompletionItemKind.Method);
+                                directiveComplete.add(completionItem);
+//                            completionItem.setLabel();
+                                break;
+                        }
+
+                    }
+                }
+            }
+
 //            Command command = new Command();
 //            command.setCommand("editor.action.triggerParameterHints");
 //            completionItem.setCommand(command);

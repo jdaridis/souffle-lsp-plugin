@@ -49,6 +49,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
                 return decl;
             }
         }
+//        LSClientLogger.getInstance().reportError(symbol.getRange(), documentUri, "No declaration found for " + symbol.getName());
         return null;
     }
 

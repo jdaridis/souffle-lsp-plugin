@@ -107,10 +107,11 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         souffleParser.setErrorHandler(new SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(path.toUri().toString()));
         ProjectContext projectContext = ProjectContext.getInstance();
-        SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, documentPath, projectContext);
+        SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
 
-        projectContext.addDocument(documentPath, visitor.getDocumentContext());
+        projectContext.addDocument(path.toUri().toString(), visitor.getDocumentContext());
+
     }
 
     @Override

@@ -132,11 +132,12 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         SouffleContext documentContext = currentContext.peek();
 
         SouffleType typeName = new SouffleType(ctx.IDENT().getText(), toRange(ctx.IDENT()), true);
+        typeName.setURI(documentUri);
         declarationContext.addContextSymbol(typeName);
         declarationContext.addToContextScope(typeName);
         documentContext.addToContextScope(typeName);
         documentContext.addToSubContext(declarationContext);
-        System.err.println(documentContext);
+//        System.err.println(documentContext);
 
         return super.visitType_decl(ctx);
     }
