@@ -15,21 +15,23 @@ public class HoverProvider {
             if (currentSymbol != null) {
                 hover = new Hover();
                 MarkupContent content = new MarkupContent();
-                content.setKind(MarkupKind.PLAINTEXT);
+                content.setKind(MarkupKind.MARKDOWN);
                 hover.setContents(content);
                 System.err.println(currentSymbol);
-                if (currentSymbol.getDocumentation() != null) {
-                    content.setValue(currentSymbol.getDocumentation());
-                } else if (currentSymbol.getDeclaration() != null) {
-                    String doc = "##### " + currentSymbol.getDeclaration().toString() + "\n";
+                String doc;
+                if (currentSymbol.getDeclaration() != null) {
+                    doc = "```souffle" + "\n"
+                            + currentSymbol.getDeclaration().toString() + "\n"
+                            + " ```" + "\n";
                     if (currentSymbol.getDeclaration().getDocumentation() != null) {
                         doc += currentSymbol.getDeclaration().getDocumentation();
                     }
-                    content.setKind(MarkupKind.MARKDOWN);
-                    content.setValue(doc);
                 } else {
-                    content.setValue(currentSymbol.toString());
+                    doc = "```souffle" + "\n"
+                            + currentSymbol + "\n"
+                            + " ```" + "\n";
                 }
+                content.setValue(doc);
             }
         }
 

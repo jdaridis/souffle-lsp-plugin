@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,11 +73,11 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             languageClient.registerCapability(new RegistrationParams(List.of(completionRegistration)));
         }
 
-        languageClient.workspaceFolders().thenApply(workspaceFolders -> {
+        languageClient.workspaceFolders().whenComplete((workspaceFolders, throwable) -> {
             if(workspaceFolders != null && !workspaceFolders.isEmpty()){
                 traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
             }
-            return true;
+//            return true;
         });
 
     }
@@ -112,7 +113,9 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         visitor.visit(souffleParser.program());
 
         projectContext.addDocument(path.toUri().toString(), visitor.getDocumentContext());
-
+        souffleParser.reset();
+        SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, path.toUri().toString());
+        visitor2.visit(souffleParser.program());
     }
 
     @Override
