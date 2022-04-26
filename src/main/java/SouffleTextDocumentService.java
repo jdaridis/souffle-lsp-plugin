@@ -33,7 +33,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         this.projectContext = ProjectContext.getInstance();
     }
 
-    private void consumeInput(String documentURI) throws IOException, URISyntaxException {
+/*    private void consumeInput(String documentURI) throws IOException, URISyntaxException {
         URI uri = new URI(documentURI);
         CharStream input = CharStreams.fromPath(Path.of(uri));
         souffleLexer = new SouffleLexer(input);
@@ -42,23 +42,34 @@ public class SouffleTextDocumentService implements TextDocumentService {
         souffleParser.removeErrorListeners();
         souffleParser.setErrorHandler(new SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
+    }*/
+
+    private void parseInput(String documentURI) throws IOException, URISyntaxException {
+        URI uri = new URI(documentURI);
+        Path path = Path.of(uri);
+        CharStream input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        SouffleParser souffleParser = new SouffleParser(tokens);
+        souffleParser.removeErrorListeners();
+        souffleParser.setErrorHandler(new SouffleError());
+        souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
+        ProjectContext projectContext = ProjectContext.getInstance();
+        SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, uri.toString(), projectContext);
+        visitor.visit(souffleParser.program());
+
+        projectContext.addDocument(uri.toString(), visitor.getDocumentContext());
+        souffleParser.reset();
+        SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
+        visitor2.visit(souffleParser.program());
     }
 
     @Override
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
         try {
             URI uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
-            consumeInput(didOpenTextDocumentParams.getTextDocument().getUri());
             this.clientLogger.clearDiagnostics(uri.toString());
-
-            // begin parsing at init rule
-            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, uri.toString(), projectContext);
-            visitor.visit(souffleParser.program());
-
-            projectContext.addDocument(uri.toString(), visitor.getDocumentContext());
-            souffleParser.reset();
-            SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
-            visitor2.visit(souffleParser.program());
+            parseInput(didOpenTextDocumentParams.getTextDocument().getUri());
 
             this.clientLogger.logMessage("Operation '" + "text/didOpen" +
                     "' {fileUri: '" + uri + "'} opened");
@@ -85,14 +96,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
     public void didSave(DidSaveTextDocumentParams didSaveTextDocumentParams) {
         this.clientLogger.clearDiagnostics(didSaveTextDocumentParams.getTextDocument().getUri());
         try {
-            consumeInput(didSaveTextDocumentParams.getTextDocument().getUri());
-            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, didSaveTextDocumentParams.getTextDocument().getUri(), projectContext);
-            visitor.visit(souffleParser.program());
-
-            projectContext.addDocument(didSaveTextDocumentParams.getTextDocument().getUri(), visitor.getDocumentContext());
-            souffleParser.reset();
-            SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, didSaveTextDocumentParams.getTextDocument().getUri());
-            visitor2.visit(souffleParser.program());
+            parseInput(didSaveTextDocumentParams.getTextDocument().getUri());
             this.clientLogger.logMessage("Operation '" + "text/didSave" +
                     "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
         } catch (IOException | URISyntaxException e) {
@@ -134,7 +138,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
                 if(currentSymbol != null){
                     hover = new Hover();
                     MarkupContent content = new MarkupContent();
-                    content.setValue("Test hover");
                     content.setKind(MarkupKind.PLAINTEXT);
                     hover.setContents(content);
                     System.err.println(currentSymbol);
@@ -279,7 +282,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
                         case RELATION_DECL:
                             topSymbol = symbol;
                             top = new DocumentSymbol();
-                            top.setDetail("Test symbol");
+                            top.setDetail(".decl");
                             top.setKind(SymbolKind.Class);
                             top.setName(symbol.toString());
                             top.setRange(symbol.getRange());
@@ -291,8 +294,12 @@ public class SouffleTextDocumentService implements TextDocumentService {
                                 topSymbol = symbol;
                                 top = use;
                             }
-                            use.setDetail("Test symbol");
+                            use.setDetail("fact");
                             use.setKind(SymbolKind.Field);
+                            if(((SouffleRelation)symbol).getDirective() != null){
+                                use.setKind(SymbolKind.Operator);
+                                use.setDetail(((SouffleRelation)symbol).getDirective());
+                            }
                             use.setName(symbol.toString());
                             use.setRange(symbol.getRange());
                             use.setSelectionRange(symbol.getRange());
@@ -305,7 +312,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
                                 topSymbol = symbol;
                                 top = rule;
                             }
-                            rule.setDetail("Test symbol");
+//                            rule.setDetail("Test symbol");
                             rule.setKind(SymbolKind.Method);
                             rule.setName(symbol.toString());
                             rule.setRange(symbol.getRange());
@@ -315,7 +322,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
                             SouffleRule souffleRule = (SouffleRule) symbol;
                             for(SouffleSymbol ruleBody: souffleRule.getBody()){
                                 DocumentSymbol body = new DocumentSymbol();
-                                body.setDetail("Test symbol");
+//                                body.setDetail("Test symbol");
                                 body.setKind(SymbolKind.Property);
                                 body.setName(ruleBody.toString());
                                 body.setRange(ruleBody.getRange());

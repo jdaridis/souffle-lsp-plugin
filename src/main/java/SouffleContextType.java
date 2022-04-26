@@ -5,5 +5,7 @@ public enum SouffleContextType {
     RULE, //Rule context
     COMPONENT, //Component context
     VARIABLE, //Variable context
-    TYPE //Type context
+    TYPE, //Type context
+
+    DIRECTIVE
 }

@@ -95,6 +95,28 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
 
     @Override
+    public SouffleSymbol visitDirective_head(SouffleParser.Directive_headContext ctx) {
+        SouffleContext directiveContext = new SouffleContext(SouffleContextType.DIRECTIVE,toRange(ctx));
+        assert currentContext.peek() != null;
+        SouffleContext documentContext = currentContext.peek();
+        documentContext.addToSubContext(directiveContext);
+        String directive = ctx.directive_head_decl().getText();
+
+        currentScope.push(new ArrayDeque<>());
+        ctx.directive_list().accept(this);
+        ArrayDeque<SouffleSymbol> directiveList =  currentScope.pop();
+        for(SouffleSymbol symbol: directiveList){
+            SouffleRelation relation = new SouffleRelation(symbol.getName(), symbol.getRange());
+            relation.setDirective(directive);
+            relation.setDeclaration(findDecl(relation));
+            directiveContext.addContextSymbol(relation);
+            documentContext.addToContextScope(relation);
+        }
+
+        return null;
+    }
+
+    @Override
     public SouffleSymbol visitRelation_decl(SouffleParser.Relation_declContext ctx) {
         currentScope.push(new ArrayDeque<>());
         ctx.relation_names().accept(this);
@@ -334,6 +356,15 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         currentScope.peek().push(attribute);
         return super.visitNon_empty_attributes(ctx);
     }
+
+    @Override
+    public SouffleSymbol visitRelation_directive_list(SouffleParser.Relation_directive_listContext ctx) {
+        SouffleSymbol attribute =  ctx.qualified_name().accept(this);
+        assert currentScope.peek() != null;
+        currentScope.peek().push(attribute);
+        return super.visitRelation_directive_list(ctx);
+    }
+
 
     @Override
     public SouffleSymbol visitAttribute(SouffleParser.AttributeContext ctx) {

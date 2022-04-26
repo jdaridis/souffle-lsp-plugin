@@ -6,6 +6,8 @@ import java.util.List;
 public class SouffleRelation extends SouffleSymbol {
     private final List<SouffleVariable> args;
 
+    private String directive;
+
     private SouffleRelation(String name, Range range, SouffleSymbolType kind) {
         super(name, kind, range);
         this.args = new ArrayList<>();
@@ -33,6 +35,14 @@ public class SouffleRelation extends SouffleSymbol {
 
     public List<SouffleVariable> getArgs() {
         return args;
+    }
+
+    public String getDirective() {
+        return directive;
+    }
+
+    public void setDirective(String directive) {
+        this.directive = directive;
     }
 
     @Override
