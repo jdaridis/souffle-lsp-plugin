@@ -56,7 +56,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
          */
         if (!isDynamicCompletionRegistration()) {
             CompletionOptions completionOptions = new CompletionOptions();
-            completionOptions.setTriggerCharacters(List.of(":"));
+            completionOptions.setTriggerCharacters(List.of(":", "."));
             response.getCapabilities().setCompletionProvider(completionOptions);
         }
         return CompletableFuture.supplyAsync(() -> response);
