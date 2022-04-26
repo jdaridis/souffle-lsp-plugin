@@ -41,12 +41,14 @@ public class SouffleRule extends SouffleSymbol{
 
     public String toString() {
         StringBuilder relationName = new StringBuilder(name + "(");
-        int i = 0;
-        for (; i < args.size() - 1; i++) {
-            SouffleVariable arg = args.get(i);
-            relationName.append(arg.toString()).append(", ");
+        if(!args.isEmpty()){
+            int i = 0;
+            for (; i < args.size() - 1; i++) {
+                SouffleVariable arg = args.get(i);
+                relationName.append(arg.toString()).append(", ");
+            }
+            relationName.append(args.get(i).toString());
         }
-        relationName.append(args.get(i).toString());
         relationName.append(")");
         return relationName.toString();
     }

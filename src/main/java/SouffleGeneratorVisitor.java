@@ -137,9 +137,27 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         declarationContext.addToContextScope(typeName);
         documentContext.addToContextScope(typeName);
         documentContext.addToSubContext(declarationContext);
+
+        if(ctx.union_type_list() != null){
+            currentScope.push(new ArrayDeque<>());
+            ctx.union_type_list().accept(this);
+            ArrayDeque<SouffleSymbol> types = currentScope.pop();
+            for(SouffleSymbol typeSymbol: types){
+                SouffleType type = new SouffleType(typeSymbol.getName(), typeSymbol.getRange());
+                SouffleContext unionContext = new SouffleContext(SouffleContextType.TYPE, type.getRange());
+                unionContext.addContextSymbol(type);
+                unionContext.addToContextScope(type);
+                declarationContext.addToSubContext(unionContext);
+                declarationContext.addToContextScope(type);
+                typeName.addType(type);
+            }
+        }
+
+
+
 //        System.err.println(documentContext);
 
-        return super.visitType_decl(ctx);
+        return null;
     }
 
     @Override
@@ -148,6 +166,14 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         super.visitRecord_type_list(ctx);
         currentScope.pop();
         return null;
+    }
+
+    @Override
+    public SouffleSymbol visitUnion_type_list(SouffleParser.Union_type_listContext ctx) {
+        SouffleSymbol type = ctx.qualified_name().accept(this);
+        assert currentScope.peek() != null;
+        currentScope.peek().push(type);
+        return super.visitUnion_type_list(ctx);
     }
 
     @Override

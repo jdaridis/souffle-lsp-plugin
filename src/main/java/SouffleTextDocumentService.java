@@ -140,14 +140,49 @@ public class SouffleTextDocumentService implements TextDocumentService {
                     System.err.println(currentSymbol);
                     if(currentSymbol.getDocumentation() != null){
                         content.setValue(currentSymbol.getDocumentation());
+                    } else if(currentSymbol.getDeclaration() != null ){
+                        String doc = "##### " + currentSymbol.getDeclaration().toString()+"\n";
+                        if(currentSymbol.getDeclaration().getDocumentation() != null){
+                            doc += currentSymbol.getDeclaration().getDocumentation();
+                        }
+                        content.setKind(MarkupKind.MARKDOWN);
+                        content.setValue(doc);
                     } else {
-                        content.setValue(currentSymbol.getName());
+                        content.setValue(currentSymbol.toString());
                     }
                 }
             }
 
             return hover;
         });
+    }
+
+    @Override
+    public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
+        return CompletableFuture.supplyAsync(() -> {
+            Range cursor = new Range(params.getPosition(), params.getPosition());
+            SouffleContext context = projectContext.getContext(params.getTextDocument().getUri(), cursor);
+            List<Location> references = new ArrayList<>();
+            if(context != null){
+                SouffleSymbol currentSymbol = context.getSymbol(cursor);
+                for(Map.Entry<String, SouffleContext> documentContext: projectContext.getDocuments().entrySet()){
+                    Optional.ofNullable(documentContext.getValue()
+                            .getSymbols(currentSymbol.getName()))
+                            .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(documentContext.getKey(), symbol.getRange()))));
+                    for(SouffleContext ruleContext: documentContext.getValue().getSubContext().values()){
+                        if(ruleContext.getKind() != SouffleContextType.COMPONENT){
+                            Optional.ofNullable(ruleContext
+                                    .getSymbols(currentSymbol.getName()))
+                                    .ifPresent(souffleSymbols ->
+                                            souffleSymbols.forEach(symbol ->
+                                                    references.add(new Location(documentContext.getKey(), symbol.getRange()))));
+                        }
+                    }
+                }
+            }
+            return references;
+        });
+
     }
 
     @Override

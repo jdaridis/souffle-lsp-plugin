@@ -7,6 +7,7 @@ import java.util.*;
 public class SouffleContext {
     private SouffleContextType kind;
     private Range range;
+
     private Map<Range, SouffleContext> subContext;
     private final Map<String, List<SouffleSymbol>> scope;
     private List<SouffleSymbol> symbols;
@@ -57,6 +58,11 @@ public class SouffleContext {
         }
         context.parent = this;
         subContext.put(context.range, context);
+    }
+
+
+    public Map<Range, SouffleContext> getSubContext() {
+        return subContext;
     }
 
     public SouffleContext getParent() {

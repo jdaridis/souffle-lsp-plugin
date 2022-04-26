@@ -1,6 +1,7 @@
 import org.eclipse.lsp4j.Range;
 
 public class SouffleVariable extends SouffleSymbol {
+
     private SouffleType type;
     private Object value;
 
@@ -20,6 +21,9 @@ public class SouffleVariable extends SouffleSymbol {
 
     public SouffleType getType() {
         return type;
+    }
+    public void setType(SouffleType type) {
+        this.type = type;
     }
 
     public Object getValue() {

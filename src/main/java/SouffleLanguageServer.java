@@ -44,6 +44,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         response.getCapabilities().setTextDocumentSync(TextDocumentSyncKind.Full);
         response.getCapabilities().setHoverProvider(true);
         response.getCapabilities().setDefinitionProvider(true);
+        response.getCapabilities().setReferencesProvider(true);
         SignatureHelpOptions signatureHelpOptions = new SignatureHelpOptions();
         signatureHelpOptions.setTriggerCharacters(List.of("("));
         response.getCapabilities().setSignatureHelpProvider(signatureHelpOptions);

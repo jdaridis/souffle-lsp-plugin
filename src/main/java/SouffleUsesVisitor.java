@@ -116,6 +116,30 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
 
     @Override
+    public SouffleSymbol visitType_decl(SouffleParser.Type_declContext ctx) {
+        if(ctx.qualified_name() != null){
+            SouffleSymbol parent = ctx.qualified_name().accept(this);
+            parent.setDeclaration(findDecl(parent));
+        } else if(ctx.union_type_list() != null){
+            currentScope.push(new ArrayDeque<>());
+            ctx.union_type_list().accept(this);
+            ArrayDeque<SouffleSymbol> types = currentScope.pop();
+            SouffleType declSymbol = (SouffleType) findDecl(new SouffleType(ctx.IDENT().getText(), toRange(ctx)));
+            int i=0;
+            for(SouffleSymbol type: types){
+                declSymbol.getUnion().get(i).setDeclaration(findDecl(type));
+                System.err.println(declSymbol.getUnion().get(i));
+                i++;
+            }
+
+//            types.forEach(symbol -> symbol.setDeclaration(findDecl(symbol)));
+        }
+//        System.err.println(documentContext);
+
+        return null;
+    }
+
+    @Override
     public SouffleSymbol visitRelation_names(SouffleParser.Relation_namesContext ctx) {
         SouffleSymbol relationName = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
         assert currentScope.peek() != null;
@@ -138,10 +162,18 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         for(SouffleSymbol symbol: rules){
             SouffleRelation relationSymbol = (SouffleRelation) symbol;
             rule = new SouffleRule(symbol.getName(), symbol.getRange());
-            rule.addArgs(relationSymbol.getArgs());
-            rule.setDeclaration(findDecl(rule));
+            SouffleSymbol decl = findDecl(rule);
+            rule.setDeclaration(decl);
             documentContext.addToContextScope(rule);
             ruleContext.addContextSymbol(rule);
+            if(decl != null){
+                List<SouffleVariable> args = relationSymbol.getArgs();
+                for (int i = 0; i < args.size(); i++) {
+                    SouffleVariable arg = args.get(i);
+                    arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
+                    rule.addArg(arg);
+                }
+            }
         }
 
         assert rule != null;
@@ -150,6 +182,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             variableContext.addContextSymbol(argSymbol);
             ruleContext.addToContextScope(argSymbol);
             ruleContext.addToSubContext(variableContext);
+
         }
         currentScope.push(new ArrayDeque<>());
         ctx.body().accept(this);
@@ -157,7 +190,16 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
         for(SouffleSymbol bodySymbol: body){
             rule.addToBody(bodySymbol);
-            bodySymbol.setDeclaration(findDecl(bodySymbol));
+            SouffleSymbol decl = findDecl(bodySymbol);
+            bodySymbol.setDeclaration(decl);
+
+            if(decl != null && bodySymbol.getKind() == SouffleSymbolType.RELATION_USE){
+                List<SouffleVariable> args = ((SouffleRelation) bodySymbol).getArgs();
+                for (int i = 0; i < args.size(); i++) {
+                    SouffleVariable arg = args.get(i);
+                    arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
+                }
+            }
         }
 
         currentContext.pop();
@@ -260,6 +302,15 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         currentScope.peek().push(arg);
         return super.visitNon_empty_arg_list(ctx);
     }
+
+    @Override
+    public SouffleSymbol visitUnion_type_list(SouffleParser.Union_type_listContext ctx) {
+        SouffleSymbol type = ctx.qualified_name().accept(this);
+        assert currentScope.peek() != null;
+        currentScope.peek().push(type);
+        return super.visitUnion_type_list(ctx);
+    }
+
     @Override
     public SouffleSymbol visitRecord_type_list(SouffleParser.Record_type_listContext ctx) {
         currentScope.push(new ArrayDeque<>());
