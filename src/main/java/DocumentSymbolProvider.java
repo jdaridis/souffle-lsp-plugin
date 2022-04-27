@@ -62,7 +62,7 @@ public class DocumentSymbolProvider {
                         rule.setSelectionRange(symbol.getRange());
                         children.add(rule);
 
-                        SouffleRule souffleRule = (SouffleRule) symbol;
+/*                        SouffleRule souffleRule = (SouffleRule) symbol;
                         for (SouffleSymbol ruleBody : souffleRule.getBody()) {
                             DocumentSymbol body = new DocumentSymbol();
 //                                body.setDetail("Test symbol");
@@ -72,7 +72,7 @@ public class DocumentSymbolProvider {
                             body.setSelectionRange(ruleBody.getRange());
                             ruleChildren.add(body);
                         }
-                        rule.setChildren(ruleChildren);
+                        rule.setChildren(ruleChildren);*/
 
                         break;
                 }

@@ -150,7 +150,6 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             int i=0;
             for(SouffleSymbol type: types){
                 declSymbol.getUnion().get(i).setDeclaration(findDecl(type));
-                System.err.println(declSymbol.getUnion().get(i));
                 i++;
             }
 
@@ -261,6 +260,15 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
                     ruleContext.addToSubContext(inRelationContext);
                     ruleContext.addToContextScope(arg);
                 }
+            } else if(bodySymbol.getKind() == SouffleSymbolType.CONSTRAINT){
+                SouffleConstraint constraint = (SouffleConstraint) bodySymbol;
+                for(SouffleVariable arg: constraint.getArgs()){
+                    SouffleContext inRelationContext = new SouffleContext(SouffleContextType.VARIABLE, arg.getRange());
+                    inRelationContext.addContextSymbol(arg);
+
+                    ruleContext.addToSubContext(inRelationContext);
+                    ruleContext.addToContextScope(arg);
+                }
             }
         }
 
@@ -279,7 +287,18 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitConstraint(SouffleParser.ConstraintContext ctx) {
-        return new SouffleSymbol(ctx.getText(),SouffleSymbolType.VARIABLE, toRange(ctx));
+        SouffleConstraint constraint = new SouffleConstraint(ctx.getText(), toRange(ctx));
+        if(!ctx.arg().isEmpty()){
+            for (int i = 0; i < ctx.arg().size(); i++) {
+                currentScope.push(new ArrayDeque<>());
+                ctx.arg(i).accept(this);
+                ArrayDeque<SouffleSymbol> subArgs = currentScope.pop();
+                for(SouffleSymbol subArg: subArgs){
+                    constraint.addArg((SouffleVariable) subArg);
+                }
+            }
+        }
+        return constraint;
     }
 
     @Override
@@ -313,17 +332,44 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
     @Override
     public SouffleSymbol visitArg(SouffleParser.ArgContext ctx) {
-        SouffleSymbol symbol = new SouffleVariable(ctx.getText(), toRange(ctx));
-        super.visitArg(ctx);
-        return symbol;
+        if(!ctx.arg().isEmpty()){
+            for (int i = 0; i < ctx.arg().size(); i++) {
+                currentScope.push(new ArrayDeque<>());
+                ctx.arg(i).accept(this);
+                ArrayDeque<SouffleSymbol> subArgs = currentScope.pop();
+                for(SouffleSymbol subArg: subArgs){
+                    if(((SouffleVariable)subArg).getValue() == null){
+                        assert currentScope.peek() != null;
+                        currentScope.peek().push(subArg);
+                    }
+                }
+            }
+        } else {
+            SouffleVariable variable = new SouffleVariable(ctx.getText(), toRange(ctx));
+            if(ctx.IDENT() == null){
+                variable.setValue(ctx.getText());
+            }
+            assert currentScope.peek() != null;
+            currentScope.peek().push(variable);
+        }
+//        super.visitArg(ctx);
+        return null;
     }
 
     @Override
     public SouffleSymbol visitNon_empty_arg_list(SouffleParser.Non_empty_arg_listContext ctx) {
-        SouffleVariable arg = (SouffleVariable) ctx.arg().accept(this);
-        assert currentScope.peek() != null;
-        currentScope.peek().push(arg);
-        return super.visitNon_empty_arg_list(ctx);
+        if(ctx.non_empty_arg_list() != null){
+            ctx.non_empty_arg_list().accept(this);
+        }
+        currentScope.push(new ArrayDeque<>());
+        ctx.arg().accept(this);
+        ArrayDeque<SouffleSymbol> args = currentScope.pop();
+        for(SouffleSymbol arg: args){
+            assert currentScope.peek() != null;
+            currentScope.peek().push(arg);
+        }
+
+        return null;
     }
 
     @Override
