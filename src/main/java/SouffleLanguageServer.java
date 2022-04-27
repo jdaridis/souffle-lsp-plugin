@@ -49,6 +49,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         signatureHelpOptions.setTriggerCharacters(List.of("("));
         response.getCapabilities().setSignatureHelpProvider(signatureHelpOptions);
         response.getCapabilities().setDocumentSymbolProvider(true);
+        response.getCapabilities().setRenameProvider(true);
 
         this.clientCapabilities = initializeParams.getCapabilities();
         /* Check if dynamic registration of completion capability is allowed by the client. If so we don't register the capability.

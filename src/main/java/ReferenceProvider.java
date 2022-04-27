@@ -1,6 +1,4 @@
-import org.eclipse.lsp4j.Location;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.ReferenceParams;
+import org.eclipse.lsp4j.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,7 @@ public class ReferenceProvider {
     public ReferenceProvider() {
     }
 
-    public List<Location> getReferences(ReferenceParams params) {
+    public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params) {
         Range cursor = new Range(params.getPosition(), params.getPosition());
         SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         List<Location> references = new ArrayList<Location>();

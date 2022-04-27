@@ -309,12 +309,24 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         documentContext.addToSubContext(factContext);
 
         SouffleRelation fact = (SouffleRelation) ctx.atom().accept(this);
-        fact.setDeclaration(findDecl(fact));
+        SouffleSymbol decl = findDecl(fact);
+        fact.setDeclaration(decl);
 
         factContext.addContextSymbol(fact);
         documentContext.addToContextScope(fact);
 
-        return super.visitFact(ctx);
+        List<SouffleVariable> args = fact.getArgs();
+        for (int i = 0; i < args.size(); i++) {
+            SouffleVariable arg = args.get(i);
+            if(decl != null) {
+                arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
+            }
+            SouffleContext factArgContext = new SouffleContext(SouffleContextType.VARIABLE, arg.getRange());
+            factArgContext.addContextSymbol(arg);
+            factContext.addToSubContext(factArgContext);
+        }
+
+        return null;
     }
 
     @Override

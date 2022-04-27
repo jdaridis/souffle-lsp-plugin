@@ -56,6 +56,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         visitor.visit(souffleParser.program());
 
         projectContext.addDocument(uri.toString(), visitor.getDocumentContext());
+        souffleParser.removeErrorListeners();
         souffleParser.reset();
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
         visitor2.visit(souffleParser.program());
@@ -73,7 +74,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -108,7 +108,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
         return CompletableFuture.supplyAsync(() -> new DefinitionProvider().getDefinition(params));
     }
 
-
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
         this.clientLogger.logMessage("Operation '" + "text/hover" +
@@ -125,6 +124,11 @@ public class SouffleTextDocumentService implements TextDocumentService {
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams position) {
         return CompletableFuture.supplyAsync(() -> new CompletionProvider(position).getCompletions());
+    }
+
+    @Override
+    public CompletableFuture<WorkspaceEdit> rename(RenameParams params) {
+        return CompletableFuture.supplyAsync(() -> new RenameProvider().getRename(params));
     }
 
 
