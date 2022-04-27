@@ -188,14 +188,15 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             rule.setDeclaration(decl);
             documentContext.addToContextScope(rule);
             ruleContext.addContextSymbol(rule);
-            if(decl != null){
-                List<SouffleVariable> args = relationSymbol.getArgs();
-                for (int i = 0; i < args.size(); i++) {
-                    SouffleVariable arg = args.get(i);
+            List<SouffleVariable> args = relationSymbol.getArgs();
+            for (int i = 0; i < args.size(); i++) {
+                SouffleVariable arg = args.get(i);
+                rule.addArg(arg);
+                if(decl != null){
                     arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
-                    rule.addArg(arg);
                 }
             }
+
         }
 
         assert rule != null;

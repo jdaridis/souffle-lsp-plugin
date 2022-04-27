@@ -22,13 +22,15 @@ public class ReferenceProvider {
                 Optional.ofNullable(documentContext.getValue()
                                 .getSymbols(currentSymbol.getName()))
                         .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(documentContext.getKey(), symbol.getRange()))));
-                for (SouffleContext ruleContext : documentContext.getValue().getSubContext().values()) {
-                    if (ruleContext.getKind() != SouffleContextType.COMPONENT) {
-                        Optional.ofNullable(ruleContext
-                                        .getSymbols(currentSymbol.getName()))
-                                .ifPresent(souffleSymbols ->
-                                        souffleSymbols.forEach(symbol ->
-                                                references.add(new Location(documentContext.getKey(), symbol.getRange()))));
+                if(documentContext.getValue().getSubContext() != null){
+                    for (SouffleContext ruleContext : documentContext.getValue().getSubContext().values()) {
+                        if (ruleContext.getKind() != SouffleContextType.COMPONENT) {
+                            Optional.ofNullable(ruleContext
+                                            .getSymbols(currentSymbol.getName()))
+                                    .ifPresent(souffleSymbols ->
+                                            souffleSymbols.forEach(symbol ->
+                                                    references.add(new Location(documentContext.getKey(), symbol.getRange()))));
+                        }
                     }
                 }
             }

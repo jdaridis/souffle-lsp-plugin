@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,6 +59,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             completionOptions.setTriggerCharacters(List.of(":", "."));
             response.getCapabilities().setCompletionProvider(completionOptions);
         }
+//        CompletableFuture.
         return CompletableFuture.supplyAsync(() -> response);
     }
 
@@ -90,16 +90,25 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     .collect(Collectors.toList());
             // printing the folder names
             for (String s : fileNamesList) {
-                parseInput(s);
+                System.err.println("Start" + s);
+                stageOneParse(s);
+                System.err.println("End " + s);
+            }
+
+            for (String s : fileNamesList) {
+//                System.err.println("Start" + s);
+                stageTwoParse(s);
+//                System.err.println("End " + s);
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
-    private void parseInput(String documentPath) throws IOException {
-        System.err.println(documentPath);
+    private void stageOneParse(String documentPath) throws IOException {
+//        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
         SouffleLexer souffleLexer = new SouffleLexer(input);
@@ -113,11 +122,18 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         visitor.visit(souffleParser.program());
 
         projectContext.addDocument(path.toUri().toString(), visitor.getDocumentContext());
-        souffleParser.reset();
+    }
+    private void stageTwoParse(String documentPath) throws IOException {
+//        System.err.println(documentPath);
+        Path path = Path.of(documentPath);
+        CharStream input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        SouffleParser souffleParser = new SouffleParser(tokens);
+        souffleParser.removeErrorListeners();
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, path.toUri().toString());
         visitor2.visit(souffleParser.program());
     }
-
     @Override
     public CompletableFuture<Object> shutdown() {
         shutdown = 0;
