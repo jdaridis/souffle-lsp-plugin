@@ -131,6 +131,11 @@ public class SouffleTextDocumentService implements TextDocumentService {
         return CompletableFuture.supplyAsync(() -> new RenameProvider().getRename(params));
     }
 
+    @Override
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> typeDefinition(TypeDefinitionParams params) {
+        return CompletableFuture.supplyAsync(() -> new TypeDefinitionProvider().getTypeDefinition(params));
+    }
+
 
     @Override
     public CompletableFuture<SignatureHelp> signatureHelp(SignatureHelpParams params) {

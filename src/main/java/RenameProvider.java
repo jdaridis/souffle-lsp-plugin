@@ -25,6 +25,7 @@ public class RenameProvider {
                     case RELATION_DECL:
                     case TYPE_DECL:
                     case COMPONENT_INIT:
+                    case COMPONENT_DECL:
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
                         for (Location reference : references) {
                             if (!textEdits.containsKey(reference.getUri())) {

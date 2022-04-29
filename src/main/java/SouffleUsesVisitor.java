@@ -153,6 +153,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
         componentInitContext.addContextSymbol(component);
         componentInitContext.addContextSymbol(componentType);
+        componentInitContext.addToContextScope(componentType);
 //        componentInitContext.addToContextScope(component);
         documentContext.addToContextScope(component);
         documentContext.addToSubContext(componentInitContext);

@@ -24,7 +24,8 @@ public class ReferenceProvider {
                         .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(documentContext.getKey(), symbol.getRange()))));
                 if(documentContext.getValue().getSubContext() != null){
                     for (SouffleContext ruleContext : documentContext.getValue().getSubContext().values()) {
-                        if (includeComponent || ruleContext.getKind() != SouffleContextType.COMPONENT) {
+                        if (includeComponent ||
+                                (context.getKind() == SouffleContextType.COMPONENT || ruleContext.getKind() != SouffleContextType.COMPONENT)) {
                             Optional.ofNullable(ruleContext
                                             .getSymbols(currentSymbol.getName()))
                                     .ifPresent(souffleSymbols ->
