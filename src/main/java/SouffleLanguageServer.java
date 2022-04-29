@@ -39,18 +39,21 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams initializeParams) {
-        final InitializeResult response = new InitializeResult(new ServerCapabilities());
-        //Set the document synchronization capabilities to full.
-        response.getCapabilities().setTextDocumentSync(TextDocumentSyncKind.Full);
-        response.getCapabilities().setHoverProvider(true);
-        response.getCapabilities().setDefinitionProvider(true);
-        response.getCapabilities().setTypeDefinitionProvider(true);
-        response.getCapabilities().setReferencesProvider(true);
+        ServerCapabilities serverCapabilities = new ServerCapabilities();
+        serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
+        serverCapabilities.setHoverProvider(true);
+        serverCapabilities.setDefinitionProvider(true);
+        serverCapabilities.setTypeDefinitionProvider(true);
+        serverCapabilities.setReferencesProvider(true);
+        serverCapabilities.setImplementationProvider(true);
         SignatureHelpOptions signatureHelpOptions = new SignatureHelpOptions();
         signatureHelpOptions.setTriggerCharacters(List.of("("));
-        response.getCapabilities().setSignatureHelpProvider(signatureHelpOptions);
-        response.getCapabilities().setDocumentSymbolProvider(true);
-        response.getCapabilities().setRenameProvider(true);
+        serverCapabilities.setSignatureHelpProvider(signatureHelpOptions);
+        serverCapabilities.setDocumentSymbolProvider(true);
+        serverCapabilities.setRenameProvider(true);
+
+        final InitializeResult response = new InitializeResult(serverCapabilities);
+        //Set the document synchronization capabilities to full.
 
         this.clientCapabilities = initializeParams.getCapabilities();
         /* Check if dynamic registration of completion capability is allowed by the client. If so we don't register the capability.
