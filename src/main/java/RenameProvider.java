@@ -24,7 +24,8 @@ public class RenameProvider {
                 switch (currentSymbol.getKind()) {
                     case RELATION_DECL:
                     case TYPE_DECL:
-                        List<Location> references = new ReferenceProvider().getReferences(params);
+                    case COMPONENT_INIT:
+                        List<Location> references = new ReferenceProvider().getReferences(params, false);
                         for (Location reference : references) {
                             if (!textEdits.containsKey(reference.getUri())) {
                                 textEdits.put(reference.getUri(), new ArrayList<TextEdit>());

@@ -9,8 +9,10 @@ public class ReferenceProvider {
 
     public ReferenceProvider() {
     }
-
-    public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params) {
+    public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params){
+        return getReferences(params, true);
+    }
+    public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params, boolean includeComponent) {
         Range cursor = new Range(params.getPosition(), params.getPosition());
         SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         List<Location> references = new ArrayList<Location>();
@@ -22,7 +24,7 @@ public class ReferenceProvider {
                         .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(documentContext.getKey(), symbol.getRange()))));
                 if(documentContext.getValue().getSubContext() != null){
                     for (SouffleContext ruleContext : documentContext.getValue().getSubContext().values()) {
-                        if (ruleContext.getKind() != SouffleContextType.COMPONENT) {
+                        if (includeComponent || ruleContext.getKind() != SouffleContextType.COMPONENT) {
                             Optional.ofNullable(ruleContext
                                             .getSymbols(currentSymbol.getName()))
                                     .ifPresent(souffleSymbols ->

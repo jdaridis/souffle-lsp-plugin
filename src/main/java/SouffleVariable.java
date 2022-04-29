@@ -10,18 +10,21 @@ public class SouffleVariable extends SouffleSymbol {
 
     private Object value;
 
-    public SouffleVariable(String name, SouffleType type, Object value, Range range) {
+    public SouffleVariable(String name, SouffleType type, Object value, Range range, boolean isComponent) {
         super(name, SouffleSymbolType.VARIABLE, range);
         this.type = type;
         this.value = value;
+        if(isComponent){
+            kind = SouffleSymbolType.COMPONENT_INIT;
+        }
     }
 
     public SouffleVariable(String name, SouffleType type, Range range) {
-        this(name, type, null, range);
+        this(name, type, null, range, false);
     }
 
     public SouffleVariable(String name, Range range) {
-        this(name, null, null, range);
+        this(name, null, null, range, false);
     }
 
     public SouffleType getType() {
