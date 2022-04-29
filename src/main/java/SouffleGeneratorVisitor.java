@@ -60,6 +60,35 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
 
     @Override
+    public SouffleSymbol visitComponent_decl(SouffleParser.Component_declContext ctx) {
+        SouffleContext componentContext = new SouffleContext(SouffleContextType.COMPONENT,toRange(ctx));
+        assert currentContext.peek() != null;
+        SouffleContext documentContext = currentContext.peek();
+        currentContext.push(componentContext);
+        documentContext.addToSubContext(componentContext);
+
+        SouffleComponent contextSymbol = (SouffleComponent) ctx.component_head().accept(this);
+        contextSymbol.setURI(documentUri);
+        componentContext.addContextSymbol(contextSymbol);
+        documentContext.addToContextScope(contextSymbol);
+        ctx.component_body().accept(this);
+        contextSymbol.addToScope(componentContext.getScope());
+        currentContext.pop();
+        return null;
+    }
+
+    @Override
+    public SouffleSymbol visitComponent_head(SouffleParser.Component_headContext ctx) {
+        SouffleSymbol symbol = ctx.component_type().accept(this);
+        return new SouffleComponent(symbol.getName(), symbol.getRange(), true);
+    }
+
+    @Override
+    public SouffleSymbol visitComponent_type(SouffleParser.Component_typeContext ctx) {
+        return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+    }
+
+    @Override
     public SouffleSymbol visitRelation_decl(SouffleParser.Relation_declContext ctx) {
         SouffleContext declarationContext = new SouffleContext(SouffleContextType.RELATION_DECL,toRange(ctx));
         assert currentContext.peek() != null;
@@ -198,12 +227,17 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         SouffleSymbol typeSymbol = ctx.qualified_name().accept(this);
 
         SouffleType type = new SouffleType(typeSymbol.getName(), typeSymbol.getRange());
-
+        type.setComponent(typeSymbol.getComponent());
         return new SouffleVariable(name, type, toRange(ctx.IDENT()));
     }
 
     @Override
     public SouffleSymbol visitQualified_name(SouffleParser.Qualified_nameContext ctx) {
-        return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
+        SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
+        if(ctx.qualified_name() != null){
+            SouffleSymbol component = ctx.qualified_name().accept(this);
+            symbol.setComponent(component);
+        }
+        return symbol;
     }
 }

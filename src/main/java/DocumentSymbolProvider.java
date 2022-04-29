@@ -5,6 +5,7 @@ import org.eclipse.lsp4j.SymbolKind;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class DocumentSymbolProvider {
@@ -16,7 +17,14 @@ public class DocumentSymbolProvider {
         List<Either<SymbolInformation, DocumentSymbol>> documentSymbols = new ArrayList<Either<SymbolInformation, DocumentSymbol>>();
         SouffleContext context = ProjectContext.getInstance().getDocumentContext(params.getTextDocument().getUri());
 
-        for (List<SouffleSymbol> symbolList : context.getScope().values()) {
+        getSymbolsFromScope(documentSymbols, context.getScope().values(), false);
+
+        return documentSymbols;
+    }
+
+    private List<DocumentSymbol> getSymbolsFromScope(List<Either<SymbolInformation, DocumentSymbol>> documentSymbols, Collection<List<SouffleSymbol>> values, boolean inComponent) {
+        List<DocumentSymbol> body = new ArrayList<DocumentSymbol>();
+        for (List<SouffleSymbol> symbolList : values) {
             DocumentSymbol top = null;
             SouffleSymbol topSymbol = null;
             List<DocumentSymbol> children = new ArrayList<DocumentSymbol>();
@@ -75,16 +83,36 @@ public class DocumentSymbolProvider {
                         rule.setChildren(ruleChildren);*/
 
                         break;
+
+                    case COMPONENT_DECL:
+                        System.err.println("Document symbols " + symbol);
+                        DocumentSymbol component = new DocumentSymbol();
+                        if (topSymbol == null || topSymbol.getKind() == SouffleSymbolType.COMPONENT_DECL) {
+                            topSymbol = symbol;
+                            top = component;
+                        }
+//                            rule.setDetail("Test symbol");
+                        component.setKind(SymbolKind.Namespace);
+                        component.setName(symbol.toString());
+                        component.setRange(symbol.getRange());
+                        component.setSelectionRange(symbol.getRange());
+                        List<DocumentSymbol> componentBody =
+                                getSymbolsFromScope(documentSymbols, ((SouffleComponent)symbol).getScope().values(), true);
+                        component.setChildren(componentBody);
+
+                        break;
                 }
             }
             if (top != null) {
-                if (topSymbol.getKind() == SouffleSymbolType.RELATION_DECL || topSymbol.getKind() == SouffleSymbolType.COMPONENT_DECL) {
+                if (topSymbol.getKind() == SouffleSymbolType.RELATION_DECL) {
                     top.setChildren(children);
                 }
-                documentSymbols.add(Either.forRight(top));
+                if (!inComponent) {
+                    documentSymbols.add(Either.forRight(top));
+                }
+                body.add(top);
             }
         }
-
-        return documentSymbols;
+        return body;
     }
 }

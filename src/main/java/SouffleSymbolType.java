@@ -3,6 +3,7 @@ public enum SouffleSymbolType {
     RELATION_USE,
     RULE,
     COMPONENT_DECL,
+    COMPONENT_INIT,
     COMPONENT_USE,
     TYPE_DECL,
     TYPE_USE,

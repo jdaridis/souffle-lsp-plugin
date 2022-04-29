@@ -5,13 +5,7 @@ public class SouffleSymbol {
     protected SouffleSymbolType kind;
     protected Range range;
 
-    public String getURI() {
-        return URI;
-    }
-
-    public void setURI(String URI) {
-        this.URI = URI;
-    }
+    protected SouffleSymbol component;
 
     protected String URI;
     protected SouffleSymbol declaration;
@@ -49,6 +43,22 @@ public class SouffleSymbol {
 
     public void setDeclaration(SouffleSymbol declaration) {
         this.declaration = declaration;
+    }
+
+    public String getURI() {
+        return URI;
+    }
+
+    public void setURI(String URI) {
+        this.URI = URI;
+    }
+
+    public SouffleSymbol getComponent() {
+        return component;
+    }
+
+    public void setComponent(SouffleSymbol component) {
+        this.component = component;
     }
 
     @Override
