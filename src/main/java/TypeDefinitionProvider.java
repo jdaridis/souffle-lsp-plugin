@@ -25,6 +25,10 @@ public class TypeDefinitionProvider {
                         declaration = Optional.ofNullable(declaration.get().getDeclaration());
                         declaration.ifPresent(symbol -> declLocations.add(new Location(symbol.getURI(), symbol.getRange())));
                     }
+                } else if(currentSymbol.get().getKind() == SouffleSymbolType.TYPE_USE){
+                    Optional<SouffleSymbol> declaration = currentSymbol;
+                    declaration = Optional.ofNullable(declaration.get().getDeclaration());
+                    declaration.ifPresent(symbol -> declLocations.add(new Location(symbol.getURI(), symbol.getRange())));
                 }
             }
         }

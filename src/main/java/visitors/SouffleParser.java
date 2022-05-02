@@ -32,8 +32,8 @@ public class SouffleParser extends Parser {
 		RPAREN=70, COMMA=71, COLON=72, SEMICOLON=73, SUBTYPE=74, LE=75, GE=76, 
 		NE=77, EQUALS=78, EXCLAMATION=79, STAR=80, AT=81, SLASH=82, CARET=83, 
 		PERCENT=84, LBRACE=85, RBRACE=86, LT=87, GT=88, IF=89, DOT=90, NUMBER=91, 
-		FLOAT=92, UNSIGNED=93, IDENT=94, STRING=95, PREPROCESSOR=96, COMMENT=97, 
-		LINE_COMMENT=98;
+		FLOAT=92, UNSIGNED=93, IDENT=94, STRING=95, COMMENT=96, LINE_COMMENT=97, 
+		PREPROCESSOR=98, PREPROCESSOR_MULTILINE=99;
 	public static final int
 		RULE_program = 0, RULE_unit = 1, RULE_qualified_name = 2, RULE_type_decl = 3, 
 		RULE_record_type_list = 4, RULE_union_type_list = 5, RULE_adt_branch_list = 6, 
@@ -105,7 +105,8 @@ public class SouffleParser extends Parser {
 			"DOLLAR", "PLUS", "MINUS", "LPAREN", "RPAREN", "COMMA", "COLON", "SEMICOLON", 
 			"SUBTYPE", "LE", "GE", "NE", "EQUALS", "EXCLAMATION", "STAR", "AT", "SLASH", 
 			"CARET", "PERCENT", "LBRACE", "RBRACE", "LT", "GT", "IF", "DOT", "NUMBER", 
-			"FLOAT", "UNSIGNED", "IDENT", "STRING", "PREPROCESSOR", "COMMENT", "LINE_COMMENT"
+			"FLOAT", "UNSIGNED", "IDENT", "STRING", "COMMENT", "LINE_COMMENT", "PREPROCESSOR", 
+			"PREPROCESSOR_MULTILINE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -4912,7 +4913,7 @@ public class SouffleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001b\u030a\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001c\u030a\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+

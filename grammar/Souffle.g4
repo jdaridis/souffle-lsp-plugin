@@ -117,12 +117,13 @@ fragment ESC :
 fragment UNICODE : 'u' HEX HEX HEX HEX ;
 fragment HEX : [0-9a-fA-F] ;
 
-PREPROCESSOR: '#'~[\r\n]* -> skip;
-//PREPROCESSOR_MULTILINE: PREPROCESSOR([.]*'\\')*'\n' -> channel(HIDDEN);
-
 COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
+
+PREPROCESSOR: '#'~[\r\n]* -> channel(HIDDEN);
+PREPROCESSOR_MULTILINE: '#' IDENT (.*? '\\')+ .+? [\n\r] -> channel(HIDDEN);
+
 
 program
   : unit EOF
