@@ -20,13 +20,13 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     ArrayDeque<ArrayDeque<SouffleSymbol>> currentScope;
     ArrayDeque<SouffleContext> currentContext;
 
-    public SouffleUsesVisitor(SouffleParser parser, String documentContext) {
+    public SouffleUsesVisitor(SouffleParser parser, String documentUri) {
         this.parser = parser;
         this.currentScope = new ArrayDeque<>();
         this.currentContext  = new ArrayDeque<>();
-        this.documentUri = documentContext;
+        this.documentUri = documentUri;
         this.projectContext = ProjectContext.getInstance();
-        this.documentContext = projectContext.getDocumentContext(documentContext);
+        this.documentContext = projectContext.getDocumentContext(documentUri);
     }
 
 
@@ -66,10 +66,9 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         boolean inComponent = false;
         if(symbol.getComponent() != null){
             inComponent = true;
-            SouffleVariable componentDecl = ((SouffleVariable) symbol.getDeclaration());
-            System.err.println("Component decl " + componentDecl);
-            if(componentDecl != null){
-                SouffleComponent componentParent = (SouffleComponent) componentDecl.getType().getDeclaration();
+            SouffleVariable componentVariable = ((SouffleVariable) symbol.getComponent().getDeclaration());
+            if(componentVariable != null){
+                SouffleComponent componentParent = (SouffleComponent) componentVariable.getType().getDeclaration();
                 if(componentParent != null){
                     scope = componentParent.getScope().get(symbol.getName());
                     componentUri = componentParent.getURI();
@@ -127,11 +126,13 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         SouffleContext documentContext = currentContext.peek();
         Position start = new Position(ctx.getStart().getLine() - 1, ctx.getStart().getCharPositionInLine());
         SouffleContext componentContext = documentContext.getFromSubContext(new Range(start, start));
-        System.err.println(componentContext);
         currentContext.push(componentContext);
-        ctx.component_body().accept(this);
         SouffleComponent component = (SouffleComponent) componentContext.getContextSymbols().get(0);
+        ctx.component_head().accept(this);
+        ctx.component_body().accept(this);
         component.addToScope(componentContext.getScope());
+        System.err.println(componentContext);
+
         currentContext.pop();
         return null;
     }
@@ -157,6 +158,25 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 //        componentInitContext.addToContextScope(component);
         documentContext.addToContextScope(component);
         documentContext.addToSubContext(componentInitContext);
+
+        return null;
+    }
+
+    @Override
+    public SouffleSymbol visitComponent_head(SouffleParser.Component_headContext ctx) {
+        SouffleSymbol symbol;
+        if(ctx.component_head() != null){
+            assert currentContext.peek() != null;
+            SouffleContext souffleContext = currentContext.peek();
+            SouffleComponent component = (SouffleComponent) souffleContext.getContextSymbols().get(0);
+            symbol = ctx.component_type().accept(this);
+            symbol.setDeclaration(findDecl(symbol));
+            component.setParent((SouffleComponent) findDecl(symbol));
+//            System.err.println("Component parent " + component.getParent().getScope());
+            component.addToScope(component.getParent().getScope());
+//            System.err.println("Component parent " + component.getScope());
+            souffleContext.addContextSymbol(symbol);
+        }
 
         return null;
     }
@@ -409,7 +429,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         ctx.arg_list().accept(this);
         ArrayDeque<SouffleSymbol> args = currentScope.pop();
         SouffleRelation atom = new SouffleRelation(atomName.getName(), atomName.getRange());
-//        atom.setComponent(atomName.getComponent());
+        atom.setComponent(atomName.getComponent());
         for(SouffleSymbol attribute: args){
             SouffleVariable arg = (SouffleVariable) attribute;
             atom.addArg(arg);
@@ -505,7 +525,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         SouffleSymbol typeSymbol = ctx.qualified_name().accept(this);
 
         SouffleType type = new SouffleType(typeSymbol.getName(), typeSymbol.getRange());
-//        type.setComponent(typeSymbol.getComponent());
+        type.setComponent(typeSymbol.getComponent());
         return new SouffleVariable(name, type, toRange(ctx.IDENT()));
     }
     @Override
@@ -517,6 +537,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             SouffleSymbol component = ctx.qualified_name().accept(this);
             SouffleVariable componentVar = new SouffleVariable(component.getName(), component.getRange());
             componentVar.setDeclaration(findDecl(component));
+            symbol.setComponent(componentVar);
             if(componentVar.getDeclaration() != null){
                 componentVar.setType(((SouffleVariable)componentVar.getDeclaration()).getType());
             }

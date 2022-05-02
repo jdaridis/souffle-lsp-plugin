@@ -79,7 +79,12 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitComponent_head(SouffleParser.Component_headContext ctx) {
-        SouffleSymbol symbol = ctx.component_type().accept(this);
+        SouffleSymbol symbol;
+        if(ctx.component_head() != null){
+            symbol = ctx.component_head().accept(this);
+        } else {
+            symbol = ctx.component_type().accept(this);
+        }
         return new SouffleComponent(symbol.getName(), symbol.getRange(), true);
     }
 
