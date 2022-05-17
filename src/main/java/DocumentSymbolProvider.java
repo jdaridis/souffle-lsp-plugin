@@ -91,7 +91,7 @@ public class DocumentSymbolProvider {
                             topSymbol = symbol;
                             top = component;
                         }
-//                            rule.setDetail("Test symbol");
+                        component.setDetail(".comp");
                         component.setKind(SymbolKind.Namespace);
                         component.setName(symbol.toString());
                         component.setRange(symbol.getRange());
