@@ -3,6 +3,20 @@
 
 grammar Souffle;
 
+tokens { PREPROCESSOR_ID }
+
+@lexer::header{
+    import java.util.*;
+}
+@lexer::members {
+Set<String> defines;
+public SouffleLexer(CharStream input, Set<String> defines){
+    this(input);
+    this.defines = defines;
+}
+}
+
+
 WS : [ \t\r\n]+ -> skip; // skip spaces, tabs, newlines
 
 //Directives
@@ -109,7 +123,7 @@ UNSIGNED: [0-9]+'u'
         | '0b'[0-1]+'u'
         | '0x'[a-fA-F0-9]+'u'
         ;
-IDENT: [?a-zA-Z]|[_?a-zA-Z][_?a-zA-Z0-9]+;
+IDENT: [?a-zA-Z]|[_?a-zA-Z][_?a-zA-Z0-9]+ {if(defines.contains(getText())) setType(SouffleParser.PREPROCESSOR_ID);} ;
 STRING: '"' (ESC | ~["\\])* '"';
 
 fragment ESC :
@@ -124,6 +138,12 @@ LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
 PREPROCESSOR: '#'~[\r\n]* -> channel(HIDDEN);
 PREPROCESSOR_MULTILINE: '#' IDENT (.*? '\\')+ .+? [\n\r] -> channel(HIDDEN);
 
+preprocessor_macro: PREPROCESSOR_ID
+                   | PREPROCESSOR_ID LPAREN RPAREN
+                   | PREPROCESSOR_ID LPAREN .+? RPAREN;
+
+macro_args: IDENT
+            | macro_args COMMA IDENT;
 
 program
   : unit EOF
@@ -152,6 +172,7 @@ unit
 qualified_name
   : IDENT
   | qualified_name DOT IDENT
+  | preprocessor_macro
   ;
 
 /**
@@ -253,6 +274,7 @@ relation_tags
 non_empty_attribute_names
   : IDENT
   | non_empty_attribute_names COMMA IDENT
+  | preprocessor_macro
   ;
 
 /**
@@ -282,6 +304,7 @@ dependency_list
  */
 fact
   : atom DOT
+  | preprocessor_macro
   ;
 
 /**
@@ -334,6 +357,7 @@ term
   | constraint
   | LPAREN disjunction RPAREN
   | EXCLAMATION term
+  | preprocessor_macro
   ;
 
 /**
@@ -360,6 +384,7 @@ constraint
   /* zero-arity constraints */
   | TRUELIT
   | FALSELIT
+  | preprocessor_macro
    ;
 
 /**
@@ -419,6 +444,7 @@ arg
   | arg BW_SHIFT_R_UNSIGNED arg
     /* -- aggregators -- */
   | aggregate_func arg_list COLON aggregate_body
+  | preprocessor_macro
   ;
 
 functor_built_in
@@ -509,6 +535,7 @@ component_type_params
 component_param_list
   : IDENT
   | component_param_list COMMA IDENT
+  | preprocessor_macro
   ;
 
 /**
@@ -620,4 +647,5 @@ kvp_value
   | NUMBER
   | TRUELIT
   | FALSELIT
+  | preprocessor_macro
   ;

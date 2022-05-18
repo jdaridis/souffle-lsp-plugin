@@ -7,6 +7,8 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import preprocessor.PreprocessorLexer;
+import preprocessor.PreprocessorParser;
 import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
@@ -15,7 +17,9 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -31,6 +35,9 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     private ClientCapabilities clientCapabilities;
     LanguageClient languageClient;
     private int shutdown = 1;
+
+    Set<String> defines;
+    private ProjectContext projectContext;
 
     public SouffleLanguageServer() {
         this.textDocumentService = new SouffleTextDocumentService(this);
@@ -77,6 +84,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     "textDocument/completion", completionRegistrationOptions);
             languageClient.registerCapability(new RegistrationParams(List.of(completionRegistration)));
         }
+        projectContext = ProjectContext.getInstance();
 
         languageClient.workspaceFolders().whenComplete((workspaceFolders, throwable) -> {
             if(workspaceFolders != null && !workspaceFolders.isEmpty()){
@@ -95,6 +103,10 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     .collect(Collectors.toList());
             // printing the folder names
             for (String s : fileNamesList) {
+                preprocessInput(s);
+            }
+
+            for (String s : fileNamesList) {
                 System.err.println("Start" + s);
                 stageOneParse(s);
                 System.err.println("End " + s);
@@ -112,27 +124,39 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         }
     }
 
+    private void preprocessInput(String documentPath) throws IOException {
+        Path path = Path.of(documentPath);
+        CharStream input = CharStreams.fromPath(path);
+        PreprocessorLexer preprocessorLexer = new PreprocessorLexer(input);
+        CommonTokenStream preprocessorTokens = new CommonTokenStream(preprocessorLexer);
+        PreprocessorParser preprocessorParser = new PreprocessorParser(preprocessorTokens);
+        PreprocessorVisitor preprocessorVisitor = new PreprocessorVisitor(projectContext.defines);
+        preprocessorVisitor.visit(preprocessorParser.program());
+    }
+
     private void stageOneParse(String documentPath) throws IOException {
 //        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
-        SouffleLexer souffleLexer = new SouffleLexer(input);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
         souffleParser.setErrorHandler(new SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(path.toUri().toString()));
-        ProjectContext projectContext = ProjectContext.getInstance();
         SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
 
         projectContext.addDocument(path.toUri().toString(), visitor.getDocumentContext());
     }
+
     private void stageTwoParse(String documentPath) throws IOException {
 //        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
-        SouffleLexer souffleLexer = new SouffleLexer(input);
+
+        input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();

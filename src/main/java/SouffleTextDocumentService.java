@@ -2,6 +2,8 @@ import org.antlr.v4.runtime.*;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
+import preprocessor.PreprocessorLexer;
+import preprocessor.PreprocessorParser;
 import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
@@ -45,7 +47,10 @@ public class SouffleTextDocumentService implements TextDocumentService {
         URI uri = new URI(documentURI);
         Path path = Path.of(uri);
         CharStream input = CharStreams.fromPath(path);
-        SouffleLexer souffleLexer = new SouffleLexer(input);
+        preprocessInput(input);
+
+        input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
@@ -60,6 +65,14 @@ public class SouffleTextDocumentService implements TextDocumentService {
         souffleParser.reset();
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
         visitor2.visit(souffleParser.program());
+    }
+
+    private void preprocessInput(CharStream input) {
+        PreprocessorLexer preprocessorLexer = new PreprocessorLexer(input);
+        CommonTokenStream preprocessorTokens = new CommonTokenStream(preprocessorLexer);
+        PreprocessorParser preprocessorParser = new PreprocessorParser(preprocessorTokens);
+        PreprocessorVisitor preprocessorVisitor = new PreprocessorVisitor(projectContext.defines);
+        preprocessorVisitor.visit(preprocessorParser.program());
     }
 
     @Override

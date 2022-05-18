@@ -11,6 +11,18 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface SouffleVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link SouffleParser#preprocessor_macro}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#macro_args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMacro_args(SouffleParser.Macro_argsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SouffleParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

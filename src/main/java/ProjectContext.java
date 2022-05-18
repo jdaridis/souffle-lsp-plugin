@@ -2,7 +2,9 @@ import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.services.LanguageClient;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ProjectContext {
     public Map<String, SouffleContext> getDocuments() {
@@ -10,6 +12,7 @@ public class ProjectContext {
     }
 
     private final Map<String, SouffleContext> documents;
+    public Set<String> defines;
     private Range cursorPosition;
 
     private boolean isInitialized;
@@ -18,6 +21,7 @@ public class ProjectContext {
 
     private ProjectContext() {
         documents = new HashMap<>();
+        defines = new HashSet<>();
     }
 
     public static ProjectContext getInstance() {

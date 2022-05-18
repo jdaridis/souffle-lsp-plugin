@@ -395,6 +395,9 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitFact(SouffleParser.FactContext ctx) {
+        if(ctx.preprocessor_macro() != null){
+            return null;
+        }
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
         SouffleContext factContext = new SouffleContext(SouffleContextType.RELATION_USE,toRange(ctx));
@@ -530,6 +533,10 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
     @Override
     public SouffleSymbol visitQualified_name(SouffleParser.Qualified_nameContext ctx) {
+        if(ctx.preprocessor_macro() != null){
+            return ctx.preprocessor_macro().accept(this);
+        }
+
         SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
         if(ctx.qualified_name() != null){
             assert currentContext.peek() != null;
@@ -546,5 +553,11 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             factContext.addToContextScope(componentVar);
         }
         return symbol;
+    }
+
+    @Override
+    public SouffleSymbol visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx) {
+
+        return new SouffleSymbol(ctx.getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
     }
 }

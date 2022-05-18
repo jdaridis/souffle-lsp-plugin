@@ -5,6 +5,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.util.Positions;
+import preprocessor.PreprocessorLexer;
+import preprocessor.PreprocessorParser;
 import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
@@ -23,13 +25,19 @@ public class VisitorLauncher {
         // create a CharStream that reads from standard input
         CharStream input = null;
         try {
-            input = CharStreams.fromFileName("type-hierarchy.dl");
+            input = CharStreams.fromFileName("test_souffle.dl");
             // create a lexer that feeds off of input CharStream
-            SouffleLexer lexer = new SouffleLexer(input);
+            PreprocessorLexer lexer = new PreprocessorLexer(input);
 // create a buffer of tokens pulled from the lexer
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 // create a parser that feeds off the tokens buffer
-            SouffleParser parser = new SouffleParser(tokens);
+            PreprocessorParser parser = new PreprocessorParser(tokens);
+
+            PreprocessorVisitor visitor = new PreprocessorVisitor();
+
+            visitor.visit(parser.program());
+
+            System.err.println(visitor.defines);
 //            SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(parser);
 //            visitor.visit(parser.program());
 //            ParseTree tree = ; // begin parsing at init rule

@@ -238,11 +238,22 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitQualified_name(SouffleParser.Qualified_nameContext ctx) {
+        if(ctx.preprocessor_macro() != null){
+            return ctx.preprocessor_macro().accept(this);
+        }
+
         SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
         if(ctx.qualified_name() != null){
             SouffleSymbol component = ctx.qualified_name().accept(this);
             symbol.setComponent(component);
         }
         return symbol;
+
+    }
+
+    @Override
+    public SouffleSymbol visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx) {
+
+        return new SouffleSymbol(ctx.getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
     }
 }
