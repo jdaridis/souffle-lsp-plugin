@@ -10,6 +10,7 @@ ELSE: '#else';
 IFNDEF: '#ifndef';
 IFDEF: '#ifdef';
 ENDIF : '#endif' ;
+PREPROCESSOR_PRAGMA: '#pragma';
 
 MACRO_BODY: (BACKSLASH .+? NEW_LINE)+ .? NEW_LINE;
 LPAREN:'(';
@@ -162,7 +163,10 @@ program_text:
 
 non_empty_directive_list: define_directive+
                         | include_directive+
-                        | ifdef_directive+;
+                        | ifdef_directive+
+                        | pragma_directive+;
+
+pragma_directive: PREPROCESSOR_PRAGMA IDENT;
 
 ifdef_directive: IFNDEF IDENT program_text ENDIF
                 | IFDEF IDENT program_text ENDIF

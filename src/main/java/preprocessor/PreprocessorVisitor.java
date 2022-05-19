@@ -29,6 +29,12 @@ public interface PreprocessorVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNon_empty_directive_list(PreprocessorParser.Non_empty_directive_listContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PreprocessorParser#pragma_directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPragma_directive(PreprocessorParser.Pragma_directiveContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PreprocessorParser#ifdef_directive}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
