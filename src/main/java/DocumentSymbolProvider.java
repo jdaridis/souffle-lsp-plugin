@@ -17,12 +17,12 @@ public class DocumentSymbolProvider {
         List<Either<SymbolInformation, DocumentSymbol>> documentSymbols = new ArrayList<Either<SymbolInformation, DocumentSymbol>>();
         SouffleContext context = ProjectContext.getInstance().getDocumentContext(params.getTextDocument().getUri());
 
-        getSymbolsFromScope(documentSymbols, context.getScope().values(), false);
+        getSymbolsFromScope(documentSymbols, context.getScope().values(), params.getTextDocument().getUri(), false);
 
         return documentSymbols;
     }
 
-    private List<DocumentSymbol> getSymbolsFromScope(List<Either<SymbolInformation, DocumentSymbol>> documentSymbols, Collection<List<SouffleSymbol>> values, boolean inComponent) {
+    private List<DocumentSymbol> getSymbolsFromScope(List<Either<SymbolInformation, DocumentSymbol>> documentSymbols, Collection<List<SouffleSymbol>> values, String documentUri, boolean inComponent) {
         List<DocumentSymbol> body = new ArrayList<DocumentSymbol>();
         for (List<SouffleSymbol> symbolList : values) {
             DocumentSymbol top = null;
@@ -97,13 +97,13 @@ public class DocumentSymbolProvider {
                         component.setRange(symbol.getRange());
                         component.setSelectionRange(symbol.getRange());
                         List<DocumentSymbol> componentBody =
-                                getSymbolsFromScope(documentSymbols, ((SouffleComponent)symbol).getScope().values(), true);
+                                getSymbolsFromScope(documentSymbols, ((SouffleComponent)symbol).getScope().values(), documentUri, true);
                         component.setChildren(componentBody);
 
                         break;
                 }
             }
-            if (top != null) {
+            if (top != null && (topSymbol.getURI() != null && topSymbol.getURI().equals(documentUri))) {
                 if (topSymbol.getKind() == SouffleSymbolType.RELATION_DECL) {
                     top.setChildren(children);
                 }

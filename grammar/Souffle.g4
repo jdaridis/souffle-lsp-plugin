@@ -135,15 +135,74 @@ COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
 
-PREPROCESSOR: '#'~[\r\n]* -> channel(HIDDEN);
-PREPROCESSOR_MULTILINE: '#' IDENT (.*? '\\')+ .+? [\n\r] -> channel(HIDDEN);
+PREPROCESSOR: '#' .+? [\r\n] -> channel(HIDDEN);
+PREPROCESSOR_MULTILINE: '#' .+? '\\' (.*? '\\')* .+? [\n\r] -> channel(HIDDEN);
 
 preprocessor_macro: PREPROCESSOR_ID
-                   | PREPROCESSOR_ID LPAREN RPAREN
-                   | PREPROCESSOR_ID LPAREN .+? RPAREN;
+                   | PREPROCESSOR_ID LPAREN macro_args RPAREN;
 
-macro_args: IDENT
-            | macro_args COMMA IDENT;
+macro_args:
+            | non_empty_macro_args;
+
+non_empty_macro_args: macro_arg
+                    | non_empty_macro_args COMMA macro_arg;
+
+macro_arg:   STRING
+             | FLOAT
+             | UNSIGNED
+             | NUMBER
+             | UNDERSCORE
+             | DOLLAR
+             | AUTOINC LPAREN RPAREN
+             | IDENT
+             | NIL
+             | LBRACKET macro_args RBRACKET
+             | DOLLAR qualified_name LPAREN macro_args RPAREN
+             | LPAREN macro_arg RPAREN
+             | AS LPAREN macro_arg COMMA qualified_name RPAREN
+             | AT IDENT LPAREN macro_args RPAREN
+             | functor_built_in LPAREN macro_args RPAREN
+              /* some aggregates have the same name as functors */
+             | aggregate_func LPAREN macro_arg COMMA non_empty_arg_list RPAREN
+              /* -- intrinsic functor -- */
+              /* unary functors */
+             | MINUS macro_arg
+             | BW_NOT  macro_arg
+             | L_NOT macro_arg
+             | EXCLAMATION macro_arg
+             | macro_arg SEMICOLON macro_arg
+             | macro_arg LT macro_arg
+             | macro_arg GT macro_arg
+             | macro_arg LE macro_arg
+             | macro_arg GE macro_arg
+             | macro_arg EQUALS macro_arg
+             | macro_arg NE macro_arg
+             /* binary prefix constraints */
+             | TMATCH LPAREN macro_arg COMMA macro_arg RPAREN
+             | TCONTAINS LPAREN macro_arg COMMA macro_arg RPAREN
+             /* zero-arity constraints */
+             | TRUELIT
+             | FALSELIT
+             /* binary infix functors */
+             | macro_arg PLUS macro_arg
+             | macro_arg MINUS macro_arg
+             | macro_arg STAR macro_arg
+             | macro_arg SLASH macro_arg
+             | macro_arg PERCENT macro_arg
+             | macro_arg CARET macro_arg
+             | macro_arg L_AND macro_arg
+             | macro_arg L_OR macro_arg
+             | macro_arg L_XOR macro_arg
+             | macro_arg BW_AND macro_arg
+             | macro_arg BW_OR macro_arg
+             | macro_arg BW_XOR macro_arg
+             | macro_arg BW_SHIFT_L macro_arg
+             | macro_arg BW_SHIFT_R macro_arg
+             | macro_arg BW_SHIFT_R_UNSIGNED macro_arg
+               /* -- aggregators -- */
+             | aggregate_func macro_args COLON aggregate_body
+             | IDENT LPAREN macro_args RPAREN
+             | preprocessor_macro;
 
 program
   : unit EOF
@@ -304,7 +363,7 @@ dependency_list
  */
 fact
   : atom DOT
-  | preprocessor_macro
+  | preprocessor_macro DOT?
   ;
 
 /**

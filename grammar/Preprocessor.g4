@@ -214,6 +214,7 @@ macro_body : MACRO_BODY
             |EXCLAMATION
             |PERCENT
             |SLASH
+            | BACKSLASH
             |CARET)+ NEW_LINE;
 
 //macro_body: .+? NEW_LINE

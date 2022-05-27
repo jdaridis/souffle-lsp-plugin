@@ -23,6 +23,18 @@ public interface SouffleVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMacro_args(SouffleParser.Macro_argsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SouffleParser#non_empty_macro_args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNon_empty_macro_args(SouffleParser.Non_empty_macro_argsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#macro_arg}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMacro_arg(SouffleParser.Macro_argContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SouffleParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

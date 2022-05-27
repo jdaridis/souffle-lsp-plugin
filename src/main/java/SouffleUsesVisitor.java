@@ -283,7 +283,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             for (int i = 0; i < args.size(); i++) {
                 SouffleVariable arg = args.get(i);
                 rule.addArg(arg);
-                if(decl != null){
+                if(decl != null && i < ((SouffleRelation)decl).getArgs().size()){
                     arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
                 }
             }
@@ -311,7 +311,9 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
                 List<SouffleVariable> args = ((SouffleRelation) bodySymbol).getArgs();
                 for (int i = 0; i < args.size(); i++) {
                     SouffleVariable arg = args.get(i);
-                    arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
+                    if(i < ((SouffleRelation)decl).getArgs().size()){
+                        arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
+                    }
                 }
             }
         }
@@ -414,7 +416,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         List<SouffleVariable> args = fact.getArgs();
         for (int i = 0; i < args.size(); i++) {
             SouffleVariable arg = args.get(i);
-            if(decl != null) {
+            if(decl != null && i < ((SouffleRelation)decl).getArgs().size()) {
                 arg.setType(((SouffleRelation)decl).getArgs().get(i).getType());
             }
             SouffleContext factArgContext = new SouffleContext(SouffleContextType.VARIABLE, arg.getRange());
@@ -441,6 +443,10 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
     @Override
     public SouffleSymbol visitArg(SouffleParser.ArgContext ctx) {
+        if(ctx.preprocessor_macro() != null){
+            return null;
+        }
+
         if(!ctx.arg().isEmpty()){
             for (int i = 0; i < ctx.arg().size(); i++) {
                 currentScope.push(new ArrayDeque<>());
@@ -475,7 +481,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         ArrayDeque<SouffleSymbol> args = currentScope.pop();
         for(SouffleSymbol arg: args){
             assert currentScope.peek() != null;
-            currentScope.peek().push(arg);
+            currentScope.peek().add(arg);
         }
 
         return null;

@@ -1252,6 +1252,10 @@ public class PreprocessorParser extends Parser {
 		public TerminalNode SLASH(int i) {
 			return getToken(PreprocessorParser.SLASH, i);
 		}
+		public List<TerminalNode> BACKSLASH() { return getTokens(PreprocessorParser.BACKSLASH); }
+		public TerminalNode BACKSLASH(int i) {
+			return getToken(PreprocessorParser.BACKSLASH, i);
+		}
 		public List<TerminalNode> CARET() { return getTokens(PreprocessorParser.CARET); }
 		public TerminalNode CARET(int i) {
 			return getToken(PreprocessorParser.CARET, i);
@@ -1284,6 +1288,7 @@ public class PreprocessorParser extends Parser {
 				break;
 			case LPAREN:
 			case RPAREN:
+			case BACKSLASH:
 			case IDENT:
 			case LBRACKET:
 			case RBRACKET:
@@ -1324,7 +1329,7 @@ public class PreprocessorParser extends Parser {
 					{
 					setState(141);
 					_la = _input.LA(1);
-					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAREN) | (1L << RPAREN) | (1L << IDENT) | (1L << LBRACKET) | (1L << RBRACKET) | (1L << DOLLAR) | (1L << PLUS) | (1L << MINUS) | (1L << COMMA) | (1L << COLON) | (1L << SEMICOLON) | (1L << LE) | (1L << GE) | (1L << EQUALS) | (1L << EXCLAMATION) | (1L << STAR) | (1L << AT) | (1L << SLASH) | (1L << CARET) | (1L << PERCENT) | (1L << LBRACE) | (1L << RBRACE) | (1L << LT) | (1L << GT) | (1L << DOT) | (1L << NUMBER) | (1L << FLOAT) | (1L << UNSIGNED))) != 0) || ((((_la - 83)) & ~0x3f) == 0 && ((1L << (_la - 83)) & ((1L << (UNDERSCORE - 83)) | (1L << (TRUELIT - 83)) | (1L << (FALSELIT - 83)) | (1L << (STRING - 83)))) != 0)) ) {
+					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAREN) | (1L << RPAREN) | (1L << BACKSLASH) | (1L << IDENT) | (1L << LBRACKET) | (1L << RBRACKET) | (1L << DOLLAR) | (1L << PLUS) | (1L << MINUS) | (1L << COMMA) | (1L << COLON) | (1L << SEMICOLON) | (1L << LE) | (1L << GE) | (1L << EQUALS) | (1L << EXCLAMATION) | (1L << STAR) | (1L << AT) | (1L << SLASH) | (1L << CARET) | (1L << PERCENT) | (1L << LBRACE) | (1L << RBRACE) | (1L << LT) | (1L << GT) | (1L << DOT) | (1L << NUMBER) | (1L << FLOAT) | (1L << UNSIGNED))) != 0) || ((((_la - 83)) & ~0x3f) == 0 && ((1L << (_la - 83)) & ((1L << (UNDERSCORE - 83)) | (1L << (TRUELIT - 83)) | (1L << (FALSELIT - 83)) | (1L << (STRING - 83)))) != 0)) ) {
 					_errHandler.recoverInline(this);
 					}
 					else {
@@ -1337,7 +1342,7 @@ public class PreprocessorParser extends Parser {
 					setState(144); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAREN) | (1L << RPAREN) | (1L << IDENT) | (1L << LBRACKET) | (1L << RBRACKET) | (1L << DOLLAR) | (1L << PLUS) | (1L << MINUS) | (1L << COMMA) | (1L << COLON) | (1L << SEMICOLON) | (1L << LE) | (1L << GE) | (1L << EQUALS) | (1L << EXCLAMATION) | (1L << STAR) | (1L << AT) | (1L << SLASH) | (1L << CARET) | (1L << PERCENT) | (1L << LBRACE) | (1L << RBRACE) | (1L << LT) | (1L << GT) | (1L << DOT) | (1L << NUMBER) | (1L << FLOAT) | (1L << UNSIGNED))) != 0) || ((((_la - 83)) & ~0x3f) == 0 && ((1L << (_la - 83)) & ((1L << (UNDERSCORE - 83)) | (1L << (TRUELIT - 83)) | (1L << (FALSELIT - 83)) | (1L << (STRING - 83)))) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAREN) | (1L << RPAREN) | (1L << BACKSLASH) | (1L << IDENT) | (1L << LBRACKET) | (1L << RBRACKET) | (1L << DOLLAR) | (1L << PLUS) | (1L << MINUS) | (1L << COMMA) | (1L << COLON) | (1L << SEMICOLON) | (1L << LE) | (1L << GE) | (1L << EQUALS) | (1L << EXCLAMATION) | (1L << STAR) | (1L << AT) | (1L << SLASH) | (1L << CARET) | (1L << PERCENT) | (1L << LBRACE) | (1L << RBRACE) | (1L << LT) | (1L << GT) | (1L << DOT) | (1L << NUMBER) | (1L << FLOAT) | (1L << UNSIGNED))) != 0) || ((((_la - 83)) & ~0x3f) == 0 && ((1L << (_la - 83)) & ((1L << (UNDERSCORE - 83)) | (1L << (TRUELIT - 83)) | (1L << (FALSELIT - 83)) | (1L << (STRING - 83)))) != 0) );
 				setState(146);
 				match(NEW_LINE);
 				}
@@ -1473,8 +1478,8 @@ public class PreprocessorParser extends Parser {
 		"\b\b\u000b\b\f\b\u0090\u0001\b\u0003\b\u0094\b\b\u0001\t\u0001\t\u0001"+
 		"\t\u0001\t\u0001\t\u0001\t\u0005\t\u009c\b\t\n\t\f\t\u009f\t\t\u0001\t"+
 		"\u0000\u0001\u0012\n\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0000"+
-		"\u0002\u0003\u0000\u000f\u000f89[[\b\u0000\f\r\u000f\u000f\u001f&()+5"+
-		"7:SU[[\u00ca\u0000\u0014\u0001\u0000\u0000\u0000\u0002>\u0001\u0000\u0000"+
+		"\u0002\u0003\u0000\u000f\u000f89[[\u0007\u0000\f\u000f\u001f&()+57:SU"+
+		"[[\u00ca\u0000\u0014\u0001\u0000\u0000\u0000\u0002>\u0001\u0000\u0000"+
 		"\u0000\u0004T\u0001\u0000\u0000\u0000\u0006V\u0001\u0000\u0000\u0000\b"+
 		"l\u0001\u0000\u0000\u0000\nn\u0001\u0000\u0000\u0000\fv\u0001\u0000\u0000"+
 		"\u0000\u000e\u008a\u0001\u0000\u0000\u0000\u0010\u0093\u0001\u0000\u0000"+
