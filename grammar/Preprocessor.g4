@@ -2,7 +2,7 @@ grammar Preprocessor;
 
 
 NEW_LINE: [\n\r];
-WS : [ \t\r\n]+ -> skip; // skip spaces, tabs, newlines
+WS : [ \t]+ -> skip; // skip spaces, tabs, newlines
 INCLUDE: '#include';
 DEFINE: '#define';
 IF_PRE: '#if';
@@ -11,12 +11,14 @@ IFNDEF: '#ifndef';
 IFDEF: '#ifdef';
 ENDIF : '#endif' ;
 PREPROCESSOR_PRAGMA: '#pragma';
+HASH: '#' -> skip;
 
 MACRO_BODY: (BACKSLASH .+? NEW_LINE)+ .? NEW_LINE;
 LPAREN:'(';
 RPAREN:')';
 BACKSLASH : '\\';
 IDENT: [?a-zA-Z]|[_?a-zA-Z][_?a-zA-Z0-9]+;
+VARARGS: '...';
 
 DECL: '.decl'WS -> skip;
 FUNCTOR: '.functor'WS-> skip;
@@ -120,7 +122,7 @@ ANY_TEXT: .+?;
 //
 //directive:
 
-program: program_text EOF;
+program: program_text;
 program_text:
              |(IDENT
              |LPAREN
@@ -168,10 +170,12 @@ non_empty_directive_list: define_directive+
 
 pragma_directive: PREPROCESSOR_PRAGMA IDENT;
 
-ifdef_directive: IFNDEF IDENT program_text ENDIF
-                | IFDEF IDENT program_text ENDIF
-                | IF_PRE IDENT program_text ENDIF
-                | ELSE program_text ENDIF;
+ifdef_directive: IFNDEF IDENT program_text else_directive? ENDIF
+                | IFDEF IDENT program_text else_directive? ENDIF
+                | IF_PRE IDENT program_text else_directive? ENDIF
+                ;
+
+else_directive : ELSE program_text ;
 
 
 include_directive: INCLUDE STRING NEW_LINE*;
@@ -180,7 +184,7 @@ define_directive : DEFINE macro_def NEW_LINE*;
 
 macro_def: IDENT LPAREN RPAREN macro_body
          | IDENT LPAREN macro_args RPAREN macro_body
-         | IDENT (NUMBER | IDENT | STRING | FLOAT);
+         | IDENT (NUMBER | IDENT | STRING | FLOAT)?;
 
 macro_body : MACRO_BODY
             |(IDENT
@@ -215,7 +219,7 @@ macro_body : MACRO_BODY
             |PERCENT
             |SLASH
             | BACKSLASH
-            |CARET)+ NEW_LINE;
+            |CARET)* NEW_LINE;
 
 //macro_body: .+? NEW_LINE
 //           | BACKSLASH macro_body;
@@ -223,7 +227,9 @@ macro_body : MACRO_BODY
 
 
 macro_args: IDENT
-          | macro_args COMMA IDENT;
+           | VARARGS
+           | macro_args COMMA IDENT
+           | macro_args COMMA VARARGS;
 
 //          | INCLUDE;
 

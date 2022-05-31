@@ -92,7 +92,6 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             }
 //            return true;
         });
-
     }
 
     private void traverseWorkspace(String directory) {
@@ -103,22 +102,34 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     .collect(Collectors.toList());
             // printing the folder names
             for (String s : fileNamesList) {
-                preprocessInput(s);
+                try {
+                    preprocessInput(s);
+                } catch (Exception e){
+                    System.err.println(e.getMessage());
+                }
             }
 
             for (String s : fileNamesList) {
                 System.err.println("Start" + s);
-                stageOneParse(s);
+                try {
+                    stageOneParse(s);
+                } catch (Exception e){
+                    System.err.println(e.getMessage());
+                }
                 System.err.println("End " + s);
             }
 
             for (String s : fileNamesList) {
 //                System.err.println("Start" + s);
-                stageTwoParse(s);
+                try {
+                    stageTwoParse(s);
+                } catch (Exception e){
+                    System.err.println(e.getMessage());
+                }
 //                System.err.println("End " + s);
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            e.printStackTrace();
             System.err.println(e.getMessage());
         }
@@ -154,8 +165,6 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 //        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
-
-        input = CharStreams.fromPath(path);
         SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);

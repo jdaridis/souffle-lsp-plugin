@@ -275,6 +275,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         for(SouffleSymbol symbol: rules){
             SouffleRelation relationSymbol = (SouffleRelation) symbol;
             rule = new SouffleRule(symbol.getName(), symbol.getRange());
+            rule.setComponent(symbol.getComponent());
             SouffleSymbol decl = findDecl(rule);
             rule.setDeclaration(decl);
             documentContext.addToContextScope(rule);

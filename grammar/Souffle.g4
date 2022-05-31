@@ -135,8 +135,8 @@ COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
 
-PREPROCESSOR: '#' .+? [\r\n] -> channel(HIDDEN);
-PREPROCESSOR_MULTILINE: '#' .+? '\\' (.*? '\\')* .+? [\n\r] -> channel(HIDDEN);
+PREPROCESSOR: '#' .+? [\r\n] -> skip;
+PREPROCESSOR_MULTILINE: '#define' .+? '\\' (.*? '\\')* .+? [\n\r] -> skip;
 
 preprocessor_macro: PREPROCESSOR_ID
                    | PREPROCESSOR_ID LPAREN macro_args RPAREN;
@@ -170,6 +170,7 @@ macro_arg:   STRING
              | BW_NOT  macro_arg
              | L_NOT macro_arg
              | EXCLAMATION macro_arg
+             | AT IDENT
              | macro_arg SEMICOLON macro_arg
              | macro_arg LT macro_arg
              | macro_arg GT macro_arg

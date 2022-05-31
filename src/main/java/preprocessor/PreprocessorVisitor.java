@@ -41,6 +41,12 @@ public interface PreprocessorVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfdef_directive(PreprocessorParser.Ifdef_directiveContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PreprocessorParser#else_directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElse_directive(PreprocessorParser.Else_directiveContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PreprocessorParser#include_directive}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -106,7 +106,7 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         List<Token> cmtChannel =
                 tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
         if ( cmtChannel!=null ) {
-            Token cmt = cmtChannel.get(0);
+            Token cmt = cmtChannel.get(cmtChannel.size() - 1);
             if ( cmt!=null ) {
                 documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
             }
