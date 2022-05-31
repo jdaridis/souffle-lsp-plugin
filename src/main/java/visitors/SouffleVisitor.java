@@ -11,30 +11,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface SouffleVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link SouffleParser#preprocessor_macro}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SouffleParser#macro_args}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMacro_args(SouffleParser.Macro_argsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SouffleParser#non_empty_macro_args}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNon_empty_macro_args(SouffleParser.Non_empty_macro_argsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SouffleParser#macro_arg}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMacro_arg(SouffleParser.Macro_argContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SouffleParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -370,4 +346,28 @@ public interface SouffleVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitKvp_value(SouffleParser.Kvp_valueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#preprocessor_macro}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#macro_args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMacro_args(SouffleParser.Macro_argsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#non_empty_macro_args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNon_empty_macro_args(SouffleParser.Non_empty_macro_argsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SouffleParser#macro_arg}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMacro_arg(SouffleParser.Macro_argContext ctx);
 }

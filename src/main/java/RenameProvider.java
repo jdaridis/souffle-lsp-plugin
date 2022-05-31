@@ -26,6 +26,9 @@ public class RenameProvider {
                     case TYPE_DECL:
                     case COMPONENT_INIT:
                     case COMPONENT_DECL:
+                    case TYPE_USE:
+                    case RELATION_USE:
+                    case RULE:
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
                         for (Location reference : references) {
                             if (!textEdits.containsKey(reference.getUri())) {
@@ -52,15 +55,15 @@ public class RenameProvider {
                         }
 
                         break;
-                    case TYPE_USE:
-                    case RELATION_USE:
-                    case RULE:
-                        textEdits.put(params.getTextDocument().getUri(), new ArrayList<TextEdit>());
-                        TextEdit textEdit = new TextEdit();
-                        textEdit.setRange(currentSymbol.getRange());
-                        textEdit.setNewText(params.getNewName());
-                        textEdits.get(params.getTextDocument().getUri()).add(textEdit);
-                        break;
+//                    case TYPE_USE:
+//                    case RELATION_USE:
+//                    case RULE:
+//                        textEdits.put(params.getTextDocument().getUri(), new ArrayList<TextEdit>());
+//                        TextEdit textEdit = new TextEdit();
+//                        textEdit.setRange(currentSymbol.getRange());
+//                        textEdit.setNewText(params.getNewName());
+//                        textEdits.get(params.getTextDocument().getUri()).add(textEdit);
+//                        break;
                 }
             }
         }
