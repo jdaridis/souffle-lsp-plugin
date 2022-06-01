@@ -24,9 +24,11 @@ public class CompletionProvider {
             ".symboltype",
             ".numbertype",
     };
+
+    static boolean inArgs = false;
     private final CompletionParams params;
-    private String documentUri;
-    private Position position;
+    private final String documentUri;
+    private final Position position;
 
     public CompletionProvider(CompletionParams params) {
         this.params = params;
@@ -37,6 +39,11 @@ public class CompletionProvider {
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
         Range range = new Range(position, position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
+//        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
+//            inArgs = true;
+//            return Either.forLeft(completionItems);
+//        }
+//
         Set<String> items = new HashSet<>();
         SouffleContext context = ProjectContext.getInstance().getContext(this.documentUri, range);
         System.err.println("Trigger " + params.getContext());
@@ -55,79 +62,48 @@ public class CompletionProvider {
         }
 
         for (SouffleContext documentContext : ProjectContext.getInstance().getDocuments().values()) {
-            for (List<SouffleSymbol> symbols : documentContext.getScope().values()) {
-                for (SouffleSymbol name : symbols) {
-                    if(!items.contains(name.toString())){
-                        items.add(name.toString());
-                        CompletionItem completionItem = new CompletionItem();
-                        completionItem.setLabel(name.toString());
-                        completionItem.setInsertText(name.getName());
-                        switch (name.getKind()) {
-                            case TYPE_DECL:
-                                completionItem.setKind(CompletionItemKind.Interface);
-                                completionItems.add(completionItem);
-                                break;
-                            case RELATION_DECL:
-                                if(params.getContext().getTriggerCharacter() != null &&
-                                        params.getContext().getTriggerCharacter().equals(":")){
-                                    break;
-                                } else {
-                                    completionItem.setKind(CompletionItemKind.Method);
-                                    completionItems.add(completionItem);
-                                    if(name.getDocumentation() != null){
-                                        completionItem.setDocumentation(name.getDocumentation());
-                                    }
-                                }
-//                            completionItem.setLabel();
-                                break;
-                        }
-                    }
-
-
-                }
-            }
+            findInContext(completionItems, items, documentContext);
         }
         if(context != null){
-            for (List<SouffleSymbol> symbols : context.getScope().values()) {
-                for (SouffleSymbol name : symbols) {
-                    if(!items.contains(name.toString())){
-                        items.add(name.toString());
-                        CompletionItem completionItem = new CompletionItem();
-                        completionItem.setLabel(name.toString());
-                        completionItem.setInsertText(name.getName());
-                        switch (name.getKind()) {
-                            case TYPE_DECL:
-                                completionItem.setKind(CompletionItemKind.Interface);
-                                completionItems.add(completionItem);
-                                break;
-                            case RELATION_DECL:
-                                if(params.getContext().getTriggerCharacter() != null &&
-                                        params.getContext().getTriggerCharacter().equals(":")){
-                                    break;
-                                } else {
-                                    completionItem.setKind(CompletionItemKind.Method);
-                                    completionItems.add(completionItem);
-                                    if(name.getDocumentation() != null){
-                                        completionItem.setDocumentation(name.getDocumentation());
-                                    }
-                                }
-//                            completionItem.setLabel();
-                                break;
-                        }
-                    }
-
-                }
-            }
+            findInContext(completionItems, items, context);
         }
-
-//            Command command = new Command();
-//            command.setCommand("editor.action.triggerParameterHints");
-//            completionItem.setCommand(command);
-
-//            CompletionList
 
         LSClientLogger.getInstance().logMessage("Operation '" + "text/completion");
 
         return Either.forLeft(completionItems);
+    }
+
+    private void findInContext(List<CompletionItem> completionItems, Set<String> items, SouffleContext documentContext) {
+        for (List<SouffleSymbol> symbols : documentContext.getScope().values()) {
+            for (SouffleSymbol name : symbols) {
+                if(!items.contains(name.toString())){
+                    items.add(name.toString());
+                    CompletionItem completionItem = new CompletionItem();
+                    completionItem.setLabel(name.toString());
+                    completionItem.setInsertText(name.getName());
+                    switch (name.getKind()) {
+                        case TYPE_DECL:
+                            completionItem.setKind(CompletionItemKind.Interface);
+                            completionItems.add(completionItem);
+                            break;
+                        case RELATION_DECL:
+                            if(params.getContext().getTriggerCharacter() != null &&
+                                    params.getContext().getTriggerCharacter().equals(":")){
+                                break;
+                            } else {
+                                completionItem.setKind(CompletionItemKind.Method);
+                                completionItems.add(completionItem);
+                                if(name.getDocumentation() != null){
+                                    completionItem.setDocumentation(name.getDocumentation());
+                                }
+                            }
+//                            completionItem.setLabel();
+                            break;
+                    }
+                }
+
+
+            }
+        }
     }
 }

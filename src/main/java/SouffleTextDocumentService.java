@@ -92,34 +92,8 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        CharStream input = CharStreams.fromString(didChangeTextDocumentParams.getContentChanges().get(0).getText());
-//        preprocessInput(input);
-        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
-        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
-        SouffleParser souffleParser = new SouffleParser(tokens);
-        SouffleCurrentTokenError errorHandler = new SouffleCurrentTokenError();
-        souffleParser.setErrorHandler(errorHandler);
-        souffleParser.program();
-        ProjectContext.getInstance().setCurrentSymbol(null);
-        for (Map.Entry<String, SouffleContext> documentContext : ProjectContext.getInstance().getDocuments().entrySet()) {
-            Optional<List<SouffleSymbol>> symbolList = Optional.ofNullable(documentContext.getValue()
-                            .getSymbols(errorHandler.currentToken));
-            boolean symbolFound = false;
-            if(symbolList.isPresent()){
-                List<SouffleSymbol> symbols = symbolList.get();
-                for(SouffleSymbol symbol: symbols){
-                    if(symbol.getDeclaration() != null){
-                        ProjectContext.getInstance().setCurrentSymbol(symbol.getDeclaration());
-                        symbolFound = true;
-                        break;
-                    }
-                }
-                if(symbolFound){
-                    break;
-                }
-            }
+        ProjectContext.getInstance().setChangedText(didChangeTextDocumentParams.getContentChanges().get(0).getText());
 
-        }
         this.clientLogger.logMessage("Operation '" + "text/didChange" +
                 "' {fileUri: '" + didChangeTextDocumentParams.getContentChanges() + "'} Changed");
 

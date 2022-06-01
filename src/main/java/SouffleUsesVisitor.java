@@ -28,7 +28,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         this.projectContext = ProjectContext.getInstance();
         this.documentContext = projectContext.getDocumentContext(documentUri);
     }
-
+    
 
     public SouffleContext getDocumentContext() {
         return documentContext;
