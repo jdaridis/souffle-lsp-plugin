@@ -14,6 +14,15 @@ public class ProjectContext {
     private final Map<String, SouffleContext> documents;
     public Set<String> defines;
     private Range cursorPosition;
+    private SouffleSymbol currentSymbol;
+
+    public SouffleSymbol getCurrentSymbol() {
+        return currentSymbol;
+    }
+
+    public void setCurrentSymbol(SouffleSymbol currentSymbol) {
+        this.currentSymbol = currentSymbol;
+    }
 
     private boolean isInitialized;
 
