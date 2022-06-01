@@ -28,6 +28,13 @@ public class SignatureHelpProvider {
             }
             signatureInformation.setParameters(parameterInformations);
             signatureInformation.setLabel(currentSymbol.toString());
+            if(relation.getDocumentation() != null){
+                MarkupContent content = new MarkupContent();
+                content.setKind(MarkupKind.MARKDOWN);
+                content.setValue(relation.getDocumentation());
+                signatureInformation.setDocumentation(content);
+            }
+
             signatureHelp.setSignatures(List.of(signatureInformation));
             if (params.getContext().isRetrigger()) {
                 signatureHelp.setActiveParameter(activeParam);

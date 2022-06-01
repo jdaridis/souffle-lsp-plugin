@@ -2,7 +2,9 @@ import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CompletionProvider {
 
@@ -35,6 +37,7 @@ public class CompletionProvider {
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
         Range range = new Range(position, position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
+        Set<String> items = new HashSet<>();
         SouffleContext context = ProjectContext.getInstance().getContext(this.documentUri, range);
         System.err.println("Trigger " + params.getContext());
         boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
@@ -54,27 +57,63 @@ public class CompletionProvider {
         for (SouffleContext documentContext : ProjectContext.getInstance().getDocuments().values()) {
             for (List<SouffleSymbol> symbols : documentContext.getScope().values()) {
                 for (SouffleSymbol name : symbols) {
-                    CompletionItem completionItem = new CompletionItem();
-                    completionItem.setLabel(name.toString());
-                    completionItem.setInsertText(name.getName());
-                    switch (name.getKind()) {
-                        case TYPE_DECL:
-                            completionItem.setKind(CompletionItemKind.Interface);
-                            completionItems.add(completionItem);
-                            break;
-                        case RELATION_DECL:
-                            if(params.getContext().getTriggerCharacter() != null &&
-                                    params.getContext().getTriggerCharacter().equals(":")){
-                                break;
-                            } else {
-                                completionItem.setKind(CompletionItemKind.Method);
+                    if(!items.contains(name.toString())){
+                        items.add(name.toString());
+                        CompletionItem completionItem = new CompletionItem();
+                        completionItem.setLabel(name.toString());
+                        completionItem.setInsertText(name.getName());
+                        switch (name.getKind()) {
+                            case TYPE_DECL:
+                                completionItem.setKind(CompletionItemKind.Interface);
                                 completionItems.add(completionItem);
-                                if(name.getDocumentation() != null){
-                                    completionItem.setDocumentation(name.getDocumentation());
+                                break;
+                            case RELATION_DECL:
+                                if(params.getContext().getTriggerCharacter() != null &&
+                                        params.getContext().getTriggerCharacter().equals(":")){
+                                    break;
+                                } else {
+                                    completionItem.setKind(CompletionItemKind.Method);
+                                    completionItems.add(completionItem);
+                                    if(name.getDocumentation() != null){
+                                        completionItem.setDocumentation(name.getDocumentation());
+                                    }
                                 }
-                            }
 //                            completionItem.setLabel();
-                            break;
+                                break;
+                        }
+                    }
+
+
+                }
+            }
+        }
+        if(context != null){
+            for (List<SouffleSymbol> symbols : context.getScope().values()) {
+                for (SouffleSymbol name : symbols) {
+                    if(!items.contains(name.toString())){
+                        items.add(name.toString());
+                        CompletionItem completionItem = new CompletionItem();
+                        completionItem.setLabel(name.toString());
+                        completionItem.setInsertText(name.getName());
+                        switch (name.getKind()) {
+                            case TYPE_DECL:
+                                completionItem.setKind(CompletionItemKind.Interface);
+                                completionItems.add(completionItem);
+                                break;
+                            case RELATION_DECL:
+                                if(params.getContext().getTriggerCharacter() != null &&
+                                        params.getContext().getTriggerCharacter().equals(":")){
+                                    break;
+                                } else {
+                                    completionItem.setKind(CompletionItemKind.Method);
+                                    completionItems.add(completionItem);
+                                    if(name.getDocumentation() != null){
+                                        completionItem.setDocumentation(name.getDocumentation());
+                                    }
+                                }
+//                            completionItem.setLabel();
+                                break;
+                        }
                     }
 
                 }

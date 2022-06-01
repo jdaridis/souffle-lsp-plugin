@@ -35,9 +35,9 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
 
     public SouffleSymbol findDecl(SouffleSymbol symbol){
-        if(symbol.getDeclaration() != null){
-            return symbol.getDeclaration();
-        }
+//        if(symbol.getDeclaration() != null){
+//            return symbol.getDeclaration();
+//        }
         for(SouffleContext context: currentContext){
             SouffleSymbol decl = filterDecl(symbol, context);
             if (decl != null) {
