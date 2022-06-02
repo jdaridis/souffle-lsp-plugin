@@ -1,10 +1,7 @@
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CompletionProvider {
 
@@ -62,10 +59,15 @@ public class CompletionProvider {
         }
 
         for (SouffleContext documentContext : ProjectContext.getInstance().getDocuments().values()) {
-            findInContext(completionItems, items, documentContext);
+            findInScope(documentContext.getScope(), completionItems, items);
         }
         if(context != null){
-            findInContext(completionItems, items, context);
+            if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
+                context = context.getParent();
+            }
+            if(context.getKind() == SouffleContextType.COMPONENT){
+                findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), completionItems, items);
+            }
         }
 
         LSClientLogger.getInstance().logMessage("Operation '" + "text/completion");
@@ -73,8 +75,8 @@ public class CompletionProvider {
         return Either.forLeft(completionItems);
     }
 
-    private void findInContext(List<CompletionItem> completionItems, Set<String> items, SouffleContext documentContext) {
-        for (List<SouffleSymbol> symbols : documentContext.getScope().values()) {
+    private void findInScope(Map<String, List<SouffleSymbol>> scope, List<CompletionItem> completionItems, Set<String> items) {
+        for (List<SouffleSymbol> symbols : scope.values()) {
             for (SouffleSymbol name : symbols) {
                 if(!items.contains(name.toString())){
                     items.add(name.toString());

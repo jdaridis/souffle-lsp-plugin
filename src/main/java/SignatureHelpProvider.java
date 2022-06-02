@@ -30,10 +30,15 @@ public class SignatureHelpProvider {
         List<SignatureInformation> signatureInformationList = new ArrayList<>();
         String currentToken = getSouffleCurrentTokenError(cursor).getCurrentToken();
         for (Map.Entry<String, SouffleContext> documentContext : ProjectContext.getInstance().getDocuments().entrySet()) {
-            findInContext(documentContext.getValue(), signatureInformationList, signatureHelp, currentToken);
+            findInScope(documentContext.getValue().getScope(), signatureInformationList, signatureHelp, currentToken);
         }
         if(context != null){
-            findInContext(context, signatureInformationList, signatureHelp, currentToken);
+            if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
+                context = context.getParent();
+            }
+            if(context.getKind() == SouffleContextType.COMPONENT){
+                findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), signatureInformationList, signatureHelp, currentToken);
+            }
         }
 
         if (params.getContext().isRetrigger()) {
@@ -43,8 +48,9 @@ public class SignatureHelpProvider {
 
     }
 
-    private void findInContext(SouffleContext documentContext, List<SignatureInformation> signatureInformationList, SignatureHelp signatureHelp, String currentToken) {
-        Optional<List<SouffleSymbol>> symbolList = Optional.ofNullable(documentContext.getSymbols(currentToken));
+    private void findInScope(Map<String, List<SouffleSymbol>> scope, List<SignatureInformation> signatureInformationList, SignatureHelp signatureHelp, String currentToken) {
+        List<SouffleSymbol> contextSymbols = scope.get(currentToken);
+        Optional<List<SouffleSymbol>> symbolList = Optional.ofNullable(contextSymbols);
         if(symbolList.isPresent()){
             List<SouffleSymbol> symbols = symbolList.get();
             for(SouffleSymbol symbol: symbols){
