@@ -17,7 +17,6 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -156,7 +155,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         souffleParser.removeErrorListeners();
         souffleParser.setErrorHandler(new SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(path.toUri().toString()));
-        SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, path.toUri().toString(), projectContext);
+        SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
 
         projectContext.addDocument(path.toUri().toString(), visitor.getDocumentContext());

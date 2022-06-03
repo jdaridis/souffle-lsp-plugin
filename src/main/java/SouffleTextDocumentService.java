@@ -57,7 +57,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         souffleParser.setErrorHandler(new SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
         ProjectContext projectContext = ProjectContext.getInstance();
-        SouffleGeneratorVisitor visitor = new SouffleGeneratorVisitor(souffleParser, uri.toString(), projectContext);
+        SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, uri.toString(), projectContext);
         visitor.visit(souffleParser.program());
 
         projectContext.addDocument(uri.toString(), visitor.getDocumentContext());

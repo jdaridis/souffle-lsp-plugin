@@ -9,11 +9,9 @@ import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
+public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     private final String documentUri;
     SouffleParser parser;
@@ -22,7 +20,7 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     ArrayDeque<ArrayDeque<SouffleSymbol>> currentScope;
     ArrayDeque<SouffleContext> currentContext;
 
-    public SouffleGeneratorVisitor(SouffleParser parser, String documentContext, ProjectContext projectContext) {
+    public SouffleDeclarationVisitor(SouffleParser parser, String documentContext, ProjectContext projectContext) {
         this.parser = parser;
         this.currentScope = new ArrayDeque<>();
         this.currentContext  = new ArrayDeque<>();
@@ -66,13 +64,24 @@ public class SouffleGeneratorVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         SouffleContext documentContext = currentContext.peek();
         currentContext.push(componentContext);
         documentContext.addToSubContext(componentContext);
-
+        String documentation = null;
+        Token semi = ctx.getStart();
+        int i = semi.getTokenIndex();
+        BufferedTokenStream tokens = (BufferedTokenStream)parser.getTokenStream();
+        List<Token> cmtChannel =
+                tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
+        if ( cmtChannel!=null ) {
+            Token cmt = cmtChannel.get(cmtChannel.size() - 1);
+            if ( cmt!=null ) {
+                documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
+            }
+        }
         SouffleComponent contextSymbol = (SouffleComponent) ctx.component_head().accept(this);
         contextSymbol.setURI(documentUri);
+        contextSymbol.setDocumentation(documentation);
         componentContext.addContextSymbol(contextSymbol);
         documentContext.addToContextScope(contextSymbol);
         ctx.component_body().accept(this);
-        contextSymbol.addToScope(componentContext.getScope());
         currentContext.pop();
         return null;
     }

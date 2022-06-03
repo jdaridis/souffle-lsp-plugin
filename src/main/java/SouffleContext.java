@@ -114,7 +114,19 @@ public class SouffleContext {
             scope.put(symbol.getName(), new ArrayList<>(List.of(symbol)));
         }
     }
-
+    public void addToContextScope(Map<String, List<SouffleSymbol>> symbols){
+        for(Map.Entry<String, List<SouffleSymbol>> entry: symbols.entrySet()){
+            if(scope.containsKey(entry.getKey())){
+                for(SouffleSymbol symbol: entry.getValue()){
+                    if(!scope.get(entry.getKey()).contains(symbol)){
+                        scope.get(entry.getKey()).add(symbol);
+                    }
+                }
+            } else {
+                scope.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
     public List<SouffleSymbol> getSymbols(String name){
         return scope.get(name);
     }
