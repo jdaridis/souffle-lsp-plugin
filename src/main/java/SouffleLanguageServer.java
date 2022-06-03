@@ -45,6 +45,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams initializeParams) {
+        System.err.println("WorkspaceFolders " + initializeParams.getWorkspaceFolders());
         ServerCapabilities serverCapabilities = new ServerCapabilities();
         serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         serverCapabilities.setHoverProvider(true);
@@ -72,6 +73,11 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             response.getCapabilities().setCompletionProvider(completionOptions);
         }
 //        CompletableFuture.
+        projectContext = ProjectContext.getInstance();
+        List<WorkspaceFolder> workspaceFolders = initializeParams.getWorkspaceFolders();
+        if(workspaceFolders != null && !workspaceFolders.isEmpty()){
+            traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
+        }
         return CompletableFuture.supplyAsync(() -> response);
     }
 
@@ -86,12 +92,12 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         }
         projectContext = ProjectContext.getInstance();
 
-        languageClient.workspaceFolders().whenComplete((workspaceFolders, throwable) -> {
-            if(workspaceFolders != null && !workspaceFolders.isEmpty()){
-                traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
-            }
-//            return true;
-        });
+//        languageClient.workspaceFolders().whenComplete((workspaceFolders, throwable) -> {
+//            if(workspaceFolders != null && !workspaceFolders.isEmpty()){
+//                traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
+//            }
+////            return true;
+//        });
     }
 
     private void traverseWorkspace(String directory) {
