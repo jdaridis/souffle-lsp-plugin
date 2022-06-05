@@ -16,8 +16,7 @@ public class RenameProvider {
         Position cursorPosition = params.getPosition();
         cursorPosition.setCharacter(cursorPosition.getCharacter() - 1);
         Range cursor = new Range(cursorPosition, cursorPosition);
-        SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
-        System.err.println("Context " + context);
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         if (context != null) {
             SouffleSymbol currentSymbol = context.getSymbol(cursor);
             if (currentSymbol != null) {

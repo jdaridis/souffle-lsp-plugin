@@ -15,11 +15,11 @@ public class ImplementationProvider {
 
     public Either<List<? extends Location>, List<? extends LocationLink>> getImplementations(ImplementationParams params) {
         Range cursor = new Range(params.getPosition(), params.getPosition());
-        SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         List<Location> references = new ArrayList<Location>();
         if (context != null) {
             SouffleSymbol currentSymbol = context.getSymbol(cursor);
-            for (Map.Entry<String, SouffleContext> documentContext : ProjectContext.getInstance().getDocuments().entrySet()) {
+            for (Map.Entry<String, SouffleContext> documentContext : SouffleProjectContext.getInstance().getDocuments().entrySet()) {
                 Optional.ofNullable(documentContext.getValue()
                                 .getSymbols(currentSymbol.getName()))
                         .ifPresent(souffleSymbols -> souffleSymbols

@@ -137,14 +137,9 @@ public class SouffleContext {
 
     @Override
     public String toString() {
-        String s = kind.toString() + " "
+        return kind.toString() + " "
                 + range.toString() + " "
                 + symbols.toString() + " "
                 + scope.toString();
-
-//        if(subContext != null){
-//            s += subContext.toString();
-//        }
-        return s;
     }
 }

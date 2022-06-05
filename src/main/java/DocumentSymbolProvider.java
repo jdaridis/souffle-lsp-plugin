@@ -15,7 +15,7 @@ public class DocumentSymbolProvider {
 
     public List<Either<SymbolInformation, DocumentSymbol>> getDocumentSymbols(DocumentSymbolParams params) {
         List<Either<SymbolInformation, DocumentSymbol>> documentSymbols = new ArrayList<Either<SymbolInformation, DocumentSymbol>>();
-        SouffleContext context = ProjectContext.getInstance().getDocumentContext(params.getTextDocument().getUri());
+        SouffleContext context = SouffleProjectContext.getInstance().getDocumentContext(params.getTextDocument().getUri());
 
         getSymbolsFromScope(documentSymbols, context.getScope().values(), params.getTextDocument().getUri(), false);
 

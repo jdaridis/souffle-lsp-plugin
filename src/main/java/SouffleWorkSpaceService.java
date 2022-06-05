@@ -4,7 +4,7 @@ import org.eclipse.lsp4j.RenameFilesParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
 /**
- * WorkspaceService implementation for Ballerina.
+ * WorkspaceService implementation for Souffle Datalog.
  */
 public class SouffleWorkSpaceService implements WorkspaceService {
 

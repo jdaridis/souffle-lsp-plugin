@@ -7,7 +7,7 @@ public class HoverProvider {
 
     public Hover getHover(HoverParams params) {
         Range cursor = new Range(params.getPosition(), params.getPosition());
-        SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         System.err.println("Context " + context);
         Hover hover = null;
         if (context != null) {

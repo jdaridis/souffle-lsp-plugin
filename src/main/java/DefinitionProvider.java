@@ -16,7 +16,7 @@ public class DefinitionProvider {
     public Either<List<? extends Location>, List<? extends LocationLink>> getDefinition(DefinitionParams params) {
         List<Location> declLocations = new ArrayList<Location>();
         Range cursor = new Range(params.getPosition(), params.getPosition());
-        Optional<SouffleContext> context = Optional.ofNullable(ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor));
+        Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor));
         if (context.isPresent()) {
             Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));
             if (currentSymbol.isPresent()) {

@@ -11,11 +11,11 @@ public class ReferenceProvider {
     }
     public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params, boolean includeComponent) {
         Range cursor = new Range(params.getPosition(), params.getPosition());
-        SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         Set<Location> references = new HashSet<>();
         if (context != null) {
             SouffleSymbol currentSymbol = context.getSymbol(cursor);
-            for (Map.Entry<String, SouffleContext> documentContext : ProjectContext.getInstance().getDocuments().entrySet()) {
+            for (Map.Entry<String, SouffleContext> documentContext : SouffleProjectContext.getInstance().getDocuments().entrySet()) {
                 Optional.ofNullable(documentContext.getValue()
                                 .getSymbols(currentSymbol.getName()))
                         .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(documentContext.getKey(), symbol.getRange()))));

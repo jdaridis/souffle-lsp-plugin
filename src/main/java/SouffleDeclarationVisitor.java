@@ -16,11 +16,11 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
     private final String documentUri;
     SouffleParser parser;
     SouffleContext documentContext;
-    ProjectContext projectContext;
+    SouffleProjectContext projectContext;
     ArrayDeque<ArrayDeque<SouffleSymbol>> currentScope;
     ArrayDeque<SouffleContext> currentContext;
 
-    public SouffleDeclarationVisitor(SouffleParser parser, String documentContext, ProjectContext projectContext) {
+    public SouffleDeclarationVisitor(SouffleParser parser, String documentContext, SouffleProjectContext projectContext) {
         this.parser = parser;
         this.currentScope = new ArrayDeque<>();
         this.currentContext  = new ArrayDeque<>();
@@ -45,6 +45,21 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         return new Range(start, end);
     }
 
+    private String getDocumentation(Token ctx) {
+        String documentation = null;
+        int i = ctx.getTokenIndex();
+        BufferedTokenStream tokens = (BufferedTokenStream)parser.getTokenStream();
+        List<Token> cmtChannel =
+                tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
+        if ( cmtChannel!=null ) {
+            Token cmt = cmtChannel.get(cmtChannel.size() - 1);
+            if ( cmt!=null ) {
+                documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
+            }
+        }
+        return documentation;
+    }
+
     @Override
     public SouffleSymbol visitProgram(SouffleParser.ProgramContext ctx) {
         documentContext = new SouffleContext(SouffleContextType.DOCUMENT, toRange(ctx));
@@ -64,18 +79,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         SouffleContext documentContext = currentContext.peek();
         currentContext.push(componentContext);
         documentContext.addToSubContext(componentContext);
-        String documentation = null;
-        Token semi = ctx.getStart();
-        int i = semi.getTokenIndex();
-        BufferedTokenStream tokens = (BufferedTokenStream)parser.getTokenStream();
-        List<Token> cmtChannel =
-                tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
-        if ( cmtChannel!=null ) {
-            Token cmt = cmtChannel.get(cmtChannel.size() - 1);
-            if ( cmt!=null ) {
-                documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
-            }
-        }
+        String documentation = getDocumentation(ctx.getStart());
         SouffleComponent contextSymbol = (SouffleComponent) ctx.component_head().accept(this);
         contextSymbol.setURI(documentUri);
         contextSymbol.setDocumentation(documentation);
@@ -108,18 +112,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
         documentContext.addToSubContext(declarationContext);
-        String documentation = null;
-        Token semi = ctx.getStart();
-        int i = semi.getTokenIndex();
-        BufferedTokenStream tokens = (BufferedTokenStream)parser.getTokenStream();
-        List<Token> cmtChannel =
-                tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
-        if ( cmtChannel!=null ) {
-            Token cmt = cmtChannel.get(cmtChannel.size() - 1);
-            if ( cmt!=null ) {
-                documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
-            }
-        }
+        String documentation = getDocumentation(ctx.getStart());
 
         currentScope.push(new ArrayDeque<>());
         ctx.relation_names().accept(this);
@@ -195,11 +188,6 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
                 typeName.addType(type);
             }
         }
-
-
-
-//        System.err.println(documentContext);
-
         return null;
     }
 
@@ -257,12 +245,10 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
             symbol.setComponent(component);
         }
         return symbol;
-
     }
 
     @Override
     public SouffleSymbol visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx) {
-
         return new SouffleSymbol(ctx.getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
     }
 }

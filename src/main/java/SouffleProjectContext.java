@@ -1,12 +1,11 @@
 import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.services.LanguageClient;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ProjectContext {
+public class SouffleProjectContext {
     public Map<String, SouffleContext> getDocuments() {
         return documents;
     }
@@ -27,16 +26,16 @@ public class ProjectContext {
 
     private boolean isInitialized;
 
-    private static ProjectContext INSTANCE;
+    private static SouffleProjectContext INSTANCE;
 
-    private ProjectContext() {
+    private SouffleProjectContext() {
         documents = new HashMap<>();
         defines = new HashSet<>();
     }
 
-    public static ProjectContext getInstance() {
+    public static SouffleProjectContext getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ProjectContext();
+            INSTANCE = new SouffleProjectContext();
         }
         return INSTANCE;
     }

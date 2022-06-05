@@ -13,7 +13,7 @@ public class SignatureHelpProvider {
 
     public SignatureHelp getSignatureHelp(SignatureHelpParams params) {
         Range cursor = new Range(params.getPosition(), params.getPosition());
-        SouffleContext context = ProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
 
         int activeParam = 0;
         if (params.getContext().isRetrigger()) {
@@ -27,7 +27,7 @@ public class SignatureHelpProvider {
         List<SignatureInformation> signatureInformationList = new ArrayList<>();
         Set<String> items = new HashSet<>();
         String currentToken = getSouffleCurrentTokenError(cursor).getCurrentToken();
-        for (Map.Entry<String, SouffleContext> documentContext : ProjectContext.getInstance().getDocuments().entrySet()) {
+        for (Map.Entry<String, SouffleContext> documentContext : SouffleProjectContext.getInstance().getDocuments().entrySet()) {
             findInScope(documentContext.getValue().getScope(), signatureInformationList, signatureHelp, currentToken, items);
         }
         if(context != null){
@@ -80,9 +80,8 @@ public class SignatureHelpProvider {
     }
 
     private SouffleCurrentTokenError getSouffleCurrentTokenError(Range cursor) {
-        CharStream input = CharStreams.fromString(ProjectContext.getInstance().getChangedText());
-//        preprocessInput(input);
-        SouffleLexer souffleLexer = new SouffleLexer(input, ProjectContext.getInstance().defines);
+        CharStream input = CharStreams.fromString(SouffleProjectContext.getInstance().getChangedText());
+        SouffleLexer souffleLexer = new SouffleLexer(input, SouffleProjectContext.getInstance().defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         SouffleCurrentTokenError errorHandler = new SouffleCurrentTokenError(cursor);

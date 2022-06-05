@@ -36,7 +36,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     private int shutdown = 1;
 
     Set<String> defines;
-    private ProjectContext projectContext;
+    private SouffleProjectContext projectContext;
 
     public SouffleLanguageServer() {
         this.textDocumentService = new SouffleTextDocumentService(this);
@@ -58,6 +58,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         signatureHelpOptions.setRetriggerCharacters(List.of(","));
         serverCapabilities.setSignatureHelpProvider(signatureHelpOptions);
         serverCapabilities.setDocumentSymbolProvider(true);
+        serverCapabilities.setWorkspaceSymbolProvider(true);
         serverCapabilities.setRenameProvider(true);
 
         final InitializeResult response = new InitializeResult(serverCapabilities);
@@ -73,7 +74,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             response.getCapabilities().setCompletionProvider(completionOptions);
         }
 //        CompletableFuture.
-        projectContext = ProjectContext.getInstance();
+        projectContext = SouffleProjectContext.getInstance();
         List<WorkspaceFolder> workspaceFolders = initializeParams.getWorkspaceFolders();
         if(workspaceFolders != null && !workspaceFolders.isEmpty()){
             traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
@@ -90,7 +91,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     "textDocument/completion", completionRegistrationOptions);
             languageClient.registerCapability(new RegistrationParams(List.of(completionRegistration)));
         }
-        projectContext = ProjectContext.getInstance();
+        projectContext = SouffleProjectContext.getInstance();
 
 //        languageClient.workspaceFolders().whenComplete((workspaceFolders, throwable) -> {
 //            if(workspaceFolders != null && !workspaceFolders.isEmpty()){
@@ -116,13 +117,13 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             }
 
             for (String s : fileNamesList) {
-                System.err.println("Start" + s);
+//                System.err.println("Start" + s);
                 try {
                     stageOneParse(s);
                 } catch (Exception e){
                     System.err.println(e.getMessage());
                 }
-                System.err.println("End " + s);
+//                System.err.println("End " + s);
             }
 
             for (String s : fileNamesList) {
@@ -160,7 +161,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
         souffleParser.setErrorHandler(new SouffleError());
-        souffleParser.addErrorListener(new SyntaxErrorListener(path.toUri().toString()));
+        souffleParser.addErrorListener(new SouffleSyntaxErrorListener(path.toUri().toString()));
         SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
 

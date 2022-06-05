@@ -5,7 +5,7 @@ import java.util.*;
 
 public class CompletionProvider {
 
-    private final String[] directives = new String[]{
+    private static final String[] directives = new String[]{
             ".decl",
             ".output",
             ".input",
@@ -42,8 +42,7 @@ public class CompletionProvider {
 //        }
 //
         Set<String> items = new HashSet<>();
-        SouffleContext context = ProjectContext.getInstance().getContext(this.documentUri, range);
-        System.err.println("Trigger " + params.getContext());
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range);
         boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
         if(directiveTrigger){
             for (String directive : directives) {
@@ -58,7 +57,7 @@ public class CompletionProvider {
             }
         }
 
-        for (SouffleContext documentContext : ProjectContext.getInstance().getDocuments().values()) {
+        for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
             findInScope(documentContext.getScope(), completionItems, items);
         }
         if(context != null){
@@ -99,7 +98,6 @@ public class CompletionProvider {
                                     completionItem.setDocumentation(name.getDocumentation());
                                 }
                             }
-//                            completionItem.setLabel();
                             break;
                     }
                 }

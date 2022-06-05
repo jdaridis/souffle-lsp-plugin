@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * TextDocumentService implementation for Ballerina.
+ * TextDocumentService implementation for Souffle Datalog.
  */
 public class SouffleTextDocumentService implements TextDocumentService {
 
@@ -23,13 +23,13 @@ public class SouffleTextDocumentService implements TextDocumentService {
     private LSClientLogger  clientLogger;
     private SouffleLexer souffleLexer;
     private SouffleParser souffleParser;
-    private ProjectContext projectContext;
+    private SouffleProjectContext projectContext;
 
 
     public SouffleTextDocumentService(SouffleLanguageServer languageServer) {
         this.languageServer = languageServer;
         this.clientLogger = LSClientLogger.getInstance();
-        this.projectContext = ProjectContext.getInstance();
+        this.projectContext = SouffleProjectContext.getInstance();
     }
 
 /*    private void consumeInput(String documentURI) throws IOException, URISyntaxException {
@@ -55,8 +55,8 @@ public class SouffleTextDocumentService implements TextDocumentService {
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
         souffleParser.setErrorHandler(new SouffleError());
-        souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
-        ProjectContext projectContext = ProjectContext.getInstance();
+        souffleParser.addErrorListener(new SouffleSyntaxErrorListener(uri.toString()));
+        SouffleProjectContext projectContext = SouffleProjectContext.getInstance();
         SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, uri.toString(), projectContext);
         visitor.visit(souffleParser.program());
 
@@ -92,7 +92,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        ProjectContext.getInstance().setChangedText(didChangeTextDocumentParams.getContentChanges().get(0).getText());
+        SouffleProjectContext.getInstance().setChangedText(didChangeTextDocumentParams.getContentChanges().get(0).getText());
 
         this.clientLogger.logMessage("Operation '" + "text/didChange" +
                 "' {fileUri: '" + didChangeTextDocumentParams.getContentChanges() + "'} Changed");
@@ -126,8 +126,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {
-        this.clientLogger.logMessage("Operation '" + "text/hover" +
-                "' {fileUri: '" + params.toString() + "'} Hover");
         return CompletableFuture.supplyAsync(() -> new HoverProvider().getHover(params));
     }
 
