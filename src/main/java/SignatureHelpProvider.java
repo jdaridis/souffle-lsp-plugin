@@ -5,10 +5,7 @@ import org.eclipse.lsp4j.*;
 import visitors.SouffleLexer;
 import visitors.SouffleParser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SignatureHelpProvider {
     public SignatureHelpProvider() {
@@ -28,16 +25,17 @@ public class SignatureHelpProvider {
 
         SignatureHelp signatureHelp = new SignatureHelp();
         List<SignatureInformation> signatureInformationList = new ArrayList<>();
+        Set<String> items = new HashSet<>();
         String currentToken = getSouffleCurrentTokenError(cursor).getCurrentToken();
         for (Map.Entry<String, SouffleContext> documentContext : ProjectContext.getInstance().getDocuments().entrySet()) {
-            findInScope(documentContext.getValue().getScope(), signatureInformationList, signatureHelp, currentToken);
+            findInScope(documentContext.getValue().getScope(), signatureInformationList, signatureHelp, currentToken, items);
         }
         if(context != null){
             if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
                 context = context.getParent();
             }
             if(context.getKind() == SouffleContextType.COMPONENT){
-                findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), signatureInformationList, signatureHelp, currentToken);
+                findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), signatureInformationList, signatureHelp, currentToken, items);
             }
         }
 
@@ -48,30 +46,33 @@ public class SignatureHelpProvider {
 
     }
 
-    private void findInScope(Map<String, List<SouffleSymbol>> scope, List<SignatureInformation> signatureInformationList, SignatureHelp signatureHelp, String currentToken) {
+    private void findInScope(Map<String, List<SouffleSymbol>> scope, List<SignatureInformation> signatureInformationList, SignatureHelp signatureHelp, String currentToken, Set<String> items) {
         List<SouffleSymbol> contextSymbols = scope.get(currentToken);
         Optional<List<SouffleSymbol>> symbolList = Optional.ofNullable(contextSymbols);
         if(symbolList.isPresent()){
             List<SouffleSymbol> symbols = symbolList.get();
             for(SouffleSymbol symbol: symbols){
-                if(symbol.getKind() == SouffleSymbolType.RELATION_DECL){
-                    SignatureInformation signatureInformation = new SignatureInformation();
-                    SouffleRelation relation = (SouffleRelation) symbol;
-                    List<ParameterInformation> parameterInformations = new ArrayList<>();
-                    for (SouffleVariable variable : relation.getArgs()) {
-                        ParameterInformation parameterInformation = new ParameterInformation();
-                        parameterInformation.setLabel(variable.toString());
-                        parameterInformations.add(parameterInformation);
+                if(!items.contains(symbol.toString())){
+                    if(symbol.getKind() == SouffleSymbolType.RELATION_DECL){
+                        items.add(symbol.toString());
+                        SignatureInformation signatureInformation = new SignatureInformation();
+                        SouffleRelation relation = (SouffleRelation) symbol;
+                        List<ParameterInformation> parameterInformations = new ArrayList<>();
+                        for (SouffleVariable variable : relation.getArgs()) {
+                            ParameterInformation parameterInformation = new ParameterInformation();
+                            parameterInformation.setLabel(variable.toString());
+                            parameterInformations.add(parameterInformation);
+                        }
+                        signatureInformation.setParameters(parameterInformations);
+                        signatureInformation.setLabel(symbol.toString());
+                        if(relation.getDocumentation() != null){
+                            MarkupContent content = new MarkupContent();
+                            content.setKind(MarkupKind.MARKDOWN);
+                            content.setValue(relation.getDocumentation());
+                            signatureInformation.setDocumentation(content);
+                        }
+                        signatureInformationList.add(signatureInformation);
                     }
-                    signatureInformation.setParameters(parameterInformations);
-                    signatureInformation.setLabel(symbol.toString());
-                    if(relation.getDocumentation() != null){
-                        MarkupContent content = new MarkupContent();
-                        content.setKind(MarkupKind.MARKDOWN);
-                        content.setValue(relation.getDocumentation());
-                        signatureInformation.setDocumentation(content);
-                    }
-                    signatureInformationList.add(signatureInformation);
                 }
             }
             signatureHelp.setSignatures(signatureInformationList);
