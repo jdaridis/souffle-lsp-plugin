@@ -110,8 +110,10 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             // printing the folder names
             for (String s : fileNamesList) {
                 try {
+//                    System.err.println("Preprocess " + s);
                     preprocessInput(s);
                 } catch (Exception e){
+                    System.err.println("Preprocess " + s);
                     System.err.println(e.getMessage());
                 }
             }
@@ -121,6 +123,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 try {
                     stageOneParse(s);
                 } catch (Exception e){
+                    System.err.println("Parse 1 " + s);
                     System.err.println(e.getMessage());
                 }
 //                System.err.println("End " + s);
@@ -131,6 +134,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 try {
                     stageTwoParse(s);
                 } catch (Exception e){
+                    System.err.println("Parse 2 " + s);
                     System.err.println(e.getMessage());
                 }
 //                System.err.println("End " + s);

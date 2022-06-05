@@ -173,6 +173,7 @@ pragma_directive: PREPROCESSOR_PRAGMA IDENT;
 ifdef_directive: IFNDEF IDENT program_text else_directive? ENDIF
                 | IFDEF IDENT program_text else_directive? ENDIF
                 | IF_PRE IDENT program_text else_directive? ENDIF
+                | IF_PRE LPAREN (IDENT|NUMBER) RPAREN program_text else_directive? ENDIF
                 ;
 
 else_directive : ELSE program_text ;

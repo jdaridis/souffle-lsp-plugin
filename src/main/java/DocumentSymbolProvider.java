@@ -103,7 +103,8 @@ public class DocumentSymbolProvider {
                         break;
                 }
             }
-            if (top != null && (topSymbol.getURI() != null && topSymbol.getURI().equals(documentUri))) {
+            if (top != null && (topSymbol.getURI() != null && topSymbol.getURI().equals(documentUri))
+                    || top != null && topSymbol.getURI() == null) {
                 if (topSymbol.getKind() == SouffleSymbolType.RELATION_DECL) {
                     top.setChildren(children);
                 }

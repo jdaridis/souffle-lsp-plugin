@@ -180,7 +180,10 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitComponent_type(SouffleParser.Component_typeContext ctx) {
-        return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+        if(ctx.IDENT() != null)
+            return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+        else
+            return new SouffleSymbol(ctx.PREPROCESSOR_ID().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.PREPROCESSOR_ID()));
     }
 
     @Override
@@ -307,7 +310,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             SouffleSymbol decl = findDecl(bodySymbol);
             bodySymbol.setDeclaration(decl);
 
-            if(decl != null && bodySymbol.getKind() == SouffleSymbolType.RELATION_USE){
+            if(decl != null && bodySymbol.getKind() == SouffleSymbolType.RELATION_USE && decl.getKind() == SouffleSymbolType.RELATION_DECL){
                 List<SouffleVariable> args = ((SouffleRelation) bodySymbol).getArgs();
                 for (int i = 0; i < args.size(); i++) {
                     SouffleVariable arg = args.get(i);

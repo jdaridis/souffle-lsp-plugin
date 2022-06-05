@@ -52,7 +52,12 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         List<Token> cmtChannel =
                 tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
         if ( cmtChannel!=null ) {
-            Token cmt = cmtChannel.get(cmtChannel.size() - 1);
+            Token cmt;
+            if(cmtChannel.get(0).getType() == SouffleParser.LINE_COMMENT){
+                cmt = cmtChannel.get(0);
+            } else {
+                cmt = cmtChannel.get(cmtChannel.size() - 1);
+            }
             if ( cmt!=null ) {
                 documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
             }
@@ -103,7 +108,10 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
 
     @Override
     public SouffleSymbol visitComponent_type(SouffleParser.Component_typeContext ctx) {
-        return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+        if(ctx.IDENT() != null)
+            return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+        else
+            return new SouffleSymbol(ctx.PREPROCESSOR_ID().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.PREPROCESSOR_ID()));
     }
 
     @Override
