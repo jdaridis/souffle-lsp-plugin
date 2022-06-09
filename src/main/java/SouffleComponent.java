@@ -18,7 +18,7 @@ public class SouffleComponent extends SouffleSymbol {
         this(name, range, SouffleSymbolType.COMPONENT_USE);
         if(isDecl){
             kind = SouffleSymbolType.COMPONENT_DECL;
-            declaration = this;
+            declarations.add(this);
         }
     }
 

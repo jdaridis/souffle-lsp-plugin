@@ -17,7 +17,7 @@ public class SouffleRelation extends SouffleSymbol {
         this(name, range, SouffleSymbolType.RELATION_USE);
         if(isDecl){
             kind = SouffleSymbolType.RELATION_DECL;
-            declaration = this;
+            declarations.add(this);
         }
     }
 

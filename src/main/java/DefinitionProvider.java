@@ -20,8 +20,9 @@ public class DefinitionProvider {
         if (context.isPresent()) {
             Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));
             if (currentSymbol.isPresent()) {
-                Optional<SouffleSymbol> declaration = Optional.ofNullable(currentSymbol.get().getDeclaration());
-                declaration.ifPresent(symbol -> declLocations.add(new Location(symbol.getURI(), symbol.getRange())));
+                for(SouffleSymbol symbol :currentSymbol.get().getDeclarations()){
+                    declLocations.add(new Location(symbol.getURI(), symbol.getRange()));
+                }
             }
         }
 

@@ -22,13 +22,18 @@ public class TypeDefinitionProvider {
                 if (currentSymbol.get().getKind() == SouffleSymbolType.VARIABLE) {
                     Optional<SouffleSymbol> declaration = Optional.ofNullable(((SouffleVariable) (currentSymbol.get())).getType());
                     if(declaration.isPresent()){
-                        declaration = Optional.ofNullable(declaration.get().getDeclaration());
-                        declaration.ifPresent(symbol -> declLocations.add(new Location(symbol.getURI(), symbol.getRange())));
+                        for(SouffleSymbol symbol: declaration.get().getDeclarations()){
+                            declLocations.add(new Location(symbol.getURI(), symbol.getRange()));
+                        }
                     }
                 } else if(currentSymbol.get().getKind() == SouffleSymbolType.TYPE_USE){
                     Optional<SouffleSymbol> declaration = currentSymbol;
                     declaration = Optional.ofNullable(declaration.get().getDeclaration());
-                    declaration.ifPresent(symbol -> declLocations.add(new Location(symbol.getURI(), symbol.getRange())));
+                    declaration.ifPresent(symbol1 -> {
+                        for(SouffleSymbol symbol: symbol1.getDeclarations()){
+                            declLocations.add(new Location(symbol.getURI(), symbol.getRange()));
+                        }
+                    });
                 }
             }
         }
