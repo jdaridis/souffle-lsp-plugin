@@ -76,33 +76,39 @@ public class CompletionProvider {
 
     private void findInScope(Map<String, List<SouffleSymbol>> scope, List<CompletionItem> completionItems, Set<String> items) {
         for (List<SouffleSymbol> symbols : scope.values()) {
-            for (SouffleSymbol name : symbols) {
-                if(!items.contains(name.toString())){
-                    items.add(name.toString());
+            for (SouffleSymbol symbol : symbols) {
+                if(!items.contains(symbol.toString())){
+                    items.add(symbol.toString());
                     CompletionItem completionItem = new CompletionItem();
-                    completionItem.setLabel(name.toString());
-                    completionItem.setInsertText(name.getName());
-                    switch (name.getKind()) {
+                    completionItem.setLabel(symbol.toString());
+                    completionItem.setInsertText(symbol.getName());
+                    switch (symbol.getKind()) {
                         case TYPE_DECL:
                             completionItem.setKind(CompletionItemKind.Interface);
                             completionItems.add(completionItem);
                             break;
                         case RELATION_DECL:
-                            if(params.getContext().getTriggerCharacter() != null &&
-                                    params.getContext().getTriggerCharacter().equals(":")){
-                                break;
-                            } else {
-                                completionItem.setKind(CompletionItemKind.Method);
-                                completionItems.add(completionItem);
-                                if(name.getDocumentation() != null){
-                                    completionItem.setDocumentation(name.getDocumentation());
-                                }
-                            }
+                            addCompletionItem(completionItem, symbol, CompletionItemKind.Method, completionItems);
+                            break;
+                        case COMPONENT_INIT:
+                            addCompletionItem(completionItem, symbol, CompletionItemKind.Variable, completionItems);
+                            break;
+                        case COMPONENT_DECL:
+                            addCompletionItem(completionItem, symbol, CompletionItemKind.Class, completionItems);
                             break;
                     }
                 }
+            }
+        }
+    }
 
-
+    private void addCompletionItem(CompletionItem completionItem, SouffleSymbol symbol, CompletionItemKind itemKind, List<CompletionItem> completionItems) {
+        String triggerCharacter = params.getContext().getTriggerCharacter();
+        if (triggerCharacter == null || !triggerCharacter.equals(":")) {
+            completionItem.setKind(itemKind);
+            completionItems.add(completionItem);
+            if(symbol.getDocumentation() != null){
+                completionItem.setDocumentation(symbol.getDocumentation());
             }
         }
     }

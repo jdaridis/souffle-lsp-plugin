@@ -50,18 +50,17 @@ public class PreprocessorParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, "'#include'", "'#define'", "'#if'", "'#else'", "'#ifndef'", 
-			"'#ifdef'", "'#endif'", "'#pragma'", "'#'", null, "'('", "')'", "'\\'", 
-			null, "'...'", null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, "'|'", "'['", "']'", "'$'", "'+'", "'-'", 
-			"','", "':'", "';'", "'<:'", "'<='", "'>='", "'!='", "'='", "'!'", "'*'", 
-			"'@'", "'/'", "'^'", "'%'", "'{'", "'}'", "'<'", "'>'", "':-'", "'.'", 
-			null, null, null, "'autoinc'", "'band'", "'bor'", "'bxor'", "'bnot'", 
-			"'bshl'", "'bshr'", "'bshru'", "'land'", "'lor'", "'lxor'", "'lnot'", 
-			"'output'", "'input'", "'overridable'", "'printsize'", "'eqrel'", "'inline'", 
-			"'no_inline'", "'magic'", "'no_magic'", "'brie'", "'btree_delete'", "'btree'", 
-			"'_'", "'true'", "'false'", "'to_float'", "'to_number'", "'to_string'", 
-			"'to_unsigned'", "'choice-domain'"
+			null, null, null, null, null, "'#if'", "'#else'", "'#ifndef'", "'#ifdef'", 
+			"'#endif'", "'#pragma'", "'#'", null, "'('", "')'", "'\\'", null, "'...'", 
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, "'|'", "'['", "']'", "'$'", "'+'", "'-'", "','", "':'", "';'", 
+			"'<:'", "'<='", "'>='", "'!='", "'='", "'!'", "'*'", "'@'", "'/'", "'^'", 
+			"'%'", "'{'", "'}'", "'<'", "'>'", "':-'", "'.'", null, null, null, "'autoinc'", 
+			"'band'", "'bor'", "'bxor'", "'bnot'", "'bshl'", "'bshr'", "'bshru'", 
+			"'land'", "'lor'", "'lxor'", "'lnot'", "'output'", "'input'", "'overridable'", 
+			"'printsize'", "'eqrel'", "'inline'", "'no_inline'", "'magic'", "'no_magic'", 
+			"'brie'", "'btree_delete'", "'btree'", "'_'", "'true'", "'false'", "'to_float'", 
+			"'to_number'", "'to_string'", "'to_unsigned'", "'choice-domain'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -830,9 +829,9 @@ public class PreprocessorParser extends Parser {
 		}
 		public TerminalNode IFDEF() { return getToken(PreprocessorParser.IFDEF, 0); }
 		public TerminalNode IF_PRE() { return getToken(PreprocessorParser.IF_PRE, 0); }
+		public TerminalNode NUMBER() { return getToken(PreprocessorParser.NUMBER, 0); }
 		public TerminalNode LPAREN() { return getToken(PreprocessorParser.LPAREN, 0); }
 		public TerminalNode RPAREN() { return getToken(PreprocessorParser.RPAREN, 0); }
-		public TerminalNode NUMBER() { return getToken(PreprocessorParser.NUMBER, 0); }
 		public Ifdef_directiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -904,7 +903,15 @@ public class PreprocessorParser extends Parser {
 				setState(106);
 				match(IF_PRE);
 				setState(107);
-				match(IDENT);
+				_la = _input.LA(1);
+				if ( !(_la==IDENT || _la==NUMBER) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
 				setState(108);
 				program_text();
 				setState(110);
@@ -1672,7 +1679,7 @@ public class PreprocessorParser extends Parser {
 		"\u0000cd\u0005\u0010\u0000\u0000df\u0003\u0002\u0001\u0000eg\u0003\n\u0005"+
 		"\u0000fe\u0001\u0000\u0000\u0000fg\u0001\u0000\u0000\u0000gh\u0001\u0000"+
 		"\u0000\u0000hi\u0005\t\u0000\u0000i}\u0001\u0000\u0000\u0000jk\u0005\u0005"+
-		"\u0000\u0000kl\u0005\u0010\u0000\u0000ln\u0003\u0002\u0001\u0000mo\u0003"+
+		"\u0000\u0000kl\u0007\u0000\u0000\u0000ln\u0003\u0002\u0001\u0000mo\u0003"+
 		"\n\u0005\u0000nm\u0001\u0000\u0000\u0000no\u0001\u0000\u0000\u0000op\u0001"+
 		"\u0000\u0000\u0000pq\u0005\t\u0000\u0000q}\u0001\u0000\u0000\u0000rs\u0005"+
 		"\u0005\u0000\u0000st\u0005\r\u0000\u0000tu\u0007\u0000\u0000\u0000uv\u0005"+

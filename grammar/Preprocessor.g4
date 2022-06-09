@@ -3,8 +3,10 @@ grammar Preprocessor;
 
 NEW_LINE: [\n\r];
 WS : [ \t]+ -> skip; // skip spaces, tabs, newlines
-INCLUDE: '#include';
-DEFINE: '#define';
+INCLUDE: '#include'
+         | '# include';
+DEFINE: '#define'
+        | '# define';
 IF_PRE: '#if';
 ELSE: '#else';
 IFNDEF: '#ifndef';
@@ -172,7 +174,7 @@ pragma_directive: PREPROCESSOR_PRAGMA IDENT;
 
 ifdef_directive: IFNDEF IDENT program_text else_directive? ENDIF
                 | IFDEF IDENT program_text else_directive? ENDIF
-                | IF_PRE IDENT program_text else_directive? ENDIF
+                | IF_PRE (IDENT|NUMBER) program_text else_directive? ENDIF
                 | IF_PRE LPAREN (IDENT|NUMBER) RPAREN program_text else_directive? ENDIF
                 ;
 
