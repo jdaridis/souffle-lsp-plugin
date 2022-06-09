@@ -34,12 +34,12 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         return documentContext;
     }
 
-    public Range toRange(ParserRuleContext ctx){
+    public static Range toRange(ParserRuleContext ctx){
         Position start = new Position(ctx.getStart().getLine() - 1, ctx.getStart().getCharPositionInLine());
         Position end = new Position(ctx.getStop().getLine() - 1, ctx.getStop().getCharPositionInLine() + ctx.getStop().getText().length());
         return new Range(start, end);
     }
-    public Range toRange(TerminalNode ctx){
+    public static Range toRange(TerminalNode ctx){
         Position start = new Position(ctx.getSymbol().getLine() - 1, ctx.getSymbol().getCharPositionInLine());
         Position end = new Position(ctx.getSymbol().getLine() - 1, ctx.getSymbol().getCharPositionInLine() + ctx.getSymbol().getText().length());
         return new Range(start, end);
