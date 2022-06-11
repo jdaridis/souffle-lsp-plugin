@@ -1,4 +1,8 @@
 import org.eclipse.lsp4j.*;
+import parsing.symbols.SouffleContext;
+import parsing.symbols.SouffleContextType;
+import parsing.symbols.SouffleProjectContext;
+import parsing.symbols.SouffleSymbol;
 
 import java.util.*;
 

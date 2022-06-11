@@ -3,6 +3,10 @@ import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.symbols.SouffleContext;
+import parsing.symbols.SouffleProjectContext;
+import parsing.symbols.SouffleSymbol;
+import parsing.symbols.SouffleSymbolType;
 
 import java.util.ArrayList;
 import java.util.List;

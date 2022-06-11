@@ -1,5 +1,5 @@
 // Generated from /home/john/IdeaProjects/Souffle_Ide_Plugin/grammar/Preprocessor.g4 by ANTLR 4.10.1
-package preprocessor;
+package parsing.preprocessor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**

@@ -1,5 +1,5 @@
 // Generated from /home/john/IdeaProjects/Souffle_Ide_Plugin/grammar/Souffle.g4 by ANTLR 4.10.1
-package visitors;
+package parsing.souffle;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**

@@ -1,4 +1,8 @@
 import org.eclipse.lsp4j.*;
+import parsing.symbols.SouffleContext;
+import parsing.symbols.SouffleProjectContext;
+import parsing.symbols.SouffleSymbol;
+import parsing.symbols.SouffleSymbolType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

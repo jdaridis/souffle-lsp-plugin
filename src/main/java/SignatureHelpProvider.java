@@ -2,8 +2,10 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.eclipse.lsp4j.*;
-import visitors.SouffleLexer;
-import visitors.SouffleParser;
+import parsing.SouffleCurrentTokenError;
+import parsing.souffle.SouffleLexer;
+import parsing.souffle.SouffleParser;
+import parsing.symbols.*;
 
 import java.util.*;
 

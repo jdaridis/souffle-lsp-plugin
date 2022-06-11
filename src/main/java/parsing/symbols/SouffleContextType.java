@@ -1,3 +1,5 @@
+package parsing.symbols;
+
 public enum SouffleContextType {
     DOCUMENT, //Whole document context
     RELATION_DECL, //Relation context (Including args)

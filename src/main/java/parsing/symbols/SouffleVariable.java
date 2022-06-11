@@ -1,3 +1,5 @@
+package parsing.symbols;
+
 import org.eclipse.lsp4j.Range;
 
 public class SouffleVariable extends SouffleSymbol {

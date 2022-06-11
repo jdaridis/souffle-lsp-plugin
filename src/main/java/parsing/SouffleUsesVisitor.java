@@ -1,9 +1,12 @@
+package parsing;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import visitors.SouffleBaseVisitor;
-import visitors.SouffleParser;
+import parsing.souffle.SouffleBaseVisitor;
+import parsing.souffle.SouffleParser;
+import parsing.symbols.*;
 
 import java.util.*;
 

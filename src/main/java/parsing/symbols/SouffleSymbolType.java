@@ -1,3 +1,5 @@
+package parsing.symbols;
+
 public enum SouffleSymbolType {
     RELATION_DECL,
     RELATION_USE,

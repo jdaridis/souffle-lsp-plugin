@@ -1,5 +1,6 @@
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.symbols.*;
 
 import java.util.*;
 

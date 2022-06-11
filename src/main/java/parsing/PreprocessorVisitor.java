@@ -1,8 +1,9 @@
-import preprocessor.PreprocessorBaseVisitor;
-import preprocessor.PreprocessorParser;
+package parsing;
+
+import parsing.preprocessor.PreprocessorBaseVisitor;
+import parsing.preprocessor.PreprocessorParser;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class PreprocessorVisitor extends PreprocessorBaseVisitor<Void> {

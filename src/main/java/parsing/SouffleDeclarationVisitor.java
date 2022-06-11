@@ -1,12 +1,15 @@
+package parsing;
+
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import visitors.SouffleBaseVisitor;
-import visitors.SouffleLexer;
-import visitors.SouffleParser;
+import parsing.souffle.SouffleBaseVisitor;
+import parsing.souffle.SouffleLexer;
+import parsing.souffle.SouffleParser;
+import parsing.symbols.*;
 
 import java.util.ArrayDeque;
 import java.util.List;

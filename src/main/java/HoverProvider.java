@@ -1,4 +1,7 @@
 import org.eclipse.lsp4j.*;
+import parsing.symbols.SouffleContext;
+import parsing.symbols.SouffleProjectContext;
+import parsing.symbols.SouffleSymbol;
 
 public class HoverProvider {
 

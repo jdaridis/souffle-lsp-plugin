@@ -2,10 +2,12 @@ import org.antlr.v4.runtime.*;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
-import preprocessor.PreprocessorLexer;
-import preprocessor.PreprocessorParser;
-import visitors.SouffleLexer;
-import visitors.SouffleParser;
+import parsing.*;
+import parsing.preprocessor.PreprocessorLexer;
+import parsing.preprocessor.PreprocessorParser;
+import parsing.souffle.SouffleLexer;
+import parsing.souffle.SouffleParser;
+import parsing.symbols.SouffleProjectContext;
 
 import java.io.IOException;
 import java.net.URI;
@@ -39,7 +41,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
-        souffleParser.setErrorHandler(new SouffleError());
+        souffleParser.setErrorHandler(new parsing.SouffleError());
         souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
     }*/
 

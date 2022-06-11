@@ -3,6 +3,7 @@ import org.eclipse.lsp4j.DocumentSymbolParams;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.SymbolKind;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.symbols.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,8 +71,8 @@ public class DocumentSymbolProvider {
                         rule.setSelectionRange(symbol.getRange());
                         children.add(rule);
 
-/*                        SouffleRule souffleRule = (SouffleRule) symbol;
-                        for (SouffleSymbol ruleBody : souffleRule.getBody()) {
+/*                        parsing.symbols.SouffleRule souffleRule = (parsing.symbols.SouffleRule) symbol;
+                        for (parsing.symbols.SouffleSymbol ruleBody : souffleRule.getBody()) {
                             DocumentSymbol body = new DocumentSymbol();
 //                                body.setDetail("Test symbol");
                             body.setKind(SymbolKind.Property);

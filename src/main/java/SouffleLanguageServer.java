@@ -1,3 +1,4 @@
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -7,10 +8,12 @@ import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import preprocessor.PreprocessorLexer;
-import preprocessor.PreprocessorParser;
-import visitors.SouffleLexer;
-import visitors.SouffleParser;
+import parsing.*;
+import parsing.preprocessor.PreprocessorLexer;
+import parsing.preprocessor.PreprocessorParser;
+import parsing.souffle.SouffleLexer;
+import parsing.souffle.SouffleParser;
+import parsing.symbols.SouffleProjectContext;
 
 import java.io.IOException;
 import java.net.URI;
@@ -109,6 +112,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     .collect(Collectors.toList());
             // printing the folder names
             for (String s : fileNamesList) {
+                LSClientLogger.getInstance().clearDiagnostics(Path.of(s).toUri().toString());
                 try {
 //                    System.err.println("Preprocess " + s);
                     preprocessInput(s);
@@ -152,6 +156,8 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         PreprocessorLexer preprocessorLexer = new PreprocessorLexer(input);
         CommonTokenStream preprocessorTokens = new CommonTokenStream(preprocessorLexer);
         PreprocessorParser preprocessorParser = new PreprocessorParser(preprocessorTokens);
+        preprocessorParser.removeErrorListeners();
+        preprocessorParser.setErrorHandler(new BailErrorStrategy());
         PreprocessorVisitor preprocessorVisitor = new PreprocessorVisitor(projectContext.defines);
         preprocessorVisitor.visit(preprocessorParser.program());
     }

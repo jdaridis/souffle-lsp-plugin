@@ -3,6 +3,7 @@ import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TypeDefinitionParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.symbols.*;
 
 import java.util.ArrayList;
 import java.util.List;
