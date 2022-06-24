@@ -1,4 +1,5 @@
 import org.eclipse.lsp4j.*;
+import parsing.Utils;
 import parsing.symbols.SouffleContext;
 import parsing.symbols.SouffleContextType;
 import parsing.symbols.SouffleProjectContext;
@@ -14,7 +15,7 @@ public class ReferenceProvider {
         return getReferences(params, true);
     }
     public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params, boolean includeComponent) {
-        Range cursor = new Range(params.getPosition(), params.getPosition());
+        Range cursor = Utils.positionToRange(params.getPosition());
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         Set<Location> references = new HashSet<>();
         if (context != null) {

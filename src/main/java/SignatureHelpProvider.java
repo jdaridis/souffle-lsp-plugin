@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.eclipse.lsp4j.*;
 import parsing.SouffleCurrentTokenError;
+import parsing.Utils;
 import parsing.souffle.SouffleLexer;
 import parsing.souffle.SouffleParser;
 import parsing.symbols.*;
@@ -14,7 +15,7 @@ public class SignatureHelpProvider {
     }
 
     public SignatureHelp getSignatureHelp(SignatureHelpParams params) {
-        Range cursor = new Range(params.getPosition(), params.getPosition());
+        Range cursor = Utils.positionToRange(params.getPosition());
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
 
         int activeParam = 0;

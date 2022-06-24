@@ -1,5 +1,6 @@
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.Utils;
 import parsing.symbols.*;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class CompletionProvider {
     }
 
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
-        Range range = new Range(position, position);
+        Range range = Utils.positionToRange(position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
 //        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
 //            inArgs = true;

@@ -25,18 +25,7 @@ public class SouffleContext {
         if(symbol != null)
             symbols.add(symbol);
         this.scope = new HashMap<>();
-        this.symbolRange = new TreeMap<>((range1, t1) -> {
-            Position currentPos = range1.getStart();
-            if(Positions.isBefore(currentPos, t1.getStart())){
-                return -1;
-            } else if(!Positions.isBefore(currentPos, t1.getEnd())){
-                return 1;
-            }
-            if(range1.getStart().equals(range1.getEnd()))
-                return 0;
-            else
-                return 1;
-        });
+        this.symbolRange = new TreeMap<>(new RangeComparator());
     }
 
     public SouffleContext(SouffleContextType kind, Range range) {
@@ -45,18 +34,7 @@ public class SouffleContext {
 
     public void addToSubContext(SouffleContext context){
         if(this.subContext == null){
-            this.subContext = new TreeMap<>((range1, t1) -> {
-                Position currentPos = range1.getStart();
-                if(Positions.isBefore(currentPos, t1.getStart())){
-                    return -1;
-                } else if(!Positions.isBefore(currentPos, t1.getEnd())){
-                    return 1;
-                }
-                if(range1.getStart().equals(range1.getEnd()))
-                    return 0;
-                else
-                    return 1;
-            });
+            this.subContext = new TreeMap<>(new RangeComparator());
         }
         context.parent = this;
         subContext.put(context.range, context);
@@ -143,5 +121,21 @@ public class SouffleContext {
                 + range.toString() + " "
                 + symbols.toString() + " "
                 + scope.toString();
+    }
+
+    public static class RangeComparator implements Comparator<Range> {
+        @Override
+        public int compare(Range range1, Range t1) {
+            Position currentPos = range1.getStart();
+            if (Positions.isBefore(currentPos, t1.getStart())) {
+                return -1;
+            } else if (!Positions.isBefore(currentPos, t1.getEnd())) {
+                return 1;
+            }
+            if (range1.getStart().equals(range1.getEnd()))
+                return 0;
+            else
+                return 1;
+        }
     }
 }

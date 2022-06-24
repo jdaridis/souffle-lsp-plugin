@@ -1,4 +1,5 @@
 import org.eclipse.lsp4j.*;
+import parsing.Utils;
 import parsing.symbols.SouffleContext;
 import parsing.symbols.SouffleProjectContext;
 import parsing.symbols.SouffleSymbol;
@@ -9,7 +10,7 @@ public class HoverProvider {
     }
 
     public Hover getHover(HoverParams params) {
-        Range cursor = new Range(params.getPosition(), params.getPosition());
+        Range cursor = Utils.positionToRange(params.getPosition());
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         System.err.println("Context " + context);
         Hover hover = null;

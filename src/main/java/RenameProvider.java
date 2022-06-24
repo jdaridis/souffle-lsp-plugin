@@ -1,4 +1,5 @@
 import org.eclipse.lsp4j.*;
+import parsing.Utils;
 import parsing.symbols.SouffleContext;
 import parsing.symbols.SouffleProjectContext;
 import parsing.symbols.SouffleSymbol;
@@ -19,7 +20,7 @@ public class RenameProvider {
         Map<String, List<TextEdit>> textEdits = new HashMap<String, List<TextEdit>>();
         Position cursorPosition = params.getPosition();
         cursorPosition.setCharacter(cursorPosition.getCharacter() - 1);
-        Range cursor = new Range(cursorPosition, cursorPosition);
+        Range cursor = Utils.positionToRange(cursorPosition);
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         if (context != null) {
             SouffleSymbol currentSymbol = context.getSymbol(cursor);

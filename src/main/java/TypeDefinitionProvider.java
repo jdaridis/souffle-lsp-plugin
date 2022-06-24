@@ -3,6 +3,7 @@ import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TypeDefinitionParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.Utils;
 import parsing.symbols.*;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class TypeDefinitionProvider {
 
     public Either<List<? extends Location>, List<? extends LocationLink>> getTypeDefinition(TypeDefinitionParams params) {
         List<Location> declLocations = new ArrayList<Location>();
-        Range cursor = new Range(params.getPosition(), params.getPosition());
+        Range cursor = Utils.positionToRange(params.getPosition());
         Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor));
         if (context.isPresent()) {
             Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));

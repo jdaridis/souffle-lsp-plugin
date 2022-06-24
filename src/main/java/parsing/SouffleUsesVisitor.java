@@ -1,7 +1,5 @@
 package parsing;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import parsing.souffle.SouffleBaseVisitor;
@@ -30,9 +28,6 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     }
 
     public List<SouffleSymbol> findDecl(SouffleSymbol symbol){
-//        if(symbol.getDeclaration() != null){
-//            return symbol.getDeclaration();
-//        }
         List<SouffleSymbol> declarations = new ArrayList<>();
         for(SouffleContext context: currentContext){
             SouffleSymbol decl = filterDecl(symbol, context);
@@ -95,25 +90,10 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         return decl.orElse(null);
     }
 
-    public static Range toRange(ParserRuleContext ctx){
-        Position start = new Position(ctx.getStart().getLine() - 1, ctx.getStart().getCharPositionInLine());
-        Position end = new Position(ctx.getStop().getLine() - 1, ctx.getStop().getCharPositionInLine() + ctx.getStop().getText().length());
-        return new Range(start, end);
-    }
-    public static Range toRange(TerminalNode ctx){
-        Position start = new Position(ctx.getSymbol().getLine() - 1, ctx.getSymbol().getCharPositionInLine());
-        Position end = new Position(ctx.getSymbol().getLine() - 1, ctx.getSymbol().getCharPositionInLine() + ctx.getSymbol().getText().length());
-        return new Range(start, end);
-    }
-
     @Override
     public SouffleSymbol visitProgram(SouffleParser.ProgramContext ctx) {
         currentContext.push(documentContext);
-//        System.err.println(ctx.toStringTree(parser));
-
         super.visitProgram(ctx);
-
-//        System.err.println(documentContext);
         return null;
     }
 
@@ -122,7 +102,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
         Position start = new Position(ctx.getStart().getLine() - 1, ctx.getStart().getCharPositionInLine());
-        SouffleContext componentContext = documentContext.getFromSubContext(new Range(start, start));
+        SouffleContext componentContext = documentContext.getFromSubContext(Utils.positionToRange(start));
         currentContext.push(componentContext);
         SouffleComponent component = (SouffleComponent) componentContext.getContextSymbols().get(0);
         ctx.component_head().accept(this);
@@ -138,7 +118,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     public SouffleSymbol visitComponent_init(SouffleParser.Component_initContext ctx) {
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
-        SouffleContext componentInitContext = new SouffleContext(SouffleContextType.COMPONENT, toRange(ctx));
+        SouffleContext componentInitContext = new SouffleContext(SouffleContextType.COMPONENT, Utils.toRange(ctx));
 
         SouffleSymbol parent = ctx.component_type().accept(this);
 
@@ -146,7 +126,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         List<SouffleSymbol> symbolList = findDecl(componentType);
         componentType.setDeclaration(symbolList);
         SouffleSymbol decl = symbolList.stream().findFirst().orElse(null);
-        SouffleVariable component = new SouffleVariable(ctx.IDENT().getText(),componentType,null, toRange(ctx.IDENT()), true);
+        SouffleVariable component = new SouffleVariable(ctx.IDENT().getText(),componentType,null, Utils.toRange(ctx.IDENT()), true);
         component.setDeclaration(component);
         component.setURI(documentUri);
         if(decl != null){
@@ -175,9 +155,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             symbol.setDeclaration(souffleSymbolList);
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
             component.setParent((SouffleComponent) decl);
-//            System.err.println("Component parent " + component.getParent().getScope());
             component.addToScope(component.getParent().getScope());
-//            System.err.println("Component parent " + component.getScope());
             souffleContext.addContextSymbol(symbol);
             souffleContext.addToContextScope(component.getParent().getScope());
         }
@@ -188,14 +166,14 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
     @Override
     public SouffleSymbol visitComponent_type(SouffleParser.Component_typeContext ctx) {
         if(ctx.IDENT() != null)
-            return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+            return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx.IDENT()));
         else
-            return new SouffleSymbol(ctx.PREPROCESSOR_ID().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.PREPROCESSOR_ID()));
+            return new SouffleSymbol(ctx.PREPROCESSOR_ID().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx.PREPROCESSOR_ID()));
     }
 
     @Override
     public SouffleSymbol visitDirective_head(SouffleParser.Directive_headContext ctx) {
-        SouffleContext directiveContext = new SouffleContext(SouffleContextType.DIRECTIVE,toRange(ctx));
+        SouffleContext directiveContext = new SouffleContext(SouffleContextType.DIRECTIVE, Utils.toRange(ctx));
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
         documentContext.addToSubContext(directiveContext);
@@ -233,7 +211,6 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             declSymbol.getArgs().get(i).getType().setDeclaration(findDecl(arg.getType()));
             i++;
         }
-//        currentContext.pop();
         return null;
     }
 
@@ -246,15 +223,13 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             currentScope.push(new ArrayDeque<>());
             ctx.union_type_list().accept(this);
             ArrayDeque<SouffleSymbol> types = currentScope.pop();
-            List<SouffleSymbol> souffleSymbolList = findDecl(new SouffleType(ctx.IDENT().getText(), toRange(ctx)));
+            List<SouffleSymbol> souffleSymbolList = findDecl(new SouffleType(ctx.IDENT().getText(), Utils.toRange(ctx)));
             SouffleType declSymbol = (SouffleType) souffleSymbolList.stream().findFirst().get();
             int i=0;
             for(SouffleSymbol type: types){
                 declSymbol.getUnion().get(i).setDeclaration(findDecl(type));
                 i++;
             }
-
-//            types.forEach(symbol -> symbol.setDeclaration(findDecl(symbol)));
         }
 
         return null;
@@ -262,7 +237,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitRelation_names(SouffleParser.Relation_namesContext ctx) {
-        SouffleSymbol relationName = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
+        SouffleSymbol relationName = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx));
         assert currentScope.peek() != null;
         currentScope.peek().push(relationName);
         return super.visitRelation_names(ctx);
@@ -270,7 +245,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitRule_def(SouffleParser.Rule_defContext ctx) {
-        SouffleContext ruleContext = new SouffleContext(SouffleContextType.RULE,toRange(ctx));
+        SouffleContext ruleContext = new SouffleContext(SouffleContextType.RULE, Utils.toRange(ctx));
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
         currentContext.push(ruleContext);
@@ -284,11 +259,14 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             SouffleRelation relationSymbol = (SouffleRelation) symbol;
             rule = new SouffleRule(symbol.getName(), symbol.getRange());
             rule.setComponent(symbol.getComponent());
+
             List<SouffleSymbol> souffleSymbolList = findDecl(rule);
             rule.setDeclaration(souffleSymbolList);
+
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
             documentContext.addToContextScope(rule);
             ruleContext.addContextSymbol(rule);
+
             List<SouffleVariable> args = relationSymbol.getArgs();
             for (int i = 0; i < args.size(); i++) {
                 SouffleVariable arg = args.get(i);
@@ -321,7 +299,9 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             bodySymbol.setDeclaration(souffleSymbolList);
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
 
-            if(decl != null && bodySymbol.getKind() == SouffleSymbolType.RELATION_USE && decl.getKind() == SouffleSymbolType.RELATION_DECL){
+            if(decl != null
+                    && bodySymbol.getKind() == SouffleSymbolType.RELATION_USE
+                    && decl.getKind() == SouffleSymbolType.RELATION_DECL){
                 List<SouffleVariable> args = ((SouffleRelation) bodySymbol).getArgs();
                 for (int i = 0; i < args.size(); i++) {
                     SouffleVariable arg = args.get(i);
@@ -396,7 +376,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitConstraint(SouffleParser.ConstraintContext ctx) {
-        SouffleConstraint constraint = new SouffleConstraint(ctx.getText(), toRange(ctx));
+        SouffleConstraint constraint = new SouffleConstraint(ctx.getText(), Utils.toRange(ctx));
         if(!ctx.arg().isEmpty()){
             for (int i = 0; i < ctx.arg().size(); i++) {
                 currentScope.push(new ArrayDeque<>());
@@ -417,7 +397,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         }
         assert currentContext.peek() != null;
         SouffleContext documentContext = currentContext.peek();
-        SouffleContext factContext = new SouffleContext(SouffleContextType.RELATION_USE,toRange(ctx));
+        SouffleContext factContext = new SouffleContext(SouffleContextType.RELATION_USE, Utils.toRange(ctx));
         documentContext.addToSubContext(factContext);
         currentContext.push(factContext);
         SouffleRelation fact = (SouffleRelation) ctx.atom().accept(this);
@@ -479,14 +459,13 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
                 }
             }
         } else {
-            SouffleVariable variable = new SouffleVariable(ctx.getText(), toRange(ctx));
+            SouffleVariable variable = new SouffleVariable(ctx.getText(), Utils.toRange(ctx));
             if(ctx.IDENT() == null){
                 variable.setValue(ctx.getText());
             }
             assert currentScope.peek() != null;
             currentScope.peek().push(variable);
         }
-//        super.visitArg(ctx);
         return null;
     }
 
@@ -553,7 +532,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
         SouffleType type = new SouffleType(typeSymbol.getName(), typeSymbol.getRange());
         type.setComponent(typeSymbol.getComponent());
-        return new SouffleVariable(name, type, toRange(ctx.IDENT()));
+        return new SouffleVariable(name, type, Utils.toRange(ctx.IDENT()));
     }
     @Override
     public SouffleSymbol visitQualified_name(SouffleParser.Qualified_nameContext ctx) {
@@ -561,7 +540,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             return ctx.preprocessor_macro().accept(this);
         }
 
-        SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, toRange(ctx.IDENT()));
+        SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx.IDENT()));
         if(ctx.qualified_name() != null){
             assert currentContext.peek() != null;
             SouffleContext factContext = currentContext.peek();
@@ -583,7 +562,6 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
     @Override
     public SouffleSymbol visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx) {
-
-        return new SouffleSymbol(ctx.getText(), SouffleSymbolType.VARIABLE, toRange(ctx));
+        return new SouffleSymbol(ctx.getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx));
     }
 }

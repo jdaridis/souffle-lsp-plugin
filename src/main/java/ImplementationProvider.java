@@ -3,6 +3,7 @@ import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import parsing.Utils;
 import parsing.symbols.SouffleContext;
 import parsing.symbols.SouffleProjectContext;
 import parsing.symbols.SouffleSymbol;
@@ -18,7 +19,7 @@ public class ImplementationProvider {
     }
 
     public Either<List<? extends Location>, List<? extends LocationLink>> getImplementations(ImplementationParams params) {
-        Range cursor = new Range(params.getPosition(), params.getPosition());
+        Range cursor = Utils.positionToRange(params.getPosition());
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         List<Location> references = new ArrayList<Location>();
         if (context != null) {

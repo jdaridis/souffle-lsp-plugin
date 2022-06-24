@@ -2,6 +2,7 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.eclipse.lsp4j.*;
+import parsing.Utils;
 
 public class SouffleSyntaxErrorListener extends BaseErrorListener {
     private final String uri;
@@ -13,7 +14,7 @@ public class SouffleSyntaxErrorListener extends BaseErrorListener {
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         Position position = new Position(line - 1, charPositionInLine);
-        Range range = new Range(position, position);
+        Range range = Utils.positionToRange(position);
         LSClientLogger.getInstance().reportError(range, uri, msg);
     }
 }
