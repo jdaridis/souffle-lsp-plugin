@@ -6,7 +6,7 @@ export function activate(context: vscode.ExtensionContext) {
 	extensionInstance.setContext(context);
 	//Initialize the LS Client extension instance.
 	extensionInstance.init().catch((error)=> {
-		console.log("Failed to activate Ballerina extension. " + (error));
+		console.log("Failed to activate Souffle extension. " + (error));
 	})
 }
 

@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
- * Standard IO Launcher for Ballerina Language Server.
+ * Standard IO Launcher for Souffle Language Server.
  */
 public class SouffleLanguageServerLauncher {
 
