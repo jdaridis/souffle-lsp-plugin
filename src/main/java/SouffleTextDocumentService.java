@@ -112,6 +112,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         this.clientLogger.clearDiagnostics(didSaveTextDocumentParams.getTextDocument().getUri());
         try {
             parseInput(didSaveTextDocumentParams.getTextDocument().getUri());
+            CompletionProvider.state = CompletionState.IDLE;
             this.clientLogger.logMessage("Operation '" + "text/didSave" +
                     "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
         } catch (IOException | URISyntaxException e) {

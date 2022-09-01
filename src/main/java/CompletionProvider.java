@@ -4,7 +4,10 @@ import parsing.Utils;
 import parsing.symbols.*;
 
 import java.util.*;
-
+enum CompletionState{
+    IDLE,
+    IN_ARGS
+}
 public class CompletionProvider {
 
     private static final String[] directives = new String[]{
@@ -24,7 +27,7 @@ public class CompletionProvider {
             ".numbertype",
     };
 
-    static boolean inArgs = false;
+    static CompletionState state = CompletionState.IDLE;
     private final CompletionParams params;
     private final String documentUri;
     private final Position position;
@@ -38,42 +41,52 @@ public class CompletionProvider {
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
         Range range = Utils.positionToRange(position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
-//        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
-//            inArgs = true;
-//            return Either.forLeft(completionItems);
-//        }
-//
-        Set<String> items = new HashSet<>();
-        SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range);
-        boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
-        if(directiveTrigger){
-            for (String directive : directives) {
-                CompletionItem completionItem = new CompletionItem();
-                completionItem.setLabel(directive);
-                completionItem.setInsertText(directive.substring(1));
-                completionItem.setKind(CompletionItemKind.Keyword);
-                completionItems.add(completionItem);
-                if (directive.equals(".symboltype") || directive.equals(".numbertype")) {
-                    completionItem.setTags(List.of(CompletionItemTag.Deprecated));
+        System.err.println("Trigger " + params.getContext().getTriggerCharacter());
+        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
+            state = CompletionState.IN_ARGS;
+            return Either.forLeft(completionItems);
+        }
+        switch (state){
+            case IDLE:
+                Set<String> items = new HashSet<>();
+                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range);
+                boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
+                if(directiveTrigger){
+                    for (String directive : directives) {
+                        CompletionItem completionItem = new CompletionItem();
+                        completionItem.setLabel(directive);
+                        completionItem.setInsertText(directive.substring(1));
+                        completionItem.setKind(CompletionItemKind.Keyword);
+                        completionItems.add(completionItem);
+                        if (directive.equals(".symboltype") || directive.equals(".numbertype")) {
+                            completionItem.setTags(List.of(CompletionItemTag.Deprecated));
+                        }
+                    }
                 }
-            }
-        }
 
-        for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
-            findInScope(documentContext.getScope(), completionItems, items);
-        }
-        if(context != null){
-            if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
-                context = context.getParent();
-            }
-            if(context.getKind() == SouffleContextType.COMPONENT){
-                findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), completionItems, items);
-            }
-        }
+                for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
+                    findInScope(documentContext.getScope(), completionItems, items);
+                }
+                if(context != null){
+                    if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
+                        context = context.getParent();
+                    }
+                    if(context.getKind() == SouffleContextType.COMPONENT){
+                        findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), completionItems, items);
+                    }
+                }
 
-        LSClientLogger.getInstance().logMessage("Operation '" + "text/completion");
+                LSClientLogger.getInstance().logMessage("Operation '" + "text/completion");
 
-        return Either.forLeft(completionItems);
+                return Either.forLeft(completionItems);
+            case IN_ARGS:
+                if( params.getContext().getTriggerCharacter() != null &&
+                        (params.getContext().getTriggerCharacter().equals(")") || params.getContext().getTriggerCharacter().equals("."))){
+                    state = CompletionState.IDLE;
+                }
+                return Either.forLeft(completionItems);
+        }
+        return null;
     }
 
     private void findInScope(Map<String, List<SouffleSymbol>> scope, List<CompletionItem> completionItems, Set<String> items) {
