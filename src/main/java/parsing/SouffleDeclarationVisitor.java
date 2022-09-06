@@ -69,9 +69,9 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
     @Override
     public SouffleSymbol visitComponent_type(SouffleParser.Component_typeContext ctx) {
         if(ctx.IDENT() != null)
-            return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx.IDENT()));
+            return new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.ATTRIBUTE, Utils.toRange(ctx.IDENT()));
         else
-            return new SouffleSymbol(ctx.PREPROCESSOR_ID().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx.PREPROCESSOR_ID()));
+            return new SouffleSymbol(ctx.PREPROCESSOR_ID().getText(), SouffleSymbolType.ATTRIBUTE, Utils.toRange(ctx.PREPROCESSOR_ID()));
     }
 
     @Override
@@ -95,13 +95,13 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
             SouffleRelation relation = new SouffleRelation(relationName.getName(), relationName.getRange(), true);
             relation.setDocumentation(documentation);
             for(SouffleSymbol attribute: attributes){
-                SouffleVariable arg = (SouffleVariable) attribute;
+                SouffleAttribute arg = (SouffleAttribute) attribute;
                 relation.addArg(arg);
 
                 if(firstPass){
                     Range varRange = new Range(arg.getRange().getStart(), arg.getRange().getEnd());
                     Range typeRange = new Range(arg.getType().getRange().getStart(), arg.getType().getRange().getEnd());
-                    SouffleContext variableContext = new SouffleContext(SouffleContextType.VARIABLE, varRange);
+                    SouffleContext variableContext = new SouffleContext(SouffleContextType.ATTRIBUTE, varRange);
                     SouffleContext typeContext = new SouffleContext(SouffleContextType.TYPE, typeRange);
                     variableContext.addContextSymbol(arg);
                     typeContext.addContextSymbol(arg.getType());
@@ -125,7 +125,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
 
     @Override
     public SouffleSymbol visitRelation_names(SouffleParser.Relation_namesContext ctx) {
-        SouffleSymbol relationName = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx));
+        SouffleSymbol relationName = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.ATTRIBUTE, Utils.toRange(ctx));
         assert currentScope.peek() != null;
         currentScope.peek().push(relationName);
         return super.visitRelation_names(ctx);
@@ -187,7 +187,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
 
     @Override
     public SouffleSymbol visitNon_empty_attributes(SouffleParser.Non_empty_attributesContext ctx) {
-        SouffleVariable attribute = (SouffleVariable) ctx.attribute().accept(this);
+        SouffleAttribute attribute = (SouffleAttribute) ctx.attribute().accept(this);
         assert currentScope.peek() != null;
         currentScope.peek().push(attribute);
         return super.visitNon_empty_attributes(ctx);
@@ -200,7 +200,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
 
         SouffleType type = new SouffleType(typeSymbol.getName(), typeSymbol.getRange());
         type.setComponent(typeSymbol.getComponent());
-        return new SouffleVariable(name, type, Utils.toRange(ctx.IDENT()));
+        return new SouffleAttribute(name, type, Utils.toRange(ctx.IDENT()));
     }
 
     @Override
@@ -209,7 +209,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
             return ctx.preprocessor_macro().accept(this);
         }
 
-        SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx));
+        SouffleSymbol symbol = new SouffleSymbol(ctx.IDENT().getText(), SouffleSymbolType.ATTRIBUTE, Utils.toRange(ctx));
         if(ctx.qualified_name() != null){
             SouffleSymbol component = ctx.qualified_name().accept(this);
             symbol.setComponent(component);
@@ -219,6 +219,6 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
 
     @Override
     public SouffleSymbol visitPreprocessor_macro(SouffleParser.Preprocessor_macroContext ctx) {
-        return new SouffleSymbol(ctx.getText(), SouffleSymbolType.VARIABLE, Utils.toRange(ctx));
+        return new SouffleSymbol(ctx.getText(), SouffleSymbolType.ATTRIBUTE, Utils.toRange(ctx));
     }
 }

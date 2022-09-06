@@ -45,11 +45,11 @@ public class RenameProvider {
 //                                System.err.println(reference);
                         }
                         break;
-                    case VARIABLE:
+                    case ATTRIBUTE:
                         textEdits.put(params.getTextDocument().getUri(), new ArrayList<TextEdit>());
                         List<SouffleSymbol> vars = context.getSymbols(currentSymbol.getName())
                                 .stream()
-                                .filter(symbol -> symbol.getKind() == SouffleSymbolType.VARIABLE)
+                                .filter(symbol -> symbol.getKind() == SouffleSymbolType.ATTRIBUTE)
                                 .collect(Collectors.toList());
                         for (SouffleSymbol var : vars) {
                             TextEdit textEdit = new TextEdit();

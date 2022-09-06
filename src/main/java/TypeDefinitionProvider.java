@@ -21,8 +21,8 @@ public class TypeDefinitionProvider {
         if (context.isPresent()) {
             Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));
             if (currentSymbol.isPresent()) {
-                if (currentSymbol.get().getKind() == SouffleSymbolType.VARIABLE) {
-                    Optional<SouffleSymbol> declaration = Optional.ofNullable(((SouffleVariable) (currentSymbol.get())).getType());
+                if (currentSymbol.get().getKind() == SouffleSymbolType.ATTRIBUTE) {
+                    Optional<SouffleSymbol> declaration = Optional.ofNullable(((SouffleAttribute) (currentSymbol.get())).getType());
                     if(declaration.isPresent()){
                         for(SouffleSymbol symbol: declaration.get().getDeclarations()){
                             declLocations.add(new Location(symbol.getURI(), symbol.getRange()));

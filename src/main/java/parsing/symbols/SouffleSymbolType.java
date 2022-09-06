@@ -9,6 +9,6 @@ public enum SouffleSymbolType {
     COMPONENT_USE,
     TYPE_DECL,
     TYPE_USE,
-    VARIABLE,
+    ATTRIBUTE,
     CONSTRAINT
 }

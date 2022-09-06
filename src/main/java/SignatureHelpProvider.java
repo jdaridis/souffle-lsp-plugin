@@ -61,7 +61,7 @@ public class SignatureHelpProvider {
                         SignatureInformation signatureInformation = new SignatureInformation();
                         SouffleRelation relation = (SouffleRelation) symbol;
                         List<ParameterInformation> parameterInformations = new ArrayList<>();
-                        for (SouffleVariable variable : relation.getArgs()) {
+                        for (SouffleAttribute variable : relation.getArgs()) {
                             ParameterInformation parameterInformation = new ParameterInformation();
                             parameterInformation.setLabel(variable.toString());
                             parameterInformations.add(parameterInformation);

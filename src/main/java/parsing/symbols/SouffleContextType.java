@@ -6,7 +6,7 @@ public enum SouffleContextType {
     RELATION_USE, //Relation use context (Facts, in rule) (Without args)
     RULE, //Rule context
     COMPONENT, //Component context
-    VARIABLE, //Variable context
+    ATTRIBUTE, //Variable context
     TYPE, //Type context
 
     DIRECTIVE

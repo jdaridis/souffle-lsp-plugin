@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SouffleRelation extends SouffleSymbol {
-    private final List<SouffleVariable> args;
+    private final List<SouffleAttribute> args;
 
     private String directive;
 
@@ -27,15 +27,15 @@ public class SouffleRelation extends SouffleSymbol {
         this(name, range, false);
     }
 
-    public void addArg(SouffleVariable variable){
+    public void addArg(SouffleAttribute variable){
         args.add(variable);
     }
 
-    public void addArgs(List<SouffleVariable> variables){
+    public void addArgs(List<SouffleAttribute> variables){
         args.addAll(variables);
     }
 
-    public List<SouffleVariable> getArgs() {
+    public List<SouffleAttribute> getArgs() {
         return args;
     }
 
@@ -53,7 +53,7 @@ public class SouffleRelation extends SouffleSymbol {
         if(!args.isEmpty()){
             int i = 0;
             for (; i < args.size() - 1; i++) {
-                SouffleVariable arg = args.get(i);
+                SouffleAttribute arg = args.get(i);
                 relationName.append(arg.toString()).append(", ");
             }
             relationName.append(args.get(i).toString());

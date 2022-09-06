@@ -2,7 +2,7 @@ package parsing.symbols;
 
 import org.eclipse.lsp4j.Range;
 
-public class SouffleVariable extends SouffleSymbol {
+public class SouffleAttribute extends SouffleSymbol {
 
     private SouffleType type;
 
@@ -12,8 +12,8 @@ public class SouffleVariable extends SouffleSymbol {
 
     private Object value;
 
-    public SouffleVariable(String name, SouffleType type, Object value, Range range, boolean isComponent) {
-        super(name, SouffleSymbolType.VARIABLE, range);
+    public SouffleAttribute(String name, SouffleType type, Object value, Range range, boolean isComponent) {
+        super(name, SouffleSymbolType.ATTRIBUTE, range);
         this.type = type;
         this.value = value;
         if(isComponent){
@@ -21,11 +21,11 @@ public class SouffleVariable extends SouffleSymbol {
         }
     }
 
-    public SouffleVariable(String name, SouffleType type, Range range) {
+    public SouffleAttribute(String name, SouffleType type, Range range) {
         this(name, type, null, range, false);
     }
 
-    public SouffleVariable(String name, Range range) {
+    public SouffleAttribute(String name, Range range) {
         this(name, null, null, range, false);
     }
 
