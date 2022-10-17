@@ -5,3 +5,7 @@
 grammar/**
 gradle/**
 *.iml
+out/**
+src/**
+tsconfig.json
+webpack.config.js

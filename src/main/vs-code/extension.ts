@@ -70,7 +70,7 @@ export class SouffleExtension {
 //Create a command to be run to start the LS java process.
 function getServerOptions() {
   //Change the project home accordingly.
-  const PROJECT_HOME = path.resolve(__dirname, "../../../");
+  const PROJECT_HOME = path.resolve(__dirname, "../");
   const LS_LIB = "build/libs/*";
   const LS_HOME = path.join(PROJECT_HOME, LS_LIB);
   const JAVA_HOME = "/usr/lib/jvm/java-11-openjdk-amd64/"//process.env.JAVA_HOME;

@@ -78,6 +78,7 @@ fabric.properties
 
 bin/
 build/
+dist/
 .gradle/*
 *.lock
 *.class
