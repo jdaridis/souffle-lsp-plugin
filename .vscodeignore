@@ -7,5 +7,12 @@ gradle/**
 *.iml
 out/**
 src/**
+bin/**
+.gitignore
 tsconfig.json
 webpack.config.js
+gradlew
+gradlew.bat
+antlr-runtime-4.9.3.jar
+*.gradle
+build/classes

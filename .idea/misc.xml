@@ -9,7 +9,7 @@
           <option name="outputDir" value="$PROJECT_DIR$/src/main/java" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
-          <option name="pkg" value="visitors" />
+          <option name="pkg" value="parsing.souffle" />
           <option name="language" value="" />
           <option name="generateListener" value="false" />
           <option name="generateVisitor" value="true" />

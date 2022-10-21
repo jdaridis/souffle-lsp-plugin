@@ -105,6 +105,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void traverseWorkspace(String directory) {
+        int errorCount = 0;
         // Reading the folder and getting Stream.
         try (Stream<Path> walk = Files.walk(Paths.get(directory))) {
             // Filtering the paths by a folder and adding into a list.
@@ -129,6 +130,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 } catch (Exception e){
                     System.err.println("Parse 1 " + s);
                     System.err.println(e.getMessage());
+                    errorCount++;
                 }
 //                System.err.println("End " + s);
             }
@@ -143,10 +145,10 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 }
 //                System.err.println("End " + s);
             }
-
+            System.err.println("Error rate " + errorCount + " : " + fileNamesList.size());
         } catch (Exception e) {
 //            e.printStackTrace();
-            System.err.println(e.getMessage());
+            System.err.println("Exit exception" + e.getMessage());
         }
     }
 
@@ -170,7 +172,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
-        souffleParser.setErrorHandler(new SouffleError());
+        souffleParser.setErrorHandler(new BailErrorStrategy());
         souffleParser.addErrorListener(new SouffleSyntaxErrorListener(path.toUri().toString()));
         SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
