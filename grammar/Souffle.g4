@@ -135,9 +135,12 @@ COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
 
-PREPROCESSOR: '#' .+? [\r\n] -> skip;
-PREPROCESSOR_MULTILINE: '#define' .+? '\\' (.*? '\\')* .+? [\n\r] -> skip;
-
+INCLUDE: '#include' STRING [\r\n]*-> skip;
+PREPROCESSOR_PRAGMA: '#pragma' IDENT [\r\n]*-> skip;
+PREPROCESSOR_DEFINE: '#define' .+? [\n\r]-> skip;
+PREPROCESSOR_MULTILINE: '#define' .+? (.*? '\\')* [\n\r]-> skip;
+PREPROCESSOR_MULTILINE_CONT: PREPROCESSOR_MULTILINE .*? [\n\r]+-> skip;
+PREPROCESSOR: '#' .+? [\r\n]+-> skip;
 
 
 program

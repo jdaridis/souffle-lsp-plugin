@@ -3,8 +3,11 @@ package parsing.souffle;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class SouffleParser extends Parser {
@@ -30,7 +33,8 @@ public class SouffleParser extends Parser {
 		NE=77, EQUALS=78, EXCLAMATION=79, STAR=80, AT=81, SLASH=82, CARET=83, 
 		PERCENT=84, LBRACE=85, RBRACE=86, LT=87, GT=88, IF=89, DOT=90, NUMBER=91, 
 		FLOAT=92, UNSIGNED=93, IDENT=94, STRING=95, COMMENT=96, LINE_COMMENT=97, 
-		PREPROCESSOR=98, PREPROCESSOR_MULTILINE=99, PREPROCESSOR_ID=100;
+		INCLUDE=98, PREPROCESSOR_PRAGMA=99, PREPROCESSOR_DEFINE=100, PREPROCESSOR_MULTILINE=101, 
+		PREPROCESSOR_MULTILINE_CONT=102, PREPROCESSOR=103, PREPROCESSOR_ID=104;
 	public static final int
 		RULE_program = 0, RULE_unit = 1, RULE_qualified_name = 2, RULE_type_decl = 3, 
 		RULE_record_type_list = 4, RULE_union_type_list = 5, RULE_adt_branch_list = 6, 
@@ -104,8 +108,9 @@ public class SouffleParser extends Parser {
 			"DOLLAR", "PLUS", "MINUS", "LPAREN", "RPAREN", "COMMA", "COLON", "SEMICOLON", 
 			"SUBTYPE", "LE", "GE", "NE", "EQUALS", "EXCLAMATION", "STAR", "AT", "SLASH", 
 			"CARET", "PERCENT", "LBRACE", "RBRACE", "LT", "GT", "IF", "DOT", "NUMBER", 
-			"FLOAT", "UNSIGNED", "IDENT", "STRING", "COMMENT", "LINE_COMMENT", "PREPROCESSOR", 
-			"PREPROCESSOR_MULTILINE", "PREPROCESSOR_ID"
+			"FLOAT", "UNSIGNED", "IDENT", "STRING", "COMMENT", "LINE_COMMENT", "INCLUDE", 
+			"PREPROCESSOR_PRAGMA", "PREPROCESSOR_DEFINE", "PREPROCESSOR_MULTILINE", 
+			"PREPROCESSOR_MULTILINE_CONT", "PREPROCESSOR", "PREPROCESSOR_ID"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -6073,7 +6078,7 @@ public class SouffleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001d\u03eb\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001h\u03eb\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
@@ -6532,7 +6537,7 @@ public class SouffleParser extends Parser {
 		"\u0001\u0000\u0000\u0000\u028e\u028c\u0001\u0000\u0000\u0000\u028e\u028f"+
 		"\u0001\u0000\u0000\u0000\u028fO\u0001\u0000\u0000\u0000\u0290\u028e\u0001"+
 		"\u0000\u0000\u0000\u0291\u0292\u0005^\u0000\u0000\u0292\u0296\u0003R)"+
-		"\u0000\u0293\u0294\u0005d\u0000\u0000\u0294\u0296\u0003R)\u0000\u0295"+
+		"\u0000\u0293\u0294\u0005h\u0000\u0000\u0294\u0296\u0003R)\u0000\u0295"+
 		"\u0291\u0001\u0000\u0000\u0000\u0295\u0293\u0001\u0000\u0000\u0000\u0296"+
 		"Q\u0001\u0000\u0000\u0000\u0297\u029d\u0001\u0000\u0000\u0000\u0298\u0299"+
 		"\u0005W\u0000\u0000\u0299\u029a\u0003T*\u0000\u029a\u029b\u0005X\u0000"+
@@ -6612,8 +6617,8 @@ public class SouffleParser extends Parser {
 		"\u0327\u0321\u0001\u0000\u0000\u0000\u0327\u0322\u0001\u0000\u0000\u0000"+
 		"\u0327\u0323\u0001\u0000\u0000\u0000\u0327\u0324\u0001\u0000\u0000\u0000"+
 		"\u0327\u0325\u0001\u0000\u0000\u0000\u0327\u0326\u0001\u0000\u0000\u0000"+
-		"\u0328o\u0001\u0000\u0000\u0000\u0329\u0330\u0005d\u0000\u0000\u032a\u032b"+
-		"\u0005d\u0000\u0000\u032b\u032c\u0005E\u0000\u0000\u032c\u032d\u0003r"+
+		"\u0328o\u0001\u0000\u0000\u0000\u0329\u0330\u0005h\u0000\u0000\u032a\u032b"+
+		"\u0005h\u0000\u0000\u032b\u032c\u0005E\u0000\u0000\u032c\u032d\u0003r"+
 		"9\u0000\u032d\u032e\u0005F\u0000\u0000\u032e\u0330\u0001\u0000\u0000\u0000"+
 		"\u032f\u0329\u0001\u0000\u0000\u0000\u032f\u032a\u0001\u0000\u0000\u0000"+
 		"\u0330q\u0001\u0000\u0000\u0000\u0331\u0334\u0001\u0000\u0000\u0000\u0332"+
