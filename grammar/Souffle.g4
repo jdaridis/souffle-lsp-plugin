@@ -668,7 +668,7 @@ macro_arg:   STRING
              | NIL
              | LBRACKET macro_args RBRACKET
              | DOLLAR qualified_name LPAREN macro_args RPAREN
-             | LPAREN macro_arg RPAREN
+             | LPAREN macro_args RPAREN
              | AS LPAREN macro_arg COMMA qualified_name RPAREN
              | AT IDENT LPAREN macro_args RPAREN
              | functor_built_in LPAREN macro_args RPAREN

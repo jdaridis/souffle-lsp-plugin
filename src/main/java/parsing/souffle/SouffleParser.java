@@ -5040,13 +5040,13 @@ public class SouffleParser extends Parser {
 		public Qualified_nameContext qualified_name() {
 			return getRuleContext(Qualified_nameContext.class,0);
 		}
+		public TerminalNode AS() { return getToken(SouffleParser.AS, 0); }
 		public List<Macro_argContext> macro_arg() {
 			return getRuleContexts(Macro_argContext.class);
 		}
 		public Macro_argContext macro_arg(int i) {
 			return getRuleContext(Macro_argContext.class,i);
 		}
-		public TerminalNode AS() { return getToken(SouffleParser.AS, 0); }
 		public TerminalNode COMMA() { return getToken(SouffleParser.COMMA, 0); }
 		public TerminalNode AT() { return getToken(SouffleParser.AT, 0); }
 		public Functor_built_inContext functor_built_in() {
@@ -5211,7 +5211,7 @@ public class SouffleParser extends Parser {
 				setState(854);
 				match(LPAREN);
 				setState(855);
-				macro_arg(0);
+				macro_args();
 				setState(856);
 				match(RPAREN);
 				}
@@ -6639,7 +6639,7 @@ public class SouffleParser extends Parser {
 		"\u0000\u0000\u0000\u0350\u0351\u0005B\u0000\u0000\u0351\u0352\u0003\u0004"+
 		"\u0002\u0000\u0352\u0353\u0005E\u0000\u0000\u0353\u0354\u0003r9\u0000"+
 		"\u0354\u0355\u0005F\u0000\u0000\u0355\u03a2\u0001\u0000\u0000\u0000\u0356"+
-		"\u0357\u0005E\u0000\u0000\u0357\u0358\u0003v;\u0000\u0358\u0359\u0005"+
+		"\u0357\u0005E\u0000\u0000\u0357\u0358\u0003r9\u0000\u0358\u0359\u0005"+
 		"F\u0000\u0000\u0359\u03a2\u0001\u0000\u0000\u0000\u035a\u035b\u00053\u0000"+
 		"\u0000\u035b\u035c\u0005E\u0000\u0000\u035c\u035d\u0003v;\u0000\u035d"+
 		"\u035e\u0005G\u0000\u0000\u035e\u035f\u0003\u0004\u0002\u0000\u035f\u0360"+
