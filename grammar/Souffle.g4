@@ -140,6 +140,11 @@ PREPROCESSOR_PRAGMA: '#pragma' IDENT [\r\n]*-> skip;
 PREPROCESSOR_DEFINE: '#define' .+? [\n\r]-> skip;
 PREPROCESSOR_MULTILINE: '#define' .+? (.*? '\\')* [\n\r]-> skip;
 PREPROCESSOR_MULTILINE_CONT: PREPROCESSOR_MULTILINE .*? [\n\r]+-> skip;
+IF_PRE: '#if' | '#ifndef' | '#ifdef';
+ENDIF : '#endif' ->skip;
+ELSE_PRE: '#else'->skip;
+PREPROCESSOR_IF: IF_PRE .*? [\r\n]->skip;
+PREPROCESSOR_ELSE: ELSE_PRE .*? ENDIF->skip;
 PREPROCESSOR: '#' .+? [\r\n]+-> skip;
 
 
@@ -649,7 +654,8 @@ kvp_value
   | preprocessor_macro
   ;
 preprocessor_macro: PREPROCESSOR_ID
-                   | PREPROCESSOR_ID LPAREN macro_args RPAREN;
+                   | PREPROCESSOR_ID LPAREN macro_args RPAREN
+                   | PREPROCESSOR_IF;
 
 macro_args:
             | non_empty_macro_args;

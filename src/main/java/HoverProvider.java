@@ -12,7 +12,7 @@ public class HoverProvider {
     public Hover getHover(HoverParams params) {
         Range cursor = Utils.positionToRange(params.getPosition());
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
-        System.err.println("Context " + context);
+//        System.err.println("Context " + context);
         Hover hover = null;
         if (context != null) {
             SouffleSymbol currentSymbol = context.getSymbol(cursor);
@@ -21,7 +21,7 @@ public class HoverProvider {
                 MarkupContent content = new MarkupContent();
                 content.setKind(MarkupKind.MARKDOWN);
                 hover.setContents(content);
-                System.err.println(currentSymbol);
+//                System.err.println(currentSymbol);
                 String doc;
                 if (currentSymbol.getDeclaration() != null) {
                     doc = "```souffle " + "\n"

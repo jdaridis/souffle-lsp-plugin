@@ -1,8 +1,13 @@
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
-import parsing.*;
+import parsing.PreprocessorVisitor;
+import parsing.SouffleDeclarationVisitor;
+import parsing.SouffleError;
+import parsing.SouffleUsesVisitor;
 import parsing.preprocessor.PreprocessorLexer;
 import parsing.preprocessor.PreprocessorParser;
 import parsing.souffle.SouffleLexer;
@@ -13,7 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -23,10 +28,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     private SouffleLanguageServer languageServer;
     private LSClientLogger  clientLogger;
-    private SouffleLexer souffleLexer;
-    private SouffleParser souffleParser;
     private SouffleProjectContext projectContext;
-
 
     public SouffleTextDocumentService(SouffleLanguageServer languageServer) {
         this.languageServer = languageServer;
@@ -95,10 +97,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
         SouffleProjectContext.getInstance().setChangedText(didChangeTextDocumentParams.getContentChanges().get(0).getText());
-
-        this.clientLogger.logMessage("Operation '" + "text/didChange" +
-                "' {fileUri: '" + didChangeTextDocumentParams.getContentChanges() + "'} Changed");
-
     }
 
     @Override

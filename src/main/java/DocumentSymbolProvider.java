@@ -86,7 +86,6 @@ public class DocumentSymbolProvider {
                         break;
 
                     case COMPONENT_DECL:
-                        System.err.println("Document symbols " + symbol);
                         DocumentSymbol component = new DocumentSymbol();
                         if (topSymbol == null || topSymbol.getKind() == SouffleSymbolType.COMPONENT_DECL) {
                             topSymbol = symbol;

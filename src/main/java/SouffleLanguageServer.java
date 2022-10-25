@@ -48,7 +48,6 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams initializeParams) {
-        System.err.println("WorkspaceFolders " + initializeParams.getWorkspaceFolders());
         ServerCapabilities serverCapabilities = new ServerCapabilities();
         serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         serverCapabilities.setHoverProvider(true);
@@ -105,7 +104,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void traverseWorkspace(String directory) {
-        int errorCount = 0;
+//        int errorCount = 0;
         // Reading the folder and getting Stream.
         try (Stream<Path> walk = Files.walk(Paths.get(directory))) {
             // Filtering the paths by a folder and adding into a list.
@@ -118,21 +117,18 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 //                    System.err.println("Preprocess " + s);
                     preprocessInput(s);
                 } catch (Exception e){
-                    System.err.println("Preprocess " + s);
                     System.err.println(e.getMessage());
                 }
             }
 
             for (String s : fileNamesList) {
-//                System.err.println("Start" + s);
                 try {
                     stageOneParse(s);
                 } catch (Exception e){
-                    System.err.println("Parse 1 " + s);
+//                    System.err.println("Parse 1 " + s);
                     System.err.println(e.getMessage());
-                    errorCount++;
+//                    errorCount++;
                 }
-//                System.err.println("End " + s);
             }
 
             for (String s : fileNamesList) {
@@ -145,9 +141,8 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 }
 //                System.err.println("End " + s);
             }
-            System.err.println("Error rate " + errorCount + " : " + fileNamesList.size());
+//            System.err.println("Error rate " + errorCount + " : " + fileNamesList.size());
         } catch (Exception e) {
-//            e.printStackTrace();
             System.err.println("Exit exception" + e.getMessage());
         }
     }
@@ -165,14 +160,14 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void stageOneParse(String documentPath) throws IOException {
-//        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
         SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
-        souffleParser.setErrorHandler(new BailErrorStrategy());
+        souffleParser.setErrorHandler(new SouffleError());
+//        souffleParser.setErrorHandler(new BailErrorStrategy());
         souffleParser.addErrorListener(new SouffleSyntaxErrorListener(path.toUri().toString()));
         SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
@@ -181,7 +176,6 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void stageTwoParse(String documentPath) throws IOException {
-//        System.err.println(documentPath);
         Path path = Path.of(documentPath);
         CharStream input = CharStreams.fromPath(path);
         SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);

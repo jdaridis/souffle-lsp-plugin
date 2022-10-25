@@ -41,7 +41,6 @@ public class CompletionProvider {
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
         Range range = Utils.positionToRange(position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
-        System.err.println("Trigger " + params.getContext().getTriggerCharacter());
         if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
             state = CompletionState.IN_ARGS;
             return Either.forLeft(completionItems);
