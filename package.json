@@ -1,8 +1,8 @@
 {
-    "name": "souffle-lsp",
-    "displayName": "Souffle LSP",
+    "name": "souffle-lang-server",
+    "displayName": "Soufflé Datalog Language Server",
     "description": "",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.65.0"
     },
@@ -29,11 +29,15 @@
             }
         ]
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jdaridis/souffle-lsp-plugin.git"
+    },
     "scripts": {
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
         "package": "webpack --mode production --devtool hidden-source-map",
-        "vscode:prepublish": "npm run webpack",
+        "vscode:prepublish": "npm run package",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",

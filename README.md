@@ -1,65 +1,58 @@
-# souffle-lsp README
+# Soufflé Datalog Language Server README
 
-This is the README for your extension "souffle-lsp". After writing up a brief description, we recommend including the following sections.
+Soufflé is a logic programming language inspired by Datalog. Soufflé was initially designed for static program analysis and since then, there have been many other applications written in the Soufflé language, including applications in reverse engineering, network analysis and data analytics. 
 
+This is a plugin adding basic smart features to the Soufflé language, using the Language Server Protocol.
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Syntax error reporting
 
-For example if there is an image subfolder under your extension project workspace:
+![Syntax error message](images/syntax_error.png)
 
-\!\[feature X\]\(images/feature-x.png\)
+- Hover (Provide declaration info on hovers)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![Hover example](images/hover_1.png)
 
-## Requirements
+- Go to definition
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![Go to definition example](images/definition.png)
 
-## Extension Settings
+- Go to Type Definition
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+![Go to type definition example](images/type_definition.png)
 
-For example:
+- Autocomplete
 
-This extension contributes the following settings:
+![Autocomplete example](images/autocomplete_1.png)
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+- Signature Help
+
+![Signature Help example](images/signature_1.png)
+
+- Rename
+
+![Rename example](images/local_rename_1.png)
+
+- Find all references
+
+![References example](images/refernces.png)
+
+- Find all rules for relation
+
+![Rule references example](images/rule_reference.png)
+
+- Document symbols
+
+![Outline example](images/outline.png)
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
 
 Users appreciate release notes as you update your extension.
 
-### 1.0.0
+### 0.1.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release of Soufflé Datalog Language Server.
