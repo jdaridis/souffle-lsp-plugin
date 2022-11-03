@@ -51,8 +51,6 @@ In libraries with heavy use of the C preprocessor macros, sometimes parsing fail
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 0.1.0
 
 Initial release of Soufflé Datalog Language Server.
