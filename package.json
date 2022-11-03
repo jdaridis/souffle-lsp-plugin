@@ -7,7 +7,7 @@
         "vscode": "^1.65.0"
     },
     "publisher": "i-daridis",
-    "icon": "images/souffle_logo.png",
+    "icon": "souffle_logo.png",
     "activationEvents": [
         "onLanguage:souffle",
         "workspaceContains:**.dl"
