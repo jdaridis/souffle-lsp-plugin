@@ -34,6 +34,9 @@ SYMBOL_TYPE:'.symbol_type'WS;
 OVERRIDE:'.override'WS;
 PRAGMA:'.pragma'WS;
 PLAN:'.plan'WS;
+INCLUDE: '.include'WS;
+ONCE:'.once'WS;
+FOLD: 'fold'WS;
 
 //Keywords
 AUTOINC:'autoinc';
@@ -135,7 +138,7 @@ COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN)
         ;
 
-INCLUDE: '#include' STRING [\r\n]*-> skip;
+INCLUDE_PRE: '#include' STRING [\r\n]*-> skip;
 PREPROCESSOR_PRAGMA: '#pragma' IDENT [\r\n]*-> skip;
 PREPROCESSOR_DEFINE: '#define' .+? [\n\r]-> skip;
 PREPROCESSOR_MULTILINE: '#define' .+? (.*? '\\')* [\n\r]-> skip;
@@ -445,6 +448,8 @@ arg
   | arg BW_SHIFT_L arg
   | arg BW_SHIFT_R arg
   | arg BW_SHIFT_R_UNSIGNED arg
+   /* -- User-defined aggregators -- */
+  | AT AT IDENT arg_list COLON arg COMMA aggregate_body
     /* -- aggregators -- */
   | aggregate_func arg_list COLON aggregate_body
   | preprocessor_macro

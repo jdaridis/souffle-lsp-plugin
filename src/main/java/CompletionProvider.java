@@ -25,6 +25,8 @@ public class CompletionProvider {
             ".plan",
             ".symboltype",
             ".numbertype",
+            ".include",
+            ".once"
     };
 
     static CompletionState state = CompletionState.IDLE;
