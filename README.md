@@ -3,7 +3,11 @@
 Soufflé is a logic programming language inspired by Datalog. Soufflé was initially designed for static program analysis and since then, there have been many other applications written in the Soufflé language, including applications in reverse engineering, network analysis and data analytics. 
 
 This is a plugin adding basic smart features to the Soufflé language, using the Language Server Protocol.
+
+ For syntax highlighting refer to: https://marketplace.visualstudio.com/items?itemName=W4RH4WK.souffle-syntax
 ## Features
+
+- Automatic reparsing when saving the file.
 
 - Syntax error reporting
 
@@ -51,6 +55,13 @@ In libraries with heavy use of the C preprocessor macros, sometimes parsing fail
 
 ## Release Notes
 
+### 0.1.2
+
+Updated README
+### 0.1.1
+
+- Changed the grammar to be on par with Souffle.
+- Added icon.
 ### 0.1.0
 
 Initial release of Soufflé Datalog Language Server.
