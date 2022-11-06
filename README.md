@@ -49,6 +49,9 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 
 ![Outline example](images/outline.png)
 
+## Requirements
+
+The user needs to have Java installed on their system.
 ## Known Issues
 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.

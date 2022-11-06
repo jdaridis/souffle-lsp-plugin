@@ -83,3 +83,4 @@ dist/
 *.lock
 *.class
 
+souffle-lang-server-0.1.0.vsix
