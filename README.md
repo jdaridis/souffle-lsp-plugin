@@ -57,6 +57,8 @@ The user needs to have Java installed on their system.
 
 To build the server jar file yourself just run `./gradlew jar` on the top level and the resulting jar will be under build/libs.
 
+To run the server run `java -cp ` with the name of the generated jar file.
+
 For the VS Code plugin run `npm run package` and the resulting .js file will be under dist/extension.js
 
 ## Known Issues
