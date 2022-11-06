@@ -52,6 +52,13 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 ## Requirements
 
 The user needs to have Java installed on their system.
+
+## Build from source
+
+To build the server jar file yourself just run `./gradlew jar` on the top level and the resulting jar will be under build/libs.
+
+For the VS Code plugin run `npm run package` and the resulting .js file will be under dist/extension.js
+
 ## Known Issues
 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
