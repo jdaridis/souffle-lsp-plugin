@@ -4,21 +4,23 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
-import parsing.PreprocessorVisitor;
-import parsing.SouffleDeclarationVisitor;
-import parsing.SouffleError;
-import parsing.SouffleUsesVisitor;
+import parsing.*;
 import parsing.preprocessor.PreprocessorLexer;
 import parsing.preprocessor.PreprocessorParser;
 import parsing.souffle.SouffleLexer;
 import parsing.souffle.SouffleParser;
+import parsing.symbols.SouffleContext;
 import parsing.symbols.SouffleProjectContext;
+import parsing.symbols.SouffleSymbol;
+import parsing.symbols.SouffleSymbolType;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -85,7 +87,8 @@ public class SouffleTextDocumentService implements TextDocumentService {
             URI uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
             this.clientLogger.clearDiagnostics(uri.toString());
             parseInput(didOpenTextDocumentParams.getTextDocument().getUri());
-
+//            SouffleContext context = SouffleProjectContext.getInstance().getDocumentContext(didOpenTextDocumentParams.getTextDocument().getUri());
+//            LSClientLogger.getInstance().reportHint(context.getRange(), uri.toString(), "Lint");
             this.clientLogger.logMessage("Operation '" + "text/didOpen" +
                     "' {fileUri: '" + uri + "'} opened");
         } catch (URISyntaxException | IOException e) {
@@ -123,6 +126,68 @@ public class SouffleTextDocumentService implements TextDocumentService {
     @Override
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
         return CompletableFuture.supplyAsync(() -> new DefinitionProvider().getDefinition(params));
+    }
+
+    @Override
+    public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(CodeActionParams params) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Either<Command, CodeAction>> actions = new ArrayList<>();
+
+//            CodeAction codeAction = new CodeAction("Lint with Souffle Lint");
+//            Command command = new Command();
+//            command.setCommand("lint");
+//            Path path = Path.of(URI.create(params.getTextDocument().getUri()));
+//            command.setArguments(List.of(path.toString()));
+//            codeAction.setCommand(command);
+//            codeAction.setKind(CodeActionKind.Source+".lint");
+////            codeAction.setDiagnostics(LSClientLogger.getInstance().diagnostics.get(params.getTextDocument().getUri()));
+//            actions.add(Either.forRight(codeAction));
+
+            Range cursor = params.getRange();
+            SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+            if (context != null) {
+                SouffleSymbol currentSymbol = context.getSymbol(cursor);
+                if (currentSymbol != null) {
+                    if(currentSymbol.getKind() == SouffleSymbolType.RELATION_USE ||
+                            currentSymbol.getKind() == SouffleSymbolType.RELATION_DECL
+                    ){
+                        CodeAction inputAction = new CodeAction("Generate .input for relation " + currentSymbol.getName());
+                        inputAction.setKind(CodeActionKind.Refactor);
+                        actions.add(Either.forRight(inputAction));
+                        WorkspaceEdit edit = new WorkspaceEdit();
+                        TextEdit textEdit = new TextEdit();
+                        textEdit.setNewText(".input " + currentSymbol.getName() + "()\n");
+
+
+                        Position end;
+                        if(currentSymbol.getKind() == SouffleSymbolType.RELATION_DECL){
+                            end = currentSymbol.getRange().getEnd();
+                        } else {
+                            end = context.getRange().getEnd();
+                        }
+                        Position position = new Position(end.getLine() + 2, 0);
+                        Range newRange = new Range(position, position);
+                        textEdit.setRange(newRange);
+                        edit.setChanges(Map.of(params.getTextDocument().getUri(), List.of(textEdit)));
+                        inputAction.setEdit(edit);
+
+                        CodeAction outputAction = new CodeAction("Generate .output for relation " + currentSymbol.getName());
+                        outputAction.setKind(CodeActionKind.Refactor);
+                        actions.add(Either.forRight(outputAction));
+                        WorkspaceEdit edit1 = new WorkspaceEdit();
+                        TextEdit textEdit1 = new TextEdit();
+                        textEdit1.setNewText(".output " + currentSymbol.getName() + "()\n");
+
+                        textEdit1.setRange(newRange);
+                        edit1.setChanges(Map.of(params.getTextDocument().getUri(), List.of(textEdit1)));
+                        outputAction.setEdit(edit1);
+
+                    }
+                }
+            }
+
+            return actions;
+        });
     }
 
     @Override

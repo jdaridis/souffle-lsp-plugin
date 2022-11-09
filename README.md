@@ -45,6 +45,10 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 
 ![Rule references example](images/rule_reference.png)
 
+- Generate .input/.output for relation
+
+![Outline example](images/generate_io.png)
+
 - Document symbols
 
 ![Outline example](images/outline.png)
@@ -64,7 +68,9 @@ For the VS Code plugin run `npm run package` and the resulting .js file will be 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
+### 0.1.5
 
+Added code actions for generating .input/.output for relations.
 ### 0.1.2
 
 Updated README

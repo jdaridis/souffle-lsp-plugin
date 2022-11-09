@@ -1,4 +1,8 @@
 # Change Log
+
+## [0.1.5]
+
+Added code actions for generating .input/.output for relations.
 ## [0.1.2]
 
 Updated README

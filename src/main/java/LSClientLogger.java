@@ -14,7 +14,7 @@ public class LSClientLogger {
     private static LSClientLogger INSTANCE;
     private LanguageClient client;
     private boolean isInitialized;
-    private Map<String, List<Diagnostic>> diagnostics;
+    public Map<String, List<Diagnostic>> diagnostics;
 
     private LSClientLogger() {
     }
@@ -64,6 +64,16 @@ public class LSClientLogger {
         }
         Diagnostic diagnostic = new Diagnostic(range, message);
         diagnostic.setSeverity(DiagnosticSeverity.Warning);
+        diagnostics.get(uri).add(diagnostic);
+        client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
+    }
+
+    public void reportHint(Range range, String uri, String message){
+        if (!isInitialized) {
+            return;
+        }
+        Diagnostic diagnostic = new Diagnostic(range, message);
+        diagnostic.setSeverity(DiagnosticSeverity.Hint);
         diagnostics.get(uri).add(diagnostic);
         client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
     }

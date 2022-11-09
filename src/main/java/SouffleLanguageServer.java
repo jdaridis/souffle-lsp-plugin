@@ -62,6 +62,13 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         serverCapabilities.setDocumentSymbolProvider(true);
         serverCapabilities.setWorkspaceSymbolProvider(true);
         serverCapabilities.setRenameProvider(true);
+//        serverCapabilities.setCodeActionProvider(true);
+        CodeActionOptions codeActionOptions = new CodeActionOptions();
+        codeActionOptions.setCodeActionKinds(List.of(CodeActionKind.Source, CodeActionKind.Empty, CodeActionKind.QuickFix));
+        serverCapabilities.setCodeActionProvider(codeActionOptions);
+        ExecuteCommandOptions executeCommandOptions = new ExecuteCommandOptions();
+        executeCommandOptions.setCommands(List.of("lint"));
+        serverCapabilities.setExecuteCommandProvider(executeCommandOptions);
 
         final InitializeResult response = new InitializeResult(serverCapabilities);
         //Set the document synchronization capabilities to full.
