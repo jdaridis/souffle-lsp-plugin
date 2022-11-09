@@ -14,7 +14,7 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 ![Syntax error message](images/syntax_error.png)
 
 - Hover (Provide declaration info on hovers)
-
+Provide documentation about relations taken from comments (for multiline comments use the /* */ style)
 ![Hover example](images/hover_1.png)
 
 - Go to definition
@@ -60,6 +60,8 @@ The user needs to have Java installed on their system.
 ## Build from source
 
 To build the server jar file yourself just run `./gradlew jar` on the top level and the resulting jar will be under build/libs.
+
+To run the server run `java -cp` with the name of the generated jar file.
 
 For the VS Code plugin run `npm run package` and the resulting .js file will be under dist/extension.js
 
