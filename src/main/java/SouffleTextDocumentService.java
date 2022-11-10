@@ -182,6 +182,18 @@ public class SouffleTextDocumentService implements TextDocumentService {
                         edit1.setChanges(Map.of(params.getTextDocument().getUri(), List.of(textEdit1)));
                         outputAction.setEdit(edit1);
 
+                        if(currentSymbol.getKind() == SouffleSymbolType.RELATION_DECL && currentSymbol.getPotentialDocumentation().getKey() != null){
+                            CodeAction formatComments = new CodeAction("Format documentation with /* */");
+                            formatComments.setKind(CodeActionKind.Refactor);
+                            WorkspaceEdit commentEdit = new WorkspaceEdit();
+                            TextEdit commentTextEdit = new TextEdit();
+                            commentTextEdit.setRange(currentSymbol.getPotentialDocumentation().getValue());
+                            commentTextEdit.setNewText(currentSymbol.getPotentialDocumentation().getKey());
+                            commentEdit.setChanges(Map.of(params.getTextDocument().getUri(), List.of(commentTextEdit)));
+                            formatComments.setEdit(commentEdit);
+                            actions.add(Either.forRight(formatComments));
+                        }
+
                     }
                 }
             }

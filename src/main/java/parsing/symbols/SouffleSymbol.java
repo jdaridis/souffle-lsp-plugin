@@ -1,6 +1,7 @@
 package parsing.symbols;
 
 import org.eclipse.lsp4j.Range;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,10 @@ public class SouffleSymbol {
     protected String URI;
     protected List<SouffleSymbol> declarations;
     protected String documentation;
+
+
+
+    protected Pair<String, Range> potentialDocumentation;
 
     public SouffleSymbol(String name, SouffleSymbolType kind, Range range) {
         this.name = name;
@@ -43,6 +48,13 @@ public class SouffleSymbol {
         this.documentation = documentation;
     }
 
+    public Pair<String, Range> getPotentialDocumentation() {
+        return potentialDocumentation;
+    }
+
+    public void setPotentialDocumentation(Pair<String, Range> potentialDocumentation) {
+        this.potentialDocumentation = potentialDocumentation;
+    }
     public SouffleSymbol getDeclaration() {
         if(declarations.isEmpty()){
             return null;

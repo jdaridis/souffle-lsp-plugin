@@ -47,7 +47,11 @@ Provide documentation about relations taken from comments (for multiline comment
 
 - Generate .input/.output for relation
 
-![Outline example](images/generate_io.png)
+![Genarate I/O example](images/generate_io.png)
+
+- Reformat documentation comments
+
+![Reformat comments example](images/format_comment.png)
 
 - Document symbols
 
@@ -70,6 +74,10 @@ For the VS Code plugin run `npm run package` and the resulting .js file will be 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
+
+### 0.1.6
+
+Added code actions for reformatting documentation comments.
 ### 0.1.5
 
 Added code actions for generating .input/.output for relations.

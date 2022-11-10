@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.6]
+
+Added code actions for reformatting documentation comments.
+
 ## [0.1.5]
 
 Added code actions for generating .input/.output for relations.

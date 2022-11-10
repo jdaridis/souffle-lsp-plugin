@@ -1,6 +1,7 @@
 package parsing;
 
 import org.eclipse.lsp4j.Range;
+import org.eclipse.xtext.xbase.lib.Pair;
 import parsing.souffle.SouffleBaseVisitor;
 import parsing.souffle.SouffleParser;
 import parsing.symbols.*;
@@ -81,6 +82,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         SouffleContext documentContext = currentContext.peek();
         documentContext.addToSubContext(declarationContext);
         String documentation = Utils.getDocumentation(ctx.getStart(), parser);
+        Pair<String, Range> potentialDoc = Utils.getPotentialDocumentation(ctx.getStart(), parser);
 
         currentScope.push(new ArrayDeque<>());
         ctx.relation_names().accept(this);
@@ -94,6 +96,7 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         for(SouffleSymbol relationName: relationNames){
             SouffleRelation relation = new SouffleRelation(relationName.getName(), relationName.getRange(), true);
             relation.setDocumentation(documentation);
+            relation.setPotentialDocumentation(potentialDoc);
             for(SouffleSymbol attribute: attributes){
                 SouffleAttribute arg = (SouffleAttribute) attribute;
                 relation.addArg(arg);
