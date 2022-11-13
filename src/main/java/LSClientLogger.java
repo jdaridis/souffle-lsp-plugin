@@ -77,4 +77,29 @@ public class LSClientLogger {
         diagnostics.get(uri).add(diagnostic);
         client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
     }
+
+    public void reportLints(List<SouffleLint> lints, String uri){
+        for (SouffleLint lint: lints){
+            if(lint != null){
+                for(SouffleLintContext fragment: lint.fragments){
+                    Diagnostic diagnostic = new Diagnostic();
+                    diagnostic.setSeverity(DiagnosticSeverity.Warning);
+                    String message = lint.rule.name + ": " + lint.rule.shortDescription + "\n\n";
+                    message+= "Examples: \n" + lint.rule.getExamples();
+                    diagnostic.setMessage(message);
+                    Position start = new Position(fragment.start.row, fragment.start.column);
+                    Position end = new Position(fragment.end.row, fragment.end.column);
+                    Range range = new Range(start, end);
+                    diagnostic.setRange(range);
+                    diagnostics.get(uri).add(diagnostic);
+                }
+            }
+        }
+        if(lints.isEmpty()){
+            MessageParams messageParams = new MessageParams();
+            messageParams.setMessage("No problems found with souffle-lint");
+            client.showMessage(messageParams);
+        }
+        client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
+    }
 }

@@ -78,6 +78,7 @@ fabric.properties
 
 bin/
 build/
+!build/libs/Souffle_Ide_Plugin-1.0-SNAPSHOT.jar
 dist/
 .gradle/*
 *.lock

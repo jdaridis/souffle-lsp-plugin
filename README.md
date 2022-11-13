@@ -13,7 +13,12 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 
 ![Syntax error message](images/syntax_error.png)
 
+- Integration with [souffle-lint](https://github.com/langston-barrett/souffle-lint) (If available on user system)
+
+![Souffle-lint message](images/souffle-lint.png)
+
 - Hover (Provide declaration info on hovers)
+
 Provide documentation about relations taken from comments (for multiline comments use the /* */ style)
 ![Hover example](images/hover_1.png)
 
@@ -74,6 +79,12 @@ For the VS Code plugin run `npm run package` and the resulting .js file will be 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
+
+### 0.2.0
+
+- Added integration with [souffle-lint](https://github.com/langston-barrett/souffle-lint).
+- Added source code action to trigger souffle-lint
+- Added code action to extract types
 
 ### 0.1.6
 

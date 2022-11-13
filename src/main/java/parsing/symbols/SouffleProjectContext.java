@@ -13,6 +13,8 @@ public class SouffleProjectContext {
     }
 
     private final Map<String, SouffleContext> documents;
+
+    private String projectPath;
     public Set<String> defines;
     private Range cursorPosition;
 
@@ -76,6 +78,14 @@ public class SouffleProjectContext {
 
     public void addDocument(String documentUri, SouffleContext souffleContext){
         documents.put(documentUri, souffleContext);
+    }
+
+    public String getProjectPath() {
+        return projectPath;
+    }
+
+    public void setProjectPath(String projectPath) {
+        this.projectPath = projectPath;
     }
 
     public Range getCursorPosition() {

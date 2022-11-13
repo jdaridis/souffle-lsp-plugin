@@ -64,16 +64,20 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         serverCapabilities.setRenameProvider(true);
 //        serverCapabilities.setCodeActionProvider(true);
         CodeActionOptions codeActionOptions = new CodeActionOptions();
+        codeActionOptions.setResolveProvider(true);
         codeActionOptions.setCodeActionKinds(List.of(CodeActionKind.Source, CodeActionKind.Empty, CodeActionKind.QuickFix));
         serverCapabilities.setCodeActionProvider(codeActionOptions);
         ExecuteCommandOptions executeCommandOptions = new ExecuteCommandOptions();
-        executeCommandOptions.setCommands(List.of("lint"));
+        executeCommandOptions.setCommands(List.of("souffle-lint", "souffle-lint-all"));
         serverCapabilities.setExecuteCommandProvider(executeCommandOptions);
 
         final InitializeResult response = new InitializeResult(serverCapabilities);
         //Set the document synchronization capabilities to full.
 
         this.clientCapabilities = initializeParams.getCapabilities();
+        CodeActionResolveSupportCapabilities codeActionResolveSupportCapabilities = new CodeActionResolveSupportCapabilities();
+        codeActionResolveSupportCapabilities.setProperties(List.of("edit"));
+        this.clientCapabilities.getTextDocument().getCodeAction().setResolveSupport(codeActionResolveSupportCapabilities);
         /* Check if dynamic registration of completion capability is allowed by the client. If so we don't register the capability.
            Else, we register the completion capability.  
          */
@@ -86,7 +90,9 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         projectContext = SouffleProjectContext.getInstance();
         List<WorkspaceFolder> workspaceFolders = initializeParams.getWorkspaceFolders();
         if(workspaceFolders != null && !workspaceFolders.isEmpty()){
-            traverseWorkspace(URI.create(workspaceFolders.get(0).getUri()).getPath());
+            String directory = URI.create(workspaceFolders.get(0).getUri()).getPath();
+            projectContext.setProjectPath(directory);
+            traverseWorkspace(directory);
         }
         return CompletableFuture.supplyAsync(() -> response);
     }

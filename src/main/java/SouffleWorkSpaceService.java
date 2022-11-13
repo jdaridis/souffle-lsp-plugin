@@ -1,10 +1,17 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.ExecuteCommandParams;
 import org.eclipse.lsp4j.RenameFilesParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -39,12 +46,22 @@ public class SouffleWorkSpaceService implements WorkspaceService {
     public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
         return CompletableFuture.supplyAsync(() -> {
             String path = params.getArguments().get(0).toString().replaceAll("\"", "");
-            ProcessBuilder processBuilder = new ProcessBuilder("souffle-lint","lint", path);
+            ProcessBuilder processBuilder = new ProcessBuilder("souffle-lint","lint","--format","json", path);
             Process p;
             try {
                 p = processBuilder.start();
                 p.waitFor();
-                return new String(p.getInputStream().readAllBytes());
+                String json = new String(p.getInputStream().readAllBytes());
+                json = "[" + json.replaceAll("}\n", "},") + "]";
+
+                Gson gson = (new GsonBuilder()).serializeNulls().create();
+                SouffleLint[] souffleLints = gson.fromJson(json, SouffleLint[].class);
+                List<SouffleLint> lints = Arrays.asList(souffleLints);
+                LSClientLogger.getInstance().reportLints(lints, Path.of(path).toUri().toString());
+
+                System.err.println(lints);
+
+                return null;
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

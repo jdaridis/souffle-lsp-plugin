@@ -1,5 +1,9 @@
 # Change Log
+## [0.2.0]
 
+- Added integration with [souffle-lint](https://github.com/langston-barrett/souffle-lint).
+- Added source code action to trigger souffle-lint
+- Added code action to extract types
 ## [0.1.6]
 
 Added code actions for reformatting documentation comments.

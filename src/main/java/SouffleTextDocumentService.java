@@ -9,18 +9,13 @@ import parsing.preprocessor.PreprocessorLexer;
 import parsing.preprocessor.PreprocessorParser;
 import parsing.souffle.SouffleLexer;
 import parsing.souffle.SouffleParser;
-import parsing.symbols.SouffleContext;
-import parsing.symbols.SouffleProjectContext;
-import parsing.symbols.SouffleSymbol;
-import parsing.symbols.SouffleSymbolType;
+import parsing.symbols.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -116,6 +111,9 @@ public class SouffleTextDocumentService implements TextDocumentService {
             CompletionProvider.state = CompletionState.IDLE;
             this.clientLogger.logMessage("Operation '" + "text/didSave" +
                     "' {fileUri: '" + didSaveTextDocumentParams.getTextDocument().getUri() + "'} Saved");
+
+
+
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -130,75 +128,14 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     @Override
     public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(CodeActionParams params) {
+        return CompletableFuture.supplyAsync(() -> new CodeActionProvider().getCodeAction(params));
+    }
+
+    @Override
+    public CompletableFuture<CodeAction> resolveCodeAction(CodeAction unresolved) {
         return CompletableFuture.supplyAsync(() -> {
-            List<Either<Command, CodeAction>> actions = new ArrayList<>();
-
-//            CodeAction codeAction = new CodeAction("Lint with Souffle Lint");
-//            Command command = new Command();
-//            command.setCommand("lint");
-//            Path path = Path.of(URI.create(params.getTextDocument().getUri()));
-//            command.setArguments(List.of(path.toString()));
-//            codeAction.setCommand(command);
-//            codeAction.setKind(CodeActionKind.Source+".lint");
-////            codeAction.setDiagnostics(LSClientLogger.getInstance().diagnostics.get(params.getTextDocument().getUri()));
-//            actions.add(Either.forRight(codeAction));
-
-            Range cursor = params.getRange();
-            SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
-            if (context != null) {
-                SouffleSymbol currentSymbol = context.getSymbol(cursor);
-                if (currentSymbol != null) {
-                    if(currentSymbol.getKind() == SouffleSymbolType.RELATION_USE ||
-                            currentSymbol.getKind() == SouffleSymbolType.RELATION_DECL
-                    ){
-                        CodeAction inputAction = new CodeAction("Generate .input for relation " + currentSymbol.getName());
-                        inputAction.setKind(CodeActionKind.Refactor);
-                        actions.add(Either.forRight(inputAction));
-                        WorkspaceEdit edit = new WorkspaceEdit();
-                        TextEdit textEdit = new TextEdit();
-                        textEdit.setNewText(".input " + currentSymbol.getName() + "()\n");
-
-
-                        Position end;
-                        if(currentSymbol.getKind() == SouffleSymbolType.RELATION_DECL){
-                            end = currentSymbol.getRange().getEnd();
-                        } else {
-                            end = context.getRange().getEnd();
-                        }
-                        Position position = new Position(end.getLine() + 2, 0);
-                        Range newRange = new Range(position, position);
-                        textEdit.setRange(newRange);
-                        edit.setChanges(Map.of(params.getTextDocument().getUri(), List.of(textEdit)));
-                        inputAction.setEdit(edit);
-
-                        CodeAction outputAction = new CodeAction("Generate .output for relation " + currentSymbol.getName());
-                        outputAction.setKind(CodeActionKind.Refactor);
-                        actions.add(Either.forRight(outputAction));
-                        WorkspaceEdit edit1 = new WorkspaceEdit();
-                        TextEdit textEdit1 = new TextEdit();
-                        textEdit1.setNewText(".output " + currentSymbol.getName() + "()\n");
-
-                        textEdit1.setRange(newRange);
-                        edit1.setChanges(Map.of(params.getTextDocument().getUri(), List.of(textEdit1)));
-                        outputAction.setEdit(edit1);
-
-                        if(currentSymbol.getKind() == SouffleSymbolType.RELATION_DECL && currentSymbol.getPotentialDocumentation().getKey() != null){
-                            CodeAction formatComments = new CodeAction("Format documentation with /* */");
-                            formatComments.setKind(CodeActionKind.Refactor);
-                            WorkspaceEdit commentEdit = new WorkspaceEdit();
-                            TextEdit commentTextEdit = new TextEdit();
-                            commentTextEdit.setRange(currentSymbol.getPotentialDocumentation().getValue());
-                            commentTextEdit.setNewText(currentSymbol.getPotentialDocumentation().getKey());
-                            commentEdit.setChanges(Map.of(params.getTextDocument().getUri(), List.of(commentTextEdit)));
-                            formatComments.setEdit(commentEdit);
-                            actions.add(Either.forRight(formatComments));
-                        }
-
-                    }
-                }
-            }
-
-            return actions;
+            System.err.println(unresolved);
+            return unresolved;
         });
     }
 

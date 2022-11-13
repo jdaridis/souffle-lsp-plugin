@@ -52,18 +52,19 @@ public class Utils {
         BufferedTokenStream tokens = (BufferedTokenStream) souffleParser.getTokenStream();
         List<Token> cmtChannel =
                 tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
-        StringBuilder sb = new StringBuilder("/**\n");
+        StringBuilder sb = new StringBuilder("\t/**\n");
         if ( cmtChannel!=null ) {
             for(Token token: cmtChannel){
+
                 if(token != null && token.getText().contains("//")){
                     sb.append("\t\t");
                     sb.append(token.getText().replaceAll("\\*", "").replaceAll("/", "").trim());
                     sb.append("\n");
                 } else return Pair.of(null,null);
             }
-            sb.append("*/");
+            sb.append("\t*/");
             documentation = sb.toString();
-            Position p1 = new Position(cmtChannel.get(0).getLine() - 1, cmtChannel.get(0).getCharPositionInLine());
+            Position p1 = new Position(cmtChannel.get(0).getLine() - 1, 0);
             Position p2 = new Position(cmtChannel.get(cmtChannel.size() - 1).getLine() - 1, cmtChannel.get(cmtChannel.size() - 1).getStopIndex());
             range = new Range(p1, p2);
         }
