@@ -1,4 +1,10 @@
 # Change Log
+
+## [0.2.1]
+
+- Added support for slow rules in souffle-lint
+- Added support for many one-line // style comments.
+
 ## [0.2.0]
 
 - Added integration with [souffle-lint](https://github.com/langston-barrett/souffle-lint).

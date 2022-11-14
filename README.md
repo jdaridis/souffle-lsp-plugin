@@ -19,7 +19,6 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 
 - Hover (Provide declaration info on hovers)
 
-Provide documentation about relations taken from comments (for multiline comments use the /* */ style)
 ![Hover example](images/hover_1.png)
 
 - Go to definition
@@ -79,6 +78,11 @@ For the VS Code plugin run `npm run package` and the resulting .js file will be 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
+
+### 0.2.1
+
+- Added support for slow rules in souffle-lint
+- Added support for many one-line // style comments.
 
 ### 0.2.0
 
