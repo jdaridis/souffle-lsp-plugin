@@ -38,8 +38,16 @@ public class Utils {
                 tokens.getHiddenTokensToLeft(i, SouffleLexer.HIDDEN);
         if ( cmtChannel!=null ) {
             Token cmt = cmtChannel.get(cmtChannel.size() - 1);
-            if ( cmt!=null ) {
+            if (cmt!=null && cmt.getText().contains("/*")) {
                 documentation = cmt.getText().replaceAll("\\*", "").replaceAll("/", "").trim();
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for(Token token: cmtChannel){
+                    if(token != null && token.getText().contains("//")){
+                        sb.append(token.getText().replaceAll("\\*", "").replaceAll("/", "").trim());
+                    }
+                }
+                documentation = sb.toString();
             }
         }
         return documentation;
