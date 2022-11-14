@@ -19,6 +19,8 @@ public class CodeActionProvider {
         List<Either<Command, CodeAction>> actions = new ArrayList<Either<Command, CodeAction>>();
 
         lintCodeAction(params, actions);
+        lintSLowCodeAction(params, actions);
+//        lintAllCodeAction(params, actions);
 
         Range cursor = params.getRange();
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
@@ -139,6 +141,28 @@ public class CodeActionProvider {
         CodeAction codeAction = new CodeAction("Lint with souffle-lint");
         Command command = new Command();
         command.setCommand("souffle-lint");
+        Path path = Path.of(URI.create(params.getTextDocument().getUri()));
+        command.setArguments(List.of(path.toString(), false));
+        codeAction.setCommand(command);
+        codeAction.setKind(CodeActionKind.Source + ".lint");
+        actions.add(Either.forRight(codeAction));
+    }
+
+    private void lintSLowCodeAction(CodeActionParams params, List<Either<Command, CodeAction>> actions) {
+        CodeAction codeAction = new CodeAction("Lint with souffle-lint (slow)");
+        Command command = new Command();
+        command.setCommand("souffle-lint");
+        Path path = Path.of(URI.create(params.getTextDocument().getUri()));
+        command.setArguments(List.of(path.toString(), true));
+        codeAction.setCommand(command);
+        codeAction.setKind(CodeActionKind.Source + ".lint");
+        actions.add(Either.forRight(codeAction));
+    }
+
+    private void lintAllCodeAction(CodeActionParams params, List<Either<Command, CodeAction>> actions) {
+        CodeAction codeAction = new CodeAction("Lint project with souffle-lint");
+        Command command = new Command();
+        command.setCommand("souffle-lint-all");
         Path path = Path.of(URI.create(params.getTextDocument().getUri()));
         command.setArguments(List.of(path.toString()));
         codeAction.setCommand(command);

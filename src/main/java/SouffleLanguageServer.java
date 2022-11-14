@@ -64,7 +64,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         serverCapabilities.setRenameProvider(true);
 //        serverCapabilities.setCodeActionProvider(true);
         CodeActionOptions codeActionOptions = new CodeActionOptions();
-        codeActionOptions.setResolveProvider(true);
+//        codeActionOptions.setResolveProvider(true);
         codeActionOptions.setCodeActionKinds(List.of(CodeActionKind.Source, CodeActionKind.Empty, CodeActionKind.QuickFix));
         serverCapabilities.setCodeActionProvider(codeActionOptions);
         ExecuteCommandOptions executeCommandOptions = new ExecuteCommandOptions();

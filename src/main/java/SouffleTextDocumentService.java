@@ -131,13 +131,13 @@ public class SouffleTextDocumentService implements TextDocumentService {
         return CompletableFuture.supplyAsync(() -> new CodeActionProvider().getCodeAction(params));
     }
 
-    @Override
-    public CompletableFuture<CodeAction> resolveCodeAction(CodeAction unresolved) {
-        return CompletableFuture.supplyAsync(() -> {
-            System.err.println(unresolved);
-            return unresolved;
-        });
-    }
+//    @Override
+//    public CompletableFuture<CodeAction> resolveCodeAction(CodeAction unresolved) {
+//        return CompletableFuture.supplyAsync(() -> {
+//            System.err.println(unresolved);
+//            return unresolved;
+//        });
+//    }
 
     @Override
     public CompletableFuture<Hover> hover(HoverParams params) {

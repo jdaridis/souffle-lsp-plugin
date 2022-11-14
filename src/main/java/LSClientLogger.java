@@ -1,6 +1,9 @@
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
+import souffleLint.SouffleLint;
+import souffleLint.SouffleLintContext;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +55,7 @@ public class LSClientLogger {
         }
         Diagnostic diagnostic = new Diagnostic(range, message);
         diagnostic.setSeverity(DiagnosticSeverity.Error);
+        diagnostic.setSource("Syntax error");
         if(diagnostics.containsKey(uri))
             diagnostics.get(uri).add(diagnostic);
         else
@@ -78,13 +82,22 @@ public class LSClientLogger {
         client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
     }
 
+    public void showErrorMessage(String message){
+        MessageParams params = new MessageParams();
+        params.setType(MessageType.Error);
+        params.setMessage(message);
+        client.showMessage(params);
+    }
+
     public void reportLints(List<SouffleLint> lints, String uri){
         for (SouffleLint lint: lints){
             if(lint != null){
                 for(SouffleLintContext fragment: lint.fragments){
                     Diagnostic diagnostic = new Diagnostic();
                     diagnostic.setSeverity(DiagnosticSeverity.Warning);
-                    String message = lint.rule.name + ": " + lint.rule.shortDescription + "\n\n";
+                    diagnostic.setSource("souffle-lint");
+                    diagnostic.setCode(lint.rule.name);
+                    String message = lint.rule.shortDescription + "\n\n";
                     message+= "Examples: \n" + lint.rule.getExamples();
                     diagnostic.setMessage(message);
                     Position start = new Position(fragment.start.row, fragment.start.column);
@@ -101,5 +114,30 @@ public class LSClientLogger {
             client.showMessage(messageParams);
         }
         client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
+    }
+
+    public void reportAllLints(List<SouffleLint> lints){
+        for (SouffleLint lint: lints){
+            if(lint != null){
+                for(SouffleLintContext fragment: lint.fragments){
+                    Diagnostic diagnostic = new Diagnostic();
+                    diagnostic.setSeverity(DiagnosticSeverity.Warning);
+                    String message = lint.rule.name + ": " + lint.rule.shortDescription + "\n\n";
+                    message+= "Examples: \n" + lint.rule.getExamples();
+                    diagnostic.setMessage(message);
+                    Position start = new Position(fragment.start.row, fragment.start.column);
+                    Position end = new Position(fragment.end.row, fragment.end.column);
+                    Range range = new Range(start, end);
+                    diagnostic.setRange(range);
+                    diagnostics.get(URI.create(lint.source_file).toString()).add(diagnostic);
+                    System.err.println(URI.create(lint.source_file).toString());
+                }
+            }
+        }
+        for(Map.Entry<String, List<Diagnostic>> entry: diagnostics.entrySet()){
+            if(!entry.getValue().isEmpty()){
+                client.publishDiagnostics(new PublishDiagnosticsParams(entry.getKey(), entry.getValue()));
+            }
+        }
     }
 }
