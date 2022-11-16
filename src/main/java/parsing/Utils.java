@@ -45,6 +45,7 @@ public class Utils {
                 for(Token token: cmtChannel){
                     if(token != null && token.getText().contains("//")){
                         sb.append(token.getText().replaceAll("\\*", "").replaceAll("/", "").trim());
+                        sb.append("\n");
                     }
                 }
                 documentation = sb.toString();

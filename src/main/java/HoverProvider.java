@@ -26,8 +26,10 @@ public class HoverProvider {
                 if (currentSymbol.getDeclaration() != null) {
                     doc = "```souffle " + "\n"
                             + currentSymbol.getDeclaration().toString() + "\n"
-                            + " ```" + "\n";
-                    if (currentSymbol.getDeclaration().getDocumentation() != null) {
+                            + " ```" + "\n----------------\n";
+                    if(currentSymbol.getDocumentation() != null){
+                        doc += currentSymbol.getDocumentation();
+                    } else if (currentSymbol.getDeclaration().getDocumentation() != null) {
                         doc += currentSymbol.getDeclaration().getDocumentation();
                     }
                 } else {

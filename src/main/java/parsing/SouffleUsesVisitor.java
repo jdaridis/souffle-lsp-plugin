@@ -262,7 +262,12 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
             List<SouffleSymbol> souffleSymbolList = findDecl(rule);
             rule.setDeclaration(souffleSymbolList);
-
+//            if(rule.getDeclaration().getDocumentation() != null){
+//                String documentation = rule.getDeclaration().getDocumentation() + "\n---------\n" + Utils.getDocumentation(ctx.getStart(), parser);
+//                rule.setDocumentation(documentation);
+//            } else {
+//                rule.setDocumentation(Utils.getDocumentation(ctx.getStart(), parser));
+//            }
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
             documentContext.addToContextScope(rule);
             ruleContext.addContextSymbol(rule);

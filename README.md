@@ -53,6 +53,9 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 
 ![Genarate I/O example](images/generate_io.png)
 
+- Snippets for fact / rule templates
+- Snippets for decl / comp generation
+
 - Reformat documentation comments
 
 ![Reformat comments example](images/format_comment.png)
@@ -78,6 +81,12 @@ For the VS Code plugin run `npm run package` and the resulting .js file will be 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
+
+### 0.2.5
+
+- Added support for snippets
+  - fact / rule template
+  - decl / comp generation
 
 ### 0.2.1
 

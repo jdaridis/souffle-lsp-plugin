@@ -76,8 +76,7 @@ public class CompletionProvider {
                         findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), completionItems, items);
                     }
                 }
-
-                LSClientLogger.getInstance().logMessage("Operation '" + "text/completion");
+                addSnippets(completionItems);
 
                 return Either.forLeft(completionItems);
             case IN_ARGS:
@@ -88,6 +87,40 @@ public class CompletionProvider {
                 return Either.forLeft(completionItems);
         }
         return null;
+    }
+
+    private static void addSnippets(List<CompletionItem> completionItems) {
+        CompletionItem factSnippet = new CompletionItem();
+        factSnippet.setLabel("fact");
+        factSnippet.setInsertText("$1($2).$0");
+        factSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
+        factSnippet.setKind(CompletionItemKind.Snippet);
+        factSnippet.setDetail("Snippet for fact template");
+        completionItems.add(factSnippet);
+
+        CompletionItem ruleSnippet = new CompletionItem();
+        ruleSnippet.setLabel("rule");
+        ruleSnippet.setInsertText("$1($2) :- $0.");
+        ruleSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
+        ruleSnippet.setKind(CompletionItemKind.Snippet);
+        ruleSnippet.setDetail("Snippet for rule template");
+        completionItems.add(ruleSnippet);
+
+        CompletionItem declSnippet = new CompletionItem();
+        declSnippet.setLabel("decl");
+        declSnippet.setInsertText(".decl $1($2)$0");
+        declSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
+        declSnippet.setKind(CompletionItemKind.Snippet);
+        declSnippet.setDetail("Snippet for declaration generation");
+        completionItems.add(declSnippet);
+
+        CompletionItem compSnippet = new CompletionItem();
+        compSnippet.setLabel("comp");
+        compSnippet.setInsertText(".comp ${1:compName} ${2::superComp} {\n\t$0\n}");
+        compSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
+        compSnippet.setKind(CompletionItemKind.Snippet);
+        compSnippet.setDetail("Snippet for component generation");
+        completionItems.add(compSnippet);
     }
 
     private void findInScope(Map<String, List<SouffleSymbol>> scope, List<CompletionItem> completionItems, Set<String> items) {

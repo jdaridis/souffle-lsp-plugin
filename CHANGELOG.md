@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.2.5]
+
+- Added support for snippets
+    - fact / rule template
+    - decl / comp generation
+- Pretty print in documentation
+
 ## [0.2.1]
 
 - Added support for slow rules in souffle-lint
