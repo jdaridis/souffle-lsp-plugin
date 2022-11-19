@@ -1,3 +1,4 @@
+import logging.LSClientLogger;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -125,7 +126,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                     .collect(Collectors.toList());
             // printing the folder names
             for (String s : fileNamesList) {
-//                LSClientLogger.getInstance().clearDiagnostics(Path.of(s).toUri().toString());
+//                logging.LSClientLogger.getInstance().clearDiagnostics(Path.of(s).toUri().toString());
                 try {
 //                    System.err.println("Preprocess " + s);
                     preprocessInput(s);

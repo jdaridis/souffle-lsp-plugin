@@ -1,3 +1,5 @@
+package logging;
+
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
 import souffleLint.SouffleLint;
@@ -68,6 +70,18 @@ public class LSClientLogger {
         }
         Diagnostic diagnostic = new Diagnostic(range, message);
         diagnostic.setSeverity(DiagnosticSeverity.Warning);
+        diagnostics.get(uri).add(diagnostic);
+        client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
+    }
+
+    public void reportDeprecated(Range range, String uri, String message, Object data){
+        if (!isInitialized) {
+            return;
+        }
+        Diagnostic diagnostic = new Diagnostic(range, message);
+        diagnostic.setSeverity(DiagnosticSeverity.Warning);
+        diagnostic.setTags(List.of(DiagnosticTag.Deprecated));
+        diagnostic.setData(data);
         diagnostics.get(uri).add(diagnostic);
         client.publishDiagnostics(new PublishDiagnosticsParams(uri, diagnostics.get(uri)));
     }

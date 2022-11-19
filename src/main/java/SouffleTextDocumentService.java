@@ -1,3 +1,4 @@
+import logging.LSClientLogger;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -83,7 +84,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
             this.clientLogger.clearDiagnostics(uri.toString());
             parseInput(didOpenTextDocumentParams.getTextDocument().getUri());
 //            SouffleContext context = SouffleProjectContext.getInstance().getDocumentContext(didOpenTextDocumentParams.getTextDocument().getUri());
-//            LSClientLogger.getInstance().reportHint(context.getRange(), uri.toString(), "Lint");
+//            logging.LSClientLogger.getInstance().reportHint(context.getRange(), uri.toString(), "Lint");
             this.clientLogger.logMessage("Operation '" + "text/didOpen" +
                     "' {fileUri: '" + uri + "'} opened");
         } catch (URISyntaxException | IOException e) {

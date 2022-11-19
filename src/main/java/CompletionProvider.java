@@ -116,11 +116,27 @@ public class CompletionProvider {
 
         CompletionItem compSnippet = new CompletionItem();
         compSnippet.setLabel("comp");
-        compSnippet.setInsertText(".comp ${1:compName} ${2::superComp} {\n\t$0\n}");
+        compSnippet.setInsertText(".comp ${1:compName}${2::superComp} {\n\t$0\n}");
         compSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
         compSnippet.setKind(CompletionItemKind.Snippet);
         compSnippet.setDetail("Snippet for component generation");
         completionItems.add(compSnippet);
+
+        CompletionItem dataStructureSnippet = new CompletionItem();
+        dataStructureSnippet.setLabel("ds");
+        dataStructureSnippet.setInsertText("${1|brie,btree,eqrel|}$0");
+        dataStructureSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
+        dataStructureSnippet.setKind(CompletionItemKind.Unit);
+        dataStructureSnippet.setDetail("List of relation data structures");
+        completionItems.add(dataStructureSnippet);
+
+        CompletionItem primitiveTypeSnippet = new CompletionItem();
+        primitiveTypeSnippet.setLabel("type");
+        primitiveTypeSnippet.setInsertText("${1|symbol,number,unsigned,float|}$0");
+        primitiveTypeSnippet.setInsertTextFormat(InsertTextFormat.Snippet);
+        primitiveTypeSnippet.setKind(CompletionItemKind.Interface);
+        primitiveTypeSnippet.setDetail("List of primitive types");
+        completionItems.add(primitiveTypeSnippet);
     }
 
     private void findInScope(Map<String, List<SouffleSymbol>> scope, List<CompletionItem> completionItems, Set<String> items) {
@@ -134,6 +150,7 @@ public class CompletionProvider {
                     switch (symbol.getKind()) {
                         case TYPE_DECL:
                             completionItem.setKind(CompletionItemKind.Interface);
+                            completionItem.setDetail(".type");
                             completionItems.add(completionItem);
                             break;
                         case RELATION_DECL:
@@ -143,6 +160,7 @@ public class CompletionProvider {
                             addCompletionItem(completionItem, symbol, CompletionItemKind.Variable, completionItems);
                             break;
                         case COMPONENT_DECL:
+                            completionItem.setDetail(".comp");
                             addCompletionItem(completionItem, symbol, CompletionItemKind.Class, completionItems);
                             break;
                     }
