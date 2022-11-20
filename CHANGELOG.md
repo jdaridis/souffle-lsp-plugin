@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.1]
+
+Minor fix in type autocomplete suggestions
+
 ## [0.3.0]
 
 - Added primitive type list autocomplete

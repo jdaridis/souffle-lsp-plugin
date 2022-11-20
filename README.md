@@ -87,6 +87,10 @@ In libraries with heavy use of the C preprocessor macros, sometimes parsing fail
 
 ## Release Notes
 
+### 0.3.1
+
+Minor fix in type autocomplete suggestions
+
 ### 0.3.0
 
 - Added primitive type list autocomplete

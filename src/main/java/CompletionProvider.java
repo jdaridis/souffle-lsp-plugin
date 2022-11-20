@@ -150,7 +150,8 @@ public class CompletionProvider {
                     switch (symbol.getKind()) {
                         case TYPE_DECL:
                             completionItem.setKind(CompletionItemKind.Interface);
-                            completionItem.setDetail(".type");
+                            completionItem.setLabel(symbol.getName());
+                            completionItem.setDetail(symbol.toString());
                             completionItems.add(completionItem);
                             break;
                         case RELATION_DECL:
