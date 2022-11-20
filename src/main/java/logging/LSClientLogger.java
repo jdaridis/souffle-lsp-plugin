@@ -79,7 +79,7 @@ public class LSClientLogger {
             return;
         }
         Diagnostic diagnostic = new Diagnostic(range, message);
-        diagnostic.setSeverity(DiagnosticSeverity.Warning);
+        diagnostic.setSeverity(DiagnosticSeverity.Hint);
         diagnostic.setTags(List.of(DiagnosticTag.Deprecated));
         diagnostic.setData(data);
         diagnostics.get(uri).add(diagnostic);

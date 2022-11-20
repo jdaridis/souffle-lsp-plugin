@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.3.0]
+
+- Added primitive type list autocomplete
+- Added relation data structure list
+- Better type documentation (include super types)
+- Added deprecated code warnings
+
 ## [0.2.5]
 
 - Added support for snippets

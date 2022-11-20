@@ -1,3 +1,4 @@
+import com.google.gson.JsonArray;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import parsing.symbols.SouffleContext;
@@ -17,7 +18,6 @@ public class CodeActionProvider {
 
     public List<Either<Command, CodeAction>> getCodeAction(CodeActionParams params) {
         List<Either<Command, CodeAction>> actions = new ArrayList<Either<Command, CodeAction>>();
-
         lintCodeAction(params, actions);
         lintSLowCodeAction(params, actions);
 //        lintAllCodeAction(params, actions);
@@ -40,7 +40,55 @@ public class CodeActionProvider {
             }
         }
 
+        diagnosticQuickfixCodeAction(params, actions);
+
         return actions;
+    }
+
+    private void diagnosticQuickfixCodeAction(CodeActionParams params, List<Either<Command, CodeAction>> actions) {
+        if(!params.getContext().getDiagnostics().isEmpty()){
+            for(Diagnostic diagnostic: params.getContext().getDiagnostics()){
+                if(diagnostic.getTags().contains(DiagnosticTag.Deprecated)){
+                    CodeAction deprecatedQuickfix = new CodeAction();
+                    deprecatedQuickfix.setKind(CodeActionKind.QuickFix);
+                    deprecatedQuickfix.setTitle("Refactor deprecated code");
+                    WorkspaceEdit deprecatedWorkspace = new WorkspaceEdit();
+                    TextEdit deprecatedEdit = new TextEdit();
+                    deprecatedEdit.setNewText("");
+                    TextEdit deprecatedNew = new TextEdit();
+                    if(diagnostic.getData() != null){
+                        JsonArray jsonArray = (JsonArray) diagnostic.getData();
+                        String problem = jsonArray.get(0).toString().replaceAll("\"", "").trim();
+                        String argument = jsonArray.get(1).toString().replaceAll("\"", "").trim();
+
+                        Position start = new Position(diagnostic.getRange().getStart().getLine() + 1, 0);
+                        deprecatedEdit.setRange(diagnostic.getRange());
+                        deprecatedNew.setRange(new Range(start, start));
+                        switch (problem){
+                            case ".number_type":
+                                deprecatedNew.setNewText(".type "+ argument + " <: number\n");
+                                break;
+                            case ".symbol_type":
+                                deprecatedNew.setNewText(".type "+ argument + " <: symbol\n");
+                                break;
+                            case "input":
+                                deprecatedNew.setNewText(".input "+ argument + "\n");
+                                break;
+                            case "output":
+                                deprecatedNew.setNewText(".output "+ argument + "\n");
+                                break;
+                            case "printsize":
+                                deprecatedNew.setNewText(".printsize "+ argument + "\n");
+                                break;
+                        }
+                        deprecatedWorkspace.setChanges(Map.of(params.getTextDocument().getUri(), List.of(deprecatedNew, deprecatedEdit)));
+                        deprecatedQuickfix.setEdit(deprecatedWorkspace);
+                        deprecatedQuickfix.setDiagnostics(List.of(diagnostic));
+                    }
+                    actions.add(Either.forRight(deprecatedQuickfix));
+                }
+            }
+        }
     }
 
     private void extractTypeCodeAction(CodeActionParams params, List<Either<Command, CodeAction>> actions, SouffleSymbol currentSymbol) {
@@ -49,7 +97,7 @@ public class CodeActionProvider {
         actions.add(Either.forRight(extractSubtypeAction));
         WorkspaceEdit extractEdit = new WorkspaceEdit();
         TextEdit newTypeText = new TextEdit();
-        newTypeText.setNewText(".type " + "subType <: " + currentSymbol + "\n\n");
+        newTypeText.setNewText(".type " + "subType <: " + currentSymbol.getName() + "\n\n");
 
         int line = currentSymbol.getRange().getStart().getLine() + 1;
 
@@ -71,12 +119,12 @@ public class CodeActionProvider {
         extractEdit.setChanges(Map.of(params.getTextDocument().getUri(), subtypeEdits));
         extractSubtypeAction.setEdit(extractEdit);
 
-        CodeAction extractTypeAction = new CodeAction("Extract Type");
+        CodeAction extractTypeAction = new CodeAction("Extract equivalence Type");
         extractTypeAction.setKind(CodeActionKind.RefactorExtract);
         actions.add(Either.forRight(extractTypeAction));
         WorkspaceEdit extractTypeEdit = new WorkspaceEdit();
         TextEdit newTypeText1 = new TextEdit();
-        newTypeText1.setNewText(".type " + "extractedType = " + currentSymbol + "\n\n");
+        newTypeText1.setNewText(".type " + "extractedType = " + currentSymbol.getName() + "\n\n");
 
         newTypeText1.setRange(newTypeRange);
         List<TextEdit> extractEdits = new ArrayList<TextEdit>();

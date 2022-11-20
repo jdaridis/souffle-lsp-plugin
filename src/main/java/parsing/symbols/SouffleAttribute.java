@@ -44,7 +44,7 @@ public class SouffleAttribute extends SouffleSymbol {
     public String toString() {
         String s = name;
         if(type != null){
-            s += ": " + type;
+            s += ": " + type.getName();
         }
         return s;
     }

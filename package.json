@@ -2,7 +2,7 @@
     "name": "souffle-lang-server",
     "displayName": "Soufflé Datalog Language Server",
     "description": "Soufflé Datalog Language Server. Add smart features to the Soufflé Datalog Language with the help of LSP in a VS code plugin",
-    "version": "0.2.5",
+    "version": "0.3.0",
     "engines": {
         "vscode": "^1.65.0"
     },

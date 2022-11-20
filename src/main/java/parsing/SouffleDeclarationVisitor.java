@@ -1,5 +1,8 @@
 package parsing;
 
+import logging.LSClientLogger;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.xtext.xbase.lib.Pair;
 import parsing.souffle.SouffleBaseVisitor;
@@ -7,6 +10,7 @@ import parsing.souffle.SouffleParser;
 import parsing.symbols.*;
 
 import java.util.ArrayDeque;
+import java.util.List;
 
 public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol> {
 
@@ -123,6 +127,20 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
         }
 
 //        System.err.println(declarationContext);
+        TerminalNode deprecatedToken = null;
+        if(ctx.relation_tags() != null){
+            if(ctx.relation_tags().INPUT_QUALIFIER() != null){
+                deprecatedToken = ctx.relation_tags().INPUT_QUALIFIER();
+            } else if(ctx.relation_tags().OUTPUT_QUALIFIER() != null){
+                deprecatedToken = ctx.relation_tags().OUTPUT_QUALIFIER();
+            } else if( ctx.relation_tags().PRINTSIZE_QUALIFIER() != null){
+                deprecatedToken = ctx.relation_tags().PRINTSIZE_QUALIFIER();
+            }
+            if(deprecatedToken != null){
+                String text = deprecatedToken.getText();
+                LSClientLogger.getInstance().reportDeprecated(Utils.toRange(ctx.relation_tags()), documentUri, "Use of tag "+ text +" is deprecated", List.of(text, relationNames.getFirst().getName()));
+            }
+        }
         return null;
     }
 
@@ -160,6 +178,21 @@ public class SouffleDeclarationVisitor extends SouffleBaseVisitor<SouffleSymbol>
                 declarationContext.addToContextScope(type);
                 typeName.addType(type);
             }
+        } else if(ctx.qualified_name() != null){
+            SouffleSymbol superTypeSymbol = ctx.qualified_name().accept(this);
+            SouffleType superType = new SouffleType(superTypeSymbol.getName(), superTypeSymbol.getRange());
+            typeName.setType(superType);
+        }
+
+        TerminalNode deprecatedToken = null;
+        if(ctx.NUMBER_TYPE() != null){
+            deprecatedToken = ctx.NUMBER_TYPE();
+        } else if(ctx.SYMBOL_TYPE() != null){
+            deprecatedToken = ctx.SYMBOL_TYPE();
+        }
+        if(deprecatedToken != null){
+            String text = deprecatedToken.getText();
+            LSClientLogger.getInstance().reportDeprecated(Utils.toRange(ctx), documentUri, "Use of "+text+"is deprecated", List.of(text, typeName.getName()));
         }
         return null;
     }

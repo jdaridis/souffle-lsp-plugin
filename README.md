@@ -53,8 +53,13 @@ This is a plugin adding basic smart features to the Soufflé language, using the
 
 ![Genarate I/O example](images/generate_io.png)
 
+- Extract type
+
+![Extract example](images/extract_type.png)
+
 - Snippets for fact / rule templates
 - Snippets for decl / comp generation
+- Deprecated code warning and quickfixes
 
 - Reformat documentation comments
 
@@ -81,6 +86,13 @@ For the VS Code plugin run `npm run package` and the resulting .js file will be 
 In libraries with heavy use of the C preprocessor macros, sometimes parsing fails giving a false syntax error.
 
 ## Release Notes
+
+### 0.3.0
+
+- Added primitive type list autocomplete
+- Added relation data structure list
+- Better type documentation (include super types)
+- Added deprecated code warnings
 
 ### 0.2.5
 

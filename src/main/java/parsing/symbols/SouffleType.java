@@ -59,7 +59,7 @@ public class SouffleType extends SouffleSymbol {
                 sb.append(type1.getName());
                 sb.append(" | ");
             }
-            sb.append(union.get(i));
+            sb.append(union.get(i).getName());
         } else if(type != null){
             sb.append(" <: ");
             sb.append(type.getName());
