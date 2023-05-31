@@ -71,11 +71,15 @@ export class SouffleExtension {
 function getServerOptions() {
   //Change the project home accordingly.
   const PROJECT_HOME = path.resolve(__dirname, "../");
-  const LS_LIB = "build/libs/*";
+  const LS_LIB_CONFIG = vscode.workspace.getConfiguration().get("PATH_LSP");
+  let LS_LIB = "build/libs/*";
+  if (LS_LIB_CONFIG) {
+    LS_LIB = String(LS_LIB_CONFIG);
+  }
   const LS_HOME = path.join(PROJECT_HOME, LS_LIB);
-  const JAVA_HOME = "/usr/lib/jvm/java-11-openjdk-amd64/"//process.env.JAVA_HOME;
+  const JAVA_HOME = vscode.workspace.getConfiguration().get("JAVA_HOME");
 
-  let executable: string = "java"//path.join(String(JAVA_HOME), "bin", "java");
+  let executable: string = path.join(String(JAVA_HOME), "bin", "java");
   let args: string[] = ["-cp", LS_HOME];
   console.log(LS_HOME)
   let serverOptions: ServerOptions = {

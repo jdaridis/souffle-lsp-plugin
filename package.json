@@ -30,7 +30,22 @@
                 ],
                 "configuration": "./language-configuration.json"
             }
-        ]
+        ],
+            "configuration": {
+            "title": "souffle-lang-server",
+            "properties": {
+                "JAVA_HOME": {
+                    "type": "string",
+                    "description": "To start the LSP service, please set the JAVA_HOME variable.",
+                    "default": ""
+                },
+                "PATH_LSP": {
+                    "type": "string",
+                    "description": "This parameter defaults to the server in the plugin folder, but it can also be customized. If you are unsure what you need to set, leave this variable empty. The variable PATH_LSP represents the folder path that contains the Souffle_Ide_Plugin-1.0-SNAPSHOT.jar file.",
+                    "default": ""
+                }
+            }
+        }
     },
     "repository": {
         "type": "git",
