@@ -151,7 +151,7 @@ public class CompletionProvider {
                         case TYPE_DECL:
                             completionItem.setKind(CompletionItemKind.Interface);
                             completionItem.setLabel(symbol.getName());
-                            completionItem.setDetail(symbol.toString());
+                            completionItem.setDetail(symbol.toString().replaceFirst(".type", ""));
                             completionItems.add(completionItem);
                             break;
                         case RELATION_DECL:

@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.5]
+
+Introduction of settings for Java home
 ## [0.3.1]
 
 Minor fix in type autocomplete suggestions
