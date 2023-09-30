@@ -5,6 +5,8 @@ Soufflé is a logic programming language inspired by Datalog. Soufflé was initi
 This is a plugin adding basic smart features to the Soufflé language, using the Language Server Protocol.
 
  For syntax highlighting refer to: https://marketplace.visualstudio.com/items?itemName=W4RH4WK.souffle-syntax
+
+ The user needs *to set the JAVA_HOME* variable in settings for the plugin to work properly.
 ## Features
 
 - Automatic reparsing when saving the file.
@@ -77,7 +79,7 @@ The user needs to have Java installed on their system.
 
 To build the server jar file yourself just run `./gradlew jar` on the top level and the resulting jar will be under build/libs.
 
-To run the server run `java -cp` with the name of the generated jar file.
+To run the server run `java -jar` with the name of the generated jar file.
 
 For the VS Code plugin run `npm run package` and the resulting .js file will be under dist/extension.js
 
