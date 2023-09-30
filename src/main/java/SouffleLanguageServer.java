@@ -94,6 +94,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         if(workspaceFolders != null && !workspaceFolders.isEmpty()){
             directory = URI.create(workspaceFolders.get(0).getUri()).getPath();
         } else {
+            // rootUri is deprecated. Here it's only used as a fallback if the client doesn't send any workspaceFolders
             directory = URI.create(initializeParams.getRootUri()).getPath();
         }
         if(directory != null) {
