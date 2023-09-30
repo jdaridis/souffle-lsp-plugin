@@ -89,9 +89,15 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         }
 //        CompletableFuture.
         projectContext = SouffleProjectContext.getInstance();
+        String directory = null;
         List<WorkspaceFolder> workspaceFolders = initializeParams.getWorkspaceFolders();
         if(workspaceFolders != null && !workspaceFolders.isEmpty()){
-            String directory = URI.create(workspaceFolders.get(0).getUri()).getPath();
+            directory = URI.create(workspaceFolders.get(0).getUri()).getPath();
+        } else {
+            // rootUri is deprecated. Here it's only used as a fallback if the client doesn't send any workspaceFolders
+            directory = URI.create(initializeParams.getRootUri()).getPath();
+        }
+        if(directory != null) {
             projectContext.setProjectPath(directory);
             traverseWorkspace(directory);
         }
